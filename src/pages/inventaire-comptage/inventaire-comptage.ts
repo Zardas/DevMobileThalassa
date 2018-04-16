@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Nav } from 'ionic-angular';
+
+import { HomePage } from '../home/home';
 
 /**
  * Generated class for the InventaireComptagePage page.
@@ -16,11 +18,27 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 export class InventaireComptagePage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public nav: Nav) {
+  	this.pagesAccessibles = new Map<String, any>();
+
+    this.pagesAccessibles['HomePage'] = HomePage;
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad InventaireComptagePage');
+    console.log('InventaireComptage didLoad()');
+  }
+
+
+  /*open = on met la page désirée sur le devant de la scène
+  Mais la page précédente (this quoi) serra toujours derrière
+  */
+  open(page) {
+  	this.navCtrl.push(this.pagesAccessibles[page]);
+  }
+
+  //goTo = mettre en racine la page désirée -> différent de open
+  goTo(page) {
+    this.nav.setRoot(this.pagesAccessibles[page]);
   }
 
 }
