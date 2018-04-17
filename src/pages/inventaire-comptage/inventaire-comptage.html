@@ -34,10 +34,12 @@
     </ion-card-content>
   </ion-card>
 
+  <!--
   <ion-item class="numero_scanne">
     <ion-label color="primary" inline>Numéro scanné : </ion-label>
     <ion-input placeholder="Juste ici" clearInput></ion-input>
   </ion-item>
+  -->
 
   <ion-list class="boutonsDeTest">
       <button ion-button (click)="ajout('1')" color="XLblueDarker">Produit n°1</button>
@@ -52,5 +54,12 @@
     <ion-card>Article n°{{article[0]}} : <span>{{article[1]}}</span></ion-card>
   </ion-list>
 
+
+  <button ion-button block color="SoftRed" (click)="viderLesDonnees()">Vider les stocks</button>
+
+  <ion-list style="text-align: center;">
+    <button ion-button (click)="stockJson()">Stock</button>
+    <button ion-button (click)="destockJson()">Destock</button>
+  </ion-list>
 
 </ion-content>

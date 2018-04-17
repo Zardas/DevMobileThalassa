@@ -16,11 +16,14 @@ import { HomePage } from '../home/home';
   templateUrl: 'inventaire-comptage.html',
 })
 
+
+
 export class InventaireComptagePage {
 
   private pagesAccessibles: Map<String, any>;
   private listeProduit: Array<[string, number]>;
-  
+
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams, public nav: Nav,
@@ -28,7 +31,7 @@ export class InventaireComptagePage {
   ) {
     
     this.pagesAccessibles = new Map<String, any>();
-    this.listeProduit = Array<[string, number]>();
+    this.listeProduit = this.destockJson();
 
     this.pagesAccessibles['HomePage'] = HomePage;
   }
@@ -38,7 +41,8 @@ export class InventaireComptagePage {
   }
 
 
-  /*open = on met la page désirée sur le devant de la scène
+  /*
+  open = on met la page désirée sur le devant de la scène
   Mais la page précédente (this quoi) serra toujours derrière
   */
   open(page) {
@@ -68,20 +72,56 @@ export class InventaireComptagePage {
   }
 
 
+  /*
+  Ajout d'un tuple [string, int] où string est numero et int le numéro précédemment
+  associé à string, mais incrémenté de 1. S'il n'existe aucun tuple avec string dans la
+  liste : on le rajoute à la fin avec comme nombre d'occurence (puisque il s'agit de 
+  cela) 1
+  */
   ajout(numero) {
     let i = 0;
     while(i < this.listeProduit.length && this.listeProduit[i][0] != numero) {
       i++
     }
     if(i < this.listeProduit.length) {
-      console.log(this.listeProduit[i]);
+      //console.log(this.listeProduit[i]);
       this.listeProduit[i][1] = this.listeProduit[i][1] + 1;
     } else {
       this.listeProduit.push([numero, 1]);
     }
+
+    this.stockJson();
   }
 
-  affList() {
+  //Les deux fonctions suivantes permettent la pérénisation des données, même lorsque l'on quitte l'application
 
+  //Stock le contenu de la liste des produits dans un fichier JSON en local
+  stockJson() {
+    let myJSON = JSON.stringify(this.listeProduit);
+    localStorage.setItem("testJSON", myJSON);
+  }
+
+  /*
+  Retourne la liste des produits inscrite dans la fichier json sous forme
+  d'un Array<[string, name]>. Elle est par exemple utilisée dans la constructeur
+  pour repartir avec les données de la session précédente
+  */
+  destockJson(): Array<[String, number]> {
+    let text = localStorage.getItem("testJSON")
+    console.log("parse");
+
+    let obj1 = JSON.parse(text);
+    for(let i = 0 ; i < obj1.length ; i++) {
+      console.log(obj1[i]);
+    }
+
+    return obj1;
+  }
+
+  //Vide la liste de toute les données
+  viderLesDonnees() {
+    this.listeProduit = new Array<[string, number]>();
+    this.stockJson();
   }
 }
+

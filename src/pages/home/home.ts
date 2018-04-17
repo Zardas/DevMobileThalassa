@@ -29,7 +29,8 @@ export class HomePage {
   }
 
 
-  /*open = on met la page désirée sur le devant de la scène
+  /*
+  open = on met la page désirée sur le devant de la scène
   Mais la page précédente (this quoi) serra toujours derrière
   */
   open(page) {
@@ -41,5 +42,8 @@ export class HomePage {
   goTo(page) {
     this.nav.setRoot(this.pagesAccessibles[page]);
   }
+
+
+  
 
 }

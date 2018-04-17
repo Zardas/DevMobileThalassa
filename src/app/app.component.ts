@@ -22,6 +22,7 @@ export class MyApp {
     public statusBar: StatusBar,
     public splashScreen: SplashScreen
   ) {
+
     this.initializeApp();
 
     // set our app's pages
@@ -46,5 +47,7 @@ export class MyApp {
     // navigate to the new page if it is not the current page
     this.nav.setRoot(page.component);
   }
+
+
 }
 
