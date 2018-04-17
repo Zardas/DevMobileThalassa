@@ -1,3 +1,33 @@
 page-inventaire-comptage {
 
 }
+
+.transfererDonnees {
+	padding-top: 1%;
+	padding-bottom: 1%;
+	font-size: 2.5vw;
+	margin-bottom: 8%;
+}
+
+.ajoutArticle {
+	text-align: center;
+	font-size: 3.80vw;
+	color: rgba(150,150,150,1);
+}
+
+.numero_scanne {
+	margin-bottom: 10%;
+}
+
+.boutonsDeTest button {
+	width: 30%;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 1%;
+	padding-right: 1%;
+}
+
+ion-list ion-card span {
+	color: rgba(0,105,162,1);
+}
+

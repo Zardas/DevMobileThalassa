@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Nav } from 'ionic-angular';
+import { NavController, NavParams, Nav } from 'ionic-angular';
 
 import { InventaireComptagePage } from '../inventaire-comptage/inventaire-comptage';
 
@@ -11,9 +11,16 @@ import { InventaireComptagePage } from '../inventaire-comptage/inventaire-compta
 
 export class HomePage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public nav: Nav) {
+  private pagesAccessibles: Map<String, any>;
+  
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public nav: Nav
+  ) {
+    
     this.pagesAccessibles = new Map<String, any>();
-
+    
     this.pagesAccessibles['InventaireComptage'] = InventaireComptagePage;
   }
 

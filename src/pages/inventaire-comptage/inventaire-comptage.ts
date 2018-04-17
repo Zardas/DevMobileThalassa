@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Nav } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Nav, ToastController } from 'ionic-angular';
 
 import { HomePage } from '../home/home';
 
@@ -18,8 +18,17 @@ import { HomePage } from '../home/home';
 
 export class InventaireComptagePage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public nav: Nav) {
-  	this.pagesAccessibles = new Map<String, any>();
+  private pagesAccessibles: Map<String, any>;
+  private listeProduit: Array<[string, number]>;
+  
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams, public nav: Nav,
+    private toastCtrl: ToastController
+  ) {
+    
+    this.pagesAccessibles = new Map<String, any>();
+    this.listeProduit = Array<[string, number]>();
 
     this.pagesAccessibles['HomePage'] = HomePage;
   }
@@ -41,4 +50,38 @@ export class InventaireComptagePage {
     this.nav.setRoot(this.pagesAccessibles[page]);
   }
 
+
+  //Affichage d'un toast en bas de l'écran
+  presentToast(textToDisplay) {
+    let toast = this.toastCtrl.create({
+      message: textToDisplay,
+      duration: 4000,
+      position: 'bottom',
+      showCloseButton: true
+    });
+
+    toast.onDidDismiss( () => {
+      console.log('Toast Dismissed');
+    });
+
+    toast.present();
+  }
+
+
+  ajout(numero) {
+    let i = 0;
+    while(i < this.listeProduit.length && this.listeProduit[i][0] != numero) {
+      i++
+    }
+    if(i < this.listeProduit.length) {
+      console.log(this.listeProduit[i]);
+      this.listeProduit[i][1] = this.listeProduit[i][1] + 1;
+    } else {
+      this.listeProduit.push([numero, 1]);
+    }
+  }
+
+  affList() {
+
+  }
 }

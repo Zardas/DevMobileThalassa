@@ -1,14 +1,16 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <ion-menu [content]="content">
 
   <ion-header>
-    <ion-toolbar>
+    <ion-toolbar color="XLblueDarker">
       <ion-title>Pages</ion-title>
     </ion-toolbar>
   </ion-header>
 
   <ion-content>
     <ion-list>
-      <button ion-item *ngFor="let p of pages" (click)="openPage(p)">
+      <button ion-item *ngFor="let p of pages" (click)="openPage(p)" class="buttonListePage">
         {{p.title}}
       </button>
     </ion-list>

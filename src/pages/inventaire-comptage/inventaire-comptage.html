@@ -6,7 +6,7 @@
 -->
 <ion-header>
 
-  <ion-navbar>
+  <ion-navbar color="XLblue">
 
   	<button ion-button menuToggle>
   		<ion-icon name="menu"></ion-icon>
@@ -15,10 +15,7 @@
     <ion-title>Inventaire</ion-title>
 
     <!-- Bouton logo (retourne au menu) -->
-    <button (click)="goTo('HomePage')">
-      <!--<img src="../../assets/imgs/logoXLSoft.png" />-->
-      <ion-icon name="apps"></ion-icon>
-    </button>
+      <img src="../../assets/imgs/logoXLSoft.png" (click)="goTo('HomePage')" />
     
   </ion-navbar>
 
@@ -26,7 +23,34 @@
 
 
 <ion-content padding>
-  <button ion-button block>
+  <button ion-button block class="envoyerDansLaBase" color="XLblueDarker" class="transfererDonnees" (click)="presentToast('Les données ont été transférées')">
     Ajouter les données scannées dans la base de données
-  </button>	
+  </button>
+
+
+  <ion-card>
+    <ion-card-content class="ajoutArticle">
+      Scannez un article pour l'ajouter dans la liste.
+    </ion-card-content>
+  </ion-card>
+
+  <ion-item class="numero_scanne">
+    <ion-label color="primary" inline>Numéro scanné : </ion-label>
+    <ion-input placeholder="Juste ici" clearInput></ion-input>
+  </ion-item>
+
+  <ion-list class="boutonsDeTest">
+      <button ion-button (click)="ajout('1')" color="XLblueDarker">Produit n°1</button>
+      <button ion-button (click)="ajout('2')" color="XLblueDarker">Produit n°2</button>
+      <button ion-button (click)="ajout('3')" color="XLblueDarker">Produit n°3</button>
+      <button ion-button (click)="ajout('4')" color="XLblueDarker">Produit n°4</button>
+      <button ion-button (click)="ajout('5')" color="XLblueDarker">Produit n°5</button>
+      <button ion-button (click)="ajout('6')" color="XLblueDarker">Produit n°6</button>
+  </ion-list>
+
+  <ion-list *ngFor="let article of listeProduit">
+    <ion-card>Article n°{{article[0]}} : <span>{{article[1]}}</span></ion-card>
+  </ion-list>
+
+
 </ion-content>

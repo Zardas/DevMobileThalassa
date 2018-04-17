@@ -1,25 +1,35 @@
+
+
+
 <ion-header>
-  <ion-navbar>
-  	<button ion-button menuToggle>
+  
+
+  <ion-navbar color="XLblue">
+
+  	<button ion-button menuToggle class="buttonToggleMenu">
   		<ion-icon name="menu"></ion-icon>
   	</button>
+
     <ion-title>
       Titre Principal
     </ion-title>
 
     <!-- Bouton logo (retourne au menu) -->
-    <button>
-      <!--<img src="../../assets/imgs/logoXLSoft.png" />-->
-      <ion-icon name="apps"></ion-icon>
-    </button>
+    <img src="../../assets/imgs/logoXLSoft.png" />
+      <!--<ion-icon name="apps"></ion-icon>-->
+
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <button ion-button block (click)="goTo('InventaireComptage')">
-    Passer à l'inventaire
+
+
+  <button ion-button block color="XLblueDarker" (click)="goTo('InventaireComptage')" class="passerInventaire">
+    <p>Passer à l'inventaire</p>
+    <ion-icon name="arrow-forward"></ion-icon>
   </button>
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+
+
+
+ 
 </ion-content>

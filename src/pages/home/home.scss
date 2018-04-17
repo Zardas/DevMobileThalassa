@@ -1,3 +1,19 @@
 page-home {
 
 }
+
+.passerInventaire {
+	padding-top: 5vw;
+	padding-bottom: 5vw;
+	font-size: 4.75vw;
+}
+
+.passerInventaire ion-icon {
+	position: absolute;
+	right: 5%;
+}
+
+.passerInventaire:hover {
+	color: rgba(240,240,240,1);
+}
+

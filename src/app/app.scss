@@ -14,3 +14,47 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+/*--------------------*/
+/*-----GLOBAL------- */
+/*------------------*/
+
+img, object, embed, canvas, video, audio, picture {
+	max-width: 100%;
+	height: auto;
+	_width: 100%; /* IE6 seulement */
+}
+
+
+/*--------------------*/
+/*-----HEADER------- */
+/*------------------*/
+
+ion-navbar * {
+	display: inline-block;
+	margin-left: 0%;
+	margin-right: 0%;
+}
+
+ion-navbar ion-title {
+	width: 80%;
+	height: 50px;
+
+	text-align: center;
+	vertical-align: middle;
+	line-height: 50px;
+}
+
+ion-navbar img {
+	width: 50px;
+	float: right;
+}
+
+
+/*--------------------*/
+/*-----TOOLBAR------ */
+/*------------------*/
+
+.buttonListePage:hover {
+	color: rgba(0,105,162,1);
+}
