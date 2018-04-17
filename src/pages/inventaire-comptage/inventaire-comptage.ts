@@ -31,7 +31,15 @@ export class InventaireComptagePage {
   ) {
     
     this.pagesAccessibles = new Map<String, any>();
-    this.listeProduit = this.destockJson();
+    
+    let stockInitial = this.destockJson();
+    //S'il n'y a pas de variables locale, on initialise le tableau à vide
+    //Sinon, on met le tableau existant à la place (pérénnité des données)
+    if(stockInitial == null) {
+      this.listeProduit = new Array<[string, number]>();
+    } else {
+      this.listeProduit = this.destockJson();
+    }
 
     this.pagesAccessibles['HomePage'] = HomePage;
   }
@@ -98,7 +106,7 @@ export class InventaireComptagePage {
   //Stock le contenu de la liste des produits dans un fichier JSON en local
   stockJson() {
     let myJSON = JSON.stringify(this.listeProduit);
-    localStorage.setItem("testJSON", myJSON);
+    localStorage.setItem("ScannedItems", myJSON);
   }
 
   /*
@@ -107,15 +115,20 @@ export class InventaireComptagePage {
   pour repartir avec les données de la session précédente
   */
   destockJson(): Array<[String, number]> {
-    let text = localStorage.getItem("testJSON")
+    let text = localStorage.getItem("ScannedItems")
     console.log("parse");
 
-    let obj1 = JSON.parse(text);
-    for(let i = 0 ; i < obj1.length ; i++) {
-      console.log(obj1[i]);
-    }
+    if(text == null) {
+      return null;
+    } else {
+      
+      let scannedItems = JSON.parse(text);
+      for(let i = 0 ; i < scannedItems.length ; i++) {
+        console.log(scannedItems[i]);
+      }
 
-    return obj1;
+      return scannedItems;
+    }
   }
 
   //Vide la liste de toute les données
