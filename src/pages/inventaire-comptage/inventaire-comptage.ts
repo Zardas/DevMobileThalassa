@@ -51,7 +51,7 @@ export class InventaireComptagePage {
     console.log('InventaireComptage didLoad()');
 
     let a = this.destockJson();
-    if(a.length != 0) {
+    if(a == null || a.length != 0) {
       this.masquerIndication();
     }    
   }
@@ -109,6 +109,8 @@ export class InventaireComptagePage {
     }
 
     this.stockJson();
+
+    console.log(this.tailleListeProduit());
   }
 
 
@@ -179,8 +181,24 @@ export class InventaireComptagePage {
     document.getElementById("divAjoutArticle").innerHTML = '';
   }
 
+  //Fait apparaître la div avec "Scannez un article pour l'ajouter dans la liste"
   afficherIndication() {
     document.getElementById("divAjoutArticle").innerHTML = "<ion-card><ion-card-content class='ajoutArticle' style='text-align: center; font-size: 15px; color: rgba(150,150,150,1);'>Scannez un article pour l'ajouter dans la liste.</ion-card-content></ion-card>";
   }
+
+
+  //Affiche la taille en mémoire de la liste des produits
+  tailleListeProduit() {
+    let size_total = 0;
+    let size_char = 2;
+    let size_number = 8;
+
+    for(let i =0 ; i < this.listeProduit.length ; i++) {
+      size_total = size_total + 13*size_char + this.listeProduit[i][1]*size_number;
+    }
+
+    return size_total;
+  }
 }
+
 
