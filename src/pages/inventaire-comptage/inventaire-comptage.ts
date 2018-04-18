@@ -50,8 +50,8 @@ export class InventaireComptagePage {
   ionViewDidLoad() {
     console.log('InventaireComptage didLoad()');
 
-    let a = this.destockJson(); 
-    if(a != '') {
+    let a = this.destockJson();
+    if(a.length != 0) {
       this.masquerIndication();
     }    
   }
@@ -110,6 +110,7 @@ export class InventaireComptagePage {
 
     this.stockJson();
   }
+
 
   //Les deux fonctions suivantes permettent la pérénisation des données, même lorsque l'on quitte l'application
 
