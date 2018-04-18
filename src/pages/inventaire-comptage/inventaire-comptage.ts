@@ -21,8 +21,9 @@ import { HomePage } from '../home/home';
 export class InventaireComptagePage {
 
   private pagesAccessibles: Map<String, any>;
-  private listeProduit: Array<[string, number]>;
+  private listeProduit: Array<[String, number]>;
 
+  
 
   constructor(
     public navCtrl: NavController,
@@ -36,13 +37,16 @@ export class InventaireComptagePage {
     //S'il n'y a pas de variables locale, on initialise le tableau à vide
     //Sinon, on met le tableau existant à la place (pérénnité des données)
     if(stockInitial == null) {
-      this.listeProduit = new Array<[string, number]>();
+      this.listeProduit = new Array<[String, number]>();
     } else {
-      this.listeProduit = this.destockJson();
+      this.listeProduit = stockInitial;
     }
+
+
 
     this.pagesAccessibles['HomePage'] = HomePage;
   }
+
 
   ionViewDidLoad() {
     console.log('InventaireComptage didLoad()');
@@ -133,8 +137,35 @@ export class InventaireComptagePage {
 
   //Vide la liste de toute les données
   viderLesDonnees() {
-    this.listeProduit = new Array<[string, number]>();
+    this.listeProduit = new Array<[String, number]>();
     this.stockJson();
   }
+
+  scanArticle() {
+    if(this.checkStyle()) {
+      //Fait disparaître la div avec "Scannez un article pour l'ajouter dans la liste"
+      document.getElementById("test").innerHTML = "";
+      this.ajout((<HTMLInputElement>document.getElementById("inputScan")).value);
+      
+    } else {
+      console.log("Aucun article scanné");
+    }
+  }
+
+
+  //Vérifie que le code-barre rentré est bien au bon format
+  checkStyle() {
+    //On vérifie que le champ n'est pas vide
+    if (((<HTMLInputElement>document.getElementById("inputScan")).value) != "") {
+      //On vérifie que le code barre fait bien 13 caractères
+      if(((<HTMLInputElement>document.getElementById("inputScan")).value).length == 13) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  } //NOTE : on ne fait pas juste un return (a && b) puisque l'on ne sait pas s'il y a une évaluation paresseuse
 }
 

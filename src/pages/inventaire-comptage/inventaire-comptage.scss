@@ -19,6 +19,14 @@ page-inventaire-comptage {
 	margin-bottom: 10%;
 }
 
+label {
+	color: rgba(0,105,162,1);
+}
+
+.numero_scanne div input {
+	border: none;
+}
+
 .boutonsDeTest {
 	text-align: center;
 }
@@ -33,4 +41,5 @@ page-inventaire-comptage {
 ion-list ion-card span {
 	color: rgba(0,105,162,1);
 }
+
 
