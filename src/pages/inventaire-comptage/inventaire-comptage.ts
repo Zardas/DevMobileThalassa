@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Nav, ToastController } from 'ionic-angular';
+import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 
 import { HomePage } from '../home/home';
 
@@ -9,6 +10,11 @@ import { HomePage } from '../home/home';
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
+
+/* Si jamais window et document ne sont pas reconnus
+const win: any = window;
+const doc: any = document;
+*/
 
 @IonicPage()
 @Component({
@@ -20,21 +26,39 @@ export class InventaireComptagePage {
 
   private pagesAccessibles: Map<String, any>;
   private listeProduit: Array<[string, number]>;
-  
+  public sqlite: SQLite;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams, public nav: Nav,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
   ) {
-    
-    this.pagesAccessibles = new Map<String, any>();
+
     this.listeProduit = Array<[string, number]>();
 
+    this.pagesAccessibles = new Map<String, any>();
     this.pagesAccessibles['HomePage'] = HomePage;
+
+    this.sqlite = new SQLite();
   }
 
   ionViewDidLoad() {
     console.log('InventaireComptage didLoad()');
+
+
+    /*------------------*/
+    /*---Création BDD---*/
+    /*------------------*/
+    this.sqlite.create({
+      name: 'Inventaire.db',
+      location: 'default'
+    })
+    .then((db: SQLiteObject) => {
+      db.executeSql('CREATE TABLE Produit(idProduit NUMBER PRIMARY KEY, codeBarre VARCHAR(13)', {})
+        .then(() => console.log('Executed SQL'))
+        .catch(e => console.log(e));
+    })
+    .catch(e => console.log(e));
+
   }
 
 
@@ -81,7 +105,19 @@ export class InventaireComptagePage {
     }
   }
 
-  affList() {
+
+
+
+  /*---------------------------------------------------------*/
+  /*------------Partie gestion de BDD avec SQLite------------*/
+  /*---------------------------------------------------------*/
+
+  testBDDInsert() {
 
   }
+
+
 }
+
+
+
