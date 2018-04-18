@@ -27,14 +27,6 @@
     Ajouter les données scannées dans la base de données
   </button>
 
-
-  <div id="test">
-    <ion-card>
-      <ion-card-content class="ajoutArticle">
-        Scannez un article pour l'ajouter dans la liste.
-      </ion-card-content>
-    </ion-card>
-  </div>
   
   
   
@@ -45,7 +37,7 @@
     </div>
   </ion-item>
   
-  <button ion-button block icon-left color="XLblue" (click)="scanArticle()">
+  <button ion-button block icon-left color="XLblue" (click)="scanArticle()" class="scanner">
     <ion-icon name="search"></ion-icon>
     Scan
   </button>
@@ -64,7 +56,15 @@
   -->
 
 
-  
+  <div id="divAjoutArticle">
+    <ion-card>
+      <ion-card-content class='ajoutArticle'>
+        Scannez un article pour l'ajouter dans la liste.
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+
   <ion-list *ngFor="let article of listeProduit">
     <ion-card>Article n°{{article[0]}} : <span>{{article[1]}}</span></ion-card>
   </ion-list>

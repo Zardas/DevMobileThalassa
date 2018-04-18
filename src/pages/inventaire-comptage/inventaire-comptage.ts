@@ -23,15 +23,13 @@ export class InventaireComptagePage {
   private pagesAccessibles: Map<String, any>;
   private listeProduit: Array<[String, number]>;
 
-  
+
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams, public nav: Nav,
     private toastCtrl: ToastController
   ) {
-    
-    this.pagesAccessibles = new Map<String, any>();
     
     let stockInitial = this.destockJson();
     //S'il n'y a pas de variables locale, on initialise le tableau à vide
@@ -40,16 +38,22 @@ export class InventaireComptagePage {
       this.listeProduit = new Array<[String, number]>();
     } else {
       this.listeProduit = stockInitial;
+
     }
 
-
-
+    this.pagesAccessibles = new Map<String, any>();
     this.pagesAccessibles['HomePage'] = HomePage;
   }
 
 
+  //Fonction appelée quand la page est en cache
   ionViewDidLoad() {
     console.log('InventaireComptage didLoad()');
+
+    let a = this.destockJson(); 
+    if(a != '') {
+      this.masquerIndication();
+    }    
   }
 
 
@@ -96,10 +100,12 @@ export class InventaireComptagePage {
       i++
     }
     if(i < this.listeProduit.length) {
-      //console.log(this.listeProduit[i]);
+      //Cas où l'on a déjà scanné ce type de produit -> incrémentation
       this.listeProduit[i][1] = this.listeProduit[i][1] + 1;
     } else {
+      //Cas où l'on a pas encore scanné ce type de produit -> ajout dans l'array
       this.listeProduit.push([numero, 1]);
+      this.masquerIndication();
     }
 
     this.stockJson();
@@ -139,14 +145,12 @@ export class InventaireComptagePage {
   viderLesDonnees() {
     this.listeProduit = new Array<[String, number]>();
     this.stockJson();
+    this.afficherIndication();
   }
 
   scanArticle() {
     if(this.checkStyle()) {
-      //Fait disparaître la div avec "Scannez un article pour l'ajouter dans la liste"
-      document.getElementById("test").innerHTML = "";
       this.ajout((<HTMLInputElement>document.getElementById("inputScan")).value);
-      
     } else {
       console.log("Aucun article scanné");
     }
@@ -167,5 +171,15 @@ export class InventaireComptagePage {
       return false;
     }
   } //NOTE : on ne fait pas juste un return (a && b) puisque l'on ne sait pas s'il y a une évaluation paresseuse
+
+
+  //Fait disparaître la div avec "Scannez un article pour l'ajouter dans la liste"
+  masquerIndication() {
+    document.getElementById("divAjoutArticle").innerHTML = '';
+  }
+
+  afficherIndication() {
+    document.getElementById("divAjoutArticle").innerHTML = "<ion-card><ion-card-content class='ajoutArticle' style='text-align: center; font-size: 15px; color: rgba(150,150,150,1);'>Scannez un article pour l'ajouter dans la liste.</ion-card-content></ion-card>";
+  }
 }
 
