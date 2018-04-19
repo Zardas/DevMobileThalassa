@@ -1,3 +1,4 @@
+import { SQLiteDatabaseConfig } from '@ionic-native/sqlite';
 import { SQLiteObject } from './SQLiteObject';
 
 
