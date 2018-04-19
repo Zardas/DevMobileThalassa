@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Nav, ToastController } from 'ionic-angular';
-import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 
 import { HomePage } from '../home/home';
 
@@ -26,7 +25,7 @@ export class InventaireComptagePage {
 
   private pagesAccessibles: Map<String, any>;
   private listeProduit: Array<[string, number]>;
-  public sqlite: SQLite;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams, public nav: Nav,
@@ -38,7 +37,6 @@ export class InventaireComptagePage {
     this.pagesAccessibles = new Map<String, any>();
     this.pagesAccessibles['HomePage'] = HomePage;
 
-    this.sqlite = new SQLite();
   }
 
   ionViewDidLoad() {
@@ -48,16 +46,7 @@ export class InventaireComptagePage {
     /*------------------*/
     /*---Création BDD---*/
     /*------------------*/
-    this.sqlite.create({
-      name: 'Inventaire.db',
-      location: 'default'
-    })
-    .then((db: SQLiteObject) => {
-      db.executeSql('CREATE TABLE Produit(idProduit NUMBER PRIMARY KEY, codeBarre VARCHAR(13)', {})
-        .then(() => console.log('Executed SQL'))
-        .catch(e => console.log(e));
-    })
-    .catch(e => console.log(e));
+    
 
   }
 

@@ -3,11 +3,16 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-import { SQLite } from '@ionic-native/sqlite';
+import { SQLite, SQLitePorter, SQLiteDatabaseConfig } from '@ionic-native/sqlite';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { InventaireComptagePage } from '../pages/inventaire-comptage/inventaire-comptage';
+
+import { SQLiteMock } from './SQLiteMock';
+import { SQLiteObject } from './SQLiteObject';
+import { SQLitePorterMock } from './SQLitePorterMock';
+
 
 @NgModule({
 
@@ -18,8 +23,22 @@ import { InventaireComptagePage } from '../pages/inventaire-comptage/inventaire-
   providers: [
     StatusBar,
     SplashScreen,,
-    SQLite,
+    {provide: SQLite, useClass: SQLiteMock },
+    {provide: SQLitePorter, useClass: SQLitePorterMock},
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
-export class AppModule {}
+
+
+export class AppModule {
+	
+}
+
+
+
+
+
+
+
+
+
