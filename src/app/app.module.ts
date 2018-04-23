@@ -4,15 +4,11 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SQLite } from '@ionic-native/sqlite';
-import { SQLitePorter } from '@ionic-native/sqlite-porter';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { InventaireComptagePage } from '../pages/inventaire-comptage/inventaire-comptage';
-
-import { SQLiteMock } from './SQLiteMock';
-import { SQLitePorterMock } from './SQLitePorterMock';
-
+//import { DatabaseProvider } from '../databaseProvider/databaseProvider';
 
 @NgModule({
 
@@ -22,9 +18,8 @@ import { SQLitePorterMock } from './SQLitePorterMock';
   entryComponents: [MyApp, HomePage, InventaireComptagePage],
   providers: [
     StatusBar,
-    SplashScreen,,
-    {provide: SQLite, useClass: SQLiteMock },
-    {provide: SQLitePorter, useClass: SQLitePorterMock},
+    SplashScreen,
+    SQLite,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
