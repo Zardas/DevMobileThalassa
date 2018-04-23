@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Nav, ToastController } from 'ionic-angular';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+import { DatabaseProvider } from '../databaseProvider/databaseProvider';
 
 //import { DatabaseProvider } from '../databaseProvider/databaseProvider';
 import { HomePage } from '../home/home';
@@ -36,7 +37,8 @@ export class InventaireComptagePage {
     public navCtrl: NavController,
     public navParams: NavParams, public nav: Nav,
     private toastCtrl: ToastController,
-    private sqlite: SQLite
+    private sqlite: SQLite,
+    private database: DatabaseProvider
   ) {
 
     this.listeProduit = Array<[string, number]>();
@@ -45,6 +47,11 @@ export class InventaireComptagePage {
     this.pagesAccessibles['HomePage'] = HomePage;
 
     this.sqlite = new SQLite();
+
+    
+
+    
+
   }
 
 
@@ -115,9 +122,37 @@ export class InventaireComptagePage {
   }
 
 
+  CreateArticle() {
+    this.database.createArticle(0,10)
+      .then( (data) => {
+        console.log(data);
+        console.log("Réussite 1");
+      }, (error) => {
+        console.log(error);
+        console.log("Echec 1");
+      })
+  }
 
 
+  GetAllArticles() {
+    this.database.getAllArticles()
+      .then( (data) => {
+        console.log(data);
+        console.log("Réussite 2");
+        console.log(this.ArticlesListes(data));
+      }, (error) => {
+        console.log(error);
+        console.log("Echec 2");
+      })
+  }
 
+  ArticlesListes(data) {
+    let listeData = "";
+    for(var i = 0 ; i < data.rows.length ; i++) {
+      listeData = listeData + "[" + data.rows.item(i).id + ";" + data.rows.item(i).prix + "] ; ";
+    }
+    return listeData;
+  }
 
 
 
