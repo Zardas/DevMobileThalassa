@@ -17,11 +17,26 @@ const doc: any = document;
 */
 
 var users: Array<user> = [];
+var article: Array<article> = [];
 
+interface champ {
+  nom: string;
+  type: string;
+  primaryKey: boolean;
+}
+
+interface table {
+  nom: string;
+  champs: Array<champ>;
+}
 
 interface user {
   username: string;
   password: stirng;
+}
+interface article {
+  id: integer;
+  prix: integer;
 }
 
 @IonicPage()
@@ -44,7 +59,21 @@ export class InventaireComptagePage {
     this.pagesAccessibles = new Map<String, any>();
     this.pagesAccessibles['HomePage'] = HomePage;
 
-    this.creationBDD();
+    let tables: Array<table> = [];
+
+    /* Création de l'array de configuration des tables */
+    let champsTableUser: Array<champ> = [];
+    champsTableUser.push({nom: 'username', type: 'VARCHAR(255)', primaryKey: true});
+    champsTableUser.push({nom: 'password', type: 'VARCHAR(255)', primaryKey: false});
+
+    let champsTableArticle: Array<champ> = [];
+    champsTableArticle.push({nom: 'id', type: 'INTEGER', primaryKey: true});
+    champsTableArticle.push({nom: 'prix', type: 'INTEGER', primaryKey: false});
+
+    tables.push({nom: 'user', champs: champsTableUser});
+    tables.push({nom: 'Article', champs: champsTableArticle});
+
+    this.creationBDD(tables);
   }
 
 
@@ -91,18 +120,15 @@ export class InventaireComptagePage {
   /*------------------*/
   /*---Création BDD---*/
   /*------------------*/
-  creationBDD() {
-      this.database = new Database(new SQLite());
+  creationBDD(tables: Array<table>) {
+      this.database = new Database(new SQLite(), tables);
   }
 
   /*-----------------------------*/
   /*---Ajout d'un utilisateur---*/
   /*---------------------------*/
   addBDD() {
-    this.database.addUser("John","12345");
-    this.database.addUser("Mark", "2");
-
-    this.synchronise();
+    this.database.add('user', ['username', 'password'], ['johnny', '1111'], 'johnny', '1111');
   }
 
   /*----------------------------------------------------------------------------------------------*/
@@ -123,9 +149,11 @@ export class InventaireComptagePage {
   /*---Affiche le contenu de la variable globale users---*/
   /*-----------------------------------------------------*/
   afficheUser() {
-    for(let i = 0 ; i < users.length ; i++) {
+    /*for(let i = 0 ; i < users.length ; i++) {
       console.log("Username : " + users[i].username + " | Password : " + users[i].password);
-    }
+    }*/
+
+    console.log(this.database.getData('user'));
   }
 
   /*---------------------------------------*/
@@ -138,9 +166,8 @@ export class InventaireComptagePage {
   /*--------------------------------------------------------------------------------*/
   /*---Supprime le contenu de la table SQLite user et de la variable globle users---*/
   /*--------------------------------------------------------------------------------*/
-  viderTableUser() {
-    this.database.viderTableUser();
-    this.synchronise();
+  viderTable(table: string) {
+    this.database.viderTable(table);
   }
 
   /*--------------------------------------------------------*/
