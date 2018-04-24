@@ -9,7 +9,6 @@ import { HttpModule } from '@angular/http'
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { InventaireComptagePage } from '../pages/inventaire-comptage/inventaire-comptage';
-import { DatabaseProvider } from '../pages/databaseProvider/databaseProvider';
 
 @NgModule({
 
@@ -22,7 +21,6 @@ import { DatabaseProvider } from '../pages/databaseProvider/databaseProvider';
     SplashScreen,
     SQLite,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    DatabaseProvider
   ]
 })
 

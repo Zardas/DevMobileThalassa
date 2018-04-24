@@ -1,72 +1,98 @@
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/map';
-
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 
 @Injectable()
-export class DatabaseProvider {
+export class Database {
+	
+	theConsole: string = "Console Messages";
+	toReturn: string = "";
+	options: any = {
+		name: 'data.db',
+		location: 'default',
+		createFromLocation: 1
+	}
+
 	private db: SQLiteObject;
-	private isOpen: boolean;
-	public storage: SQLite;
 
-	constructor() {
-		console.log('a');
-		if(!this.isOpen) {
-			console.log('b');
-			this.storage = new SQLite();
+	constructor(private sqlite: SQLite) {
+		this.connectToDb();
+	}
 
-			this.storage.create({
-				name: 'inventaire.db',
-				location: 'default'
-			})
-			.then( (db:SQLiteObject) => {
+
+	private connectToDb():void {
+		this.sqlite.create(this.options)
+			.then( (db: SQLiteObject) => {
 				this.db = db;
-				db.executeSql("CREATE TABLE IF NOT EXISTS Article (id INTEGER PRIMARY KEY, prix INTEGER)", []);
-				this.isOpen = true;
-				console.log("BDD créée");
-			})
-			.catch( (error) => {
-				console.log(error);
-			})
-		}
-		console.log('c');
+				var sql = 'CREATE TABLE IF NOT EXISTS `user` (username VARCHAR(255), password VARCHAR(255))';
 
+				this.db.executeSql(sql, {})
+					.then( () => this.theConsole += 'Executed SQL' + sql)
+					.catch( e => this.theConsole += "Error : " + JSON.stringify(e));
+			})
+			.catch(e => this.theConsole += JSON.stringify(e));
 	}
 
 
-	createArticle(id: number, prix: number) {
-		return new Promise( (resolve, reject) => {
-			let sql = "INSERT INTO Article (id, prix) VALUES (?, ?)";
-			this.db.executeSql(sql, [id, prix]).then( (data) => {
-				resolve(data);
-				console.log('Article ajouté');
-			}, (error) => {
-				reject(error);
-				console.log("L'article n'a pas pu être ajouté");
+	addUser(username, password):void {
+		var sql = "INSERT INTO `user` (username,password) VALUES ('"+username+"','"+ password+"')";
+
+		this.db.executeSql(sql, {})
+			.then( () => this.theConsole += 'Executed SQL' + sql)
+			.catch( e => this.theConsole += "Error : " + JSON.stringify(e));
+	}
+
+	getDealer() {
+		var toReturn = "";
+		var sql = "SELECT * FROM user";
+
+		this.db.executeSql(sql, {})
+			.then( (result) => {
+				this.theConsole += JSON.stringify(result);
+				console.log("Nombre de résultats : " + result.rows.length);
+
+				if(result.rows.length > 0) {
+					this.theConsole += 'Result' + result.rows.item(0);
+				}
+				this.theConsole += "\n" + result.rows.item(0).username + result.rows.item(0).password;
+				this.theConsole += "\n" + 'Rows' + result.rows.length;
+
+				for(let i = 0 ; i < result.rows.length ; i++) {
+					toReturn += "[" + result.rows.item(i).username + " ; " + result.rows.item(i).password + "] ";
+				}
+			})
+			.catch( e => {
+				this.theConsole += JSON.stringify(e);
+				toReturn = "Problème pour le SELECT";
 			});
-		});
+		
+		return toReturn;
 	}
 
-	getAllArticles() {
-		return new Promise( (resolve, reject) => {
-			this.db.executeSql("SELECT * FROM Article", [])
-				.then( (data) => {
-					let arrayArticle = [];
-					if(data.rows.length > 0) {
-						for(var i = 0 ; i < data.rows.length ; i++) {
-							arrayArticle.push({
-								id: data.rows.item(i).id,
-								prix: data.rows.item(i).prix
-							});
-						}
-					}
-					resolve(arrayArticle);
-					console.log("On a bien pu accéder à l'array");
-				}, (error) => {
-					reject(error);
-					console.log("Nous n'avons pas pu accéder à l'array");
-				})
-		});
+
+	getConsoleMessage() {
+		return this.theConsole;
+	}
+
+	viderTableUser() {
+		var sql = "DELETE FROM `user`";
+
+		this.db.executeSql(sql, {})
+			.then( () => this.theConsole += 'Executed SQL' + sql)
+			.catch( e => this.theConsole += "Error : " + JSON.stringify(e));
+	}
+
+	tableUserVide() {
+		var sql = "SELECT * FROM user";
+
+		this.db.executeSql(sql, {})
+			.then( (result) => {
+				this.theConsole += JSON.stringify(result);
+				return (result.rows.length == 0)
+			})
+			.catch( e => {
+				this.theConsole += JSON.stringify(e);
+				return null
+			});
 	}
 
 

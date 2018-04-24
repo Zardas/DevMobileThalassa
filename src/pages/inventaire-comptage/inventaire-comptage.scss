@@ -9,16 +9,28 @@ page-inventaire-comptage {
 	margin-bottom: 8%;
 }
 
-.ajoutArticle {
+#divAjoutArticle ion-card ion-card-content {
 	text-align: center;
-	font-size: 3.80vw;
+	font-size: 5.0vw;
 	color: rgba(150,150,150,1);
 }
 
-.numero_scanne {
-	margin-bottom: 10%;
+#divAjoutArticle {
+	margin-bottom: 5%;
 }
 
+
+label {
+	color: rgba(0,105,162,1);
+}
+
+.numero_scanne div input {
+	border: none;
+}
+
+.boutonsDeTest {
+	text-align: center;
+}
 .boutonsDeTest button {
 	width: 30%;
 	padding-top: 5px;
@@ -27,7 +39,10 @@ page-inventaire-comptage {
 	padding-right: 1%;
 }
 
+
+.scanner {
+	margin-bottom: 10%;
+}
 ion-list ion-card span {
 	color: rgba(0,105,162,1);
 }
-

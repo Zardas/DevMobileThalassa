@@ -26,25 +26,32 @@
 
 <ion-content padding>
 
-  <button ion-button color="XLblueDarker" (click)='CreateArticle()'>Creer article</button>
-  <button ion-button color="XLblue" (click)='GetAllArticles()'>Get articles</button>
+  
+  <div id="buttonsBDD">
+    <button ion-button color="XLblueDarker" (click)='addBDD()'>Creer article</button>
+    <button ion-button color="XLblueDarker" (click)='getDealer()'>Get article</button>
+    <button ion-button color="XLblueDarker" (click)='showConsoleMessage()'>Show console</button>
+    <button ion-button color="danger" (click)='viderTableUser()'><ion-icon name="trash"></ion-icon></button>
+  </div>
+  
 
-  <button ion-button block class="envoyerDansLaBase" color="XLblueDarker" class="transfererDonnees" (click)="presentToast('Les données ont été transférées')">
-    Ajouter les données scannées dans la base de données
+
+
+
+  <ion-item class="numero_scanne">
+    <div>
+      <label for="codeBarre" color="primary" inline>Code-barre : </label>
+      <input name="codeBarre" placeholder="0000000000000" clearInput id="inputScan" size="35" maxlength="13" />
+    </div>
+  </ion-item>
+
+  <button ion-button block icon-left color="XLblue" (click)="scanArticle()" class="scanner">
+    <ion-icon name="search"></ion-icon>
+    Scan
   </button>
 
 
-  <ion-card>
-    <ion-card-content class="ajoutArticle">
-      Scannez un article pour l'ajouter dans la liste.
-    </ion-card-content>
-  </ion-card>
-
-  <ion-item class="numero_scanne">
-    <ion-label color="primary" inline>Numéro scanné : </ion-label>
-    <ion-input placeholder="Juste ici" clearInput></ion-input>
-  </ion-item>
-
+  <!--
   <ion-list class="boutonsDeTest">
       <button ion-button (click)="ajout('1')" color="XLblueDarker">Produit n°1</button>
       <button ion-button (click)="ajout('2')" color="XLblueDarker">Produit n°2</button>
@@ -53,10 +60,37 @@
       <button ion-button (click)="ajout('5')" color="XLblueDarker">Produit n°5</button>
       <button ion-button (click)="ajout('6')" color="XLblueDarker">Produit n°6</button>
   </ion-list>
+  -->
+
+  <div id="divAjoutArticle">
+      <ion-card>
+        <ion-card-content class='ajoutArticle'>
+          Scannez un article pour l'ajouter dans la liste.
+        </ion-card-content>
+      </ion-card>
+  </div>
 
   <ion-list *ngFor="let article of listeProduit">
     <ion-card>Article n°{{article[0]}} : <span>{{article[1]}}</span></ion-card>
   </ion-list>
+
+
+
+
+
+  <button ion-button block class="envoyerDansLaBase" color="XLblueDarker" class="transfererDonnees" (click)="presentToast('Les données ont été transférées')">
+    Ajouter les données scannées dans la base de données
+  </button>
+
+
+  <button ion-button block icon-left icon-right color="danger" (click)="viderTableUser()">
+    <ion-icon name="trash"></ion-icon>
+      Vider les stocks
+    <ion-icon name="trash"></ion-icon>
+  </button>
+
+
+  <button ion-button block (click)="aucuneArticleBis()">Aucun Article ?</button>
 
 
 </ion-content>
