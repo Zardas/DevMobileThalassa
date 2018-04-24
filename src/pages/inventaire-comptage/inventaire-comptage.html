@@ -28,10 +28,13 @@
 
   
   <div id="buttonsBDD">
-    <button ion-button color="XLblueDarker" (click)='addBDD()'>Creer article</button>
-    <button ion-button color="XLblueDarker" (click)='getDealer()'>Get article</button>
-    <button ion-button color="XLblueDarker" (click)='showConsoleMessage()'>Show console</button>
+    <button ion-button color="XLblueDarker" (click)='addBDD()'>Ajout User</button>
+    <button ion-button color="XLblueDarker" (click)='afficheUser()'>Voir user</button>
+  </div>
+  <div id="buttonsBDD">
+    <button ion-button color="primary" (click)='synchronise()'><ion-icon name="download"></ion-icon></button>
     <button ion-button color="danger" (click)='viderTableUser()'><ion-icon name="trash"></ion-icon></button>
+    <button ion-button color="XLblue" (click)='synchronise()'><ion-icon name="refresh"></ion-icon></button>
   </div>
   
 
@@ -70,8 +73,8 @@
       </ion-card>
   </div>
 
-  <ion-list *ngFor="let article of listeProduit">
-    <ion-card>Article n°{{article[0]}} : <span>{{article[1]}}</span></ion-card>
+  <ion-list *ngFor="let user of users">
+    <ion-card>Article n°{{user.username}} : <span>{{user.password}}</span></ion-card>
   </ion-list>
 
 
@@ -90,7 +93,7 @@
   </button>
 
 
-  <button ion-button block (click)="aucuneArticleBis()">Aucun Article ?</button>
+  <button ion-button block (click)="aucuneArticleAffiche()">Aucun Article ?</button>
 
 
 </ion-content>

@@ -1,11 +1,16 @@
 import { Injectable } from '@angular/core';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 
+interface user {
+	username: string;
+	password: stirng;
+}
+
 @Injectable()
 export class Database {
 	
 	theConsole: string = "Console Messages";
-	toReturn: string = "";
+
 	options: any = {
 		name: 'data.db',
 		location: 'default',
@@ -14,15 +19,24 @@ export class Database {
 
 	private db: SQLiteObject;
 
+
+	/*--------------------------*/
+  	/*---Constructeur basique---*/
+  	/*--------------------------*/
 	constructor(private sqlite: SQLite) {
 		this.connectToDb();
 	}
 
-
+	/*--------------------------------------------------*/
+  	/*---Création de la base de données et des tables---*/
+  	/*--------------------------------------------------*/
+  	/*  Possible problème ici : si on tente direct de faire une requête SQL après l'appel à connectToDb, 
+  		on peut se retrouver dans le cas où db n'a pas encore été créé (TODO) */
 	private connectToDb():void {
 		this.sqlite.create(this.options)
 			.then( (db: SQLiteObject) => {
 				this.db = db;
+				this.toReturn = "";
 				var sql = 'CREATE TABLE IF NOT EXISTS `user` (username VARCHAR(255), password VARCHAR(255))';
 
 				this.db.executeSql(sql, {})
@@ -41,32 +55,22 @@ export class Database {
 			.catch( e => this.theConsole += "Error : " + JSON.stringify(e));
 	}
 
-	getDealer() {
-		var toReturn = "";
+	//https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
+	getDataUser() {
 		var sql = "SELECT * FROM user";
 
-		this.db.executeSql(sql, {})
-			.then( (result) => {
-				this.theConsole += JSON.stringify(result);
-				console.log("Nombre de résultats : " + result.rows.length);
-
-				if(result.rows.length > 0) {
-					this.theConsole += 'Result' + result.rows.item(0);
-				}
-				this.theConsole += "\n" + result.rows.item(0).username + result.rows.item(0).password;
-				this.theConsole += "\n" + 'Rows' + result.rows.length;
-
+		return this.db.executeSql(sql, {})
+			.then( function(result) {
+				console.log("----Nombre de users dans la bdd : " + result.rows.length + "----");
+				let toReturn: Array<user> = [];
 				for(let i = 0 ; i < result.rows.length ; i++) {
-					toReturn += "[" + result.rows.item(i).username + " ; " + result.rows.item(i).password + "] ";
+					//toReturn += "[" + result.rows.item(i).username + " ; " + result.rows.item(i).password + "]";
+					toReturn.push({username: result.rows.item(i).username, password: result.rows.item(i).password});
 				}
-			})
-			.catch( e => {
-				this.theConsole += JSON.stringify(e);
-				toReturn = "Problème pour le SELECT";
+				return toReturn;
 			});
-		
-		return toReturn;
 	}
+
 
 
 	getConsoleMessage() {
@@ -81,19 +85,6 @@ export class Database {
 			.catch( e => this.theConsole += "Error : " + JSON.stringify(e));
 	}
 
-	tableUserVide() {
-		var sql = "SELECT * FROM user";
-
-		this.db.executeSql(sql, {})
-			.then( (result) => {
-				this.theConsole += JSON.stringify(result);
-				return (result.rows.length == 0)
-			})
-			.catch( e => {
-				this.theConsole += JSON.stringify(e);
-				return null
-			});
-	}
 
 
 }

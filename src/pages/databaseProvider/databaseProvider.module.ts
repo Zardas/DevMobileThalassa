@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-import { DatabaseProvider } from './databaseProvider';
+import { Database } from './databaseProvider';
 
 @NgModule({
   declarations: [
-    DatabaseProvider,
+    Database,
   ],
   imports: [
-    IonicPageModule.forChild(DatabaseProvider),
+    IonicPageModule.forChild(Database),
   ],
 })
 export class databaseProviderPageModule {}
