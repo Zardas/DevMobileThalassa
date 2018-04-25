@@ -28,19 +28,24 @@
 
   
   <div id="buttonsBDD">
-    <button ion-button color="XLblueDarker" (click)='addBDD()'>Ajout User</button>
+    <button ion-button color="XLblue" (click)="addBDD('user', ['username', 'password'], ['john', '1111'])">1</button>
+    <button ion-button color="XLblue" (click)="addBDD('user', ['username', 'password'], ['john', '3333'])">2</button>
+    <button ion-button color="XLblue" (click)="addBDD('user', ['username', 'password'], ['greg', '2222'])">3</button>
+    <button ion-button color="XLblue" (click)="addBDD('user', ['username', 'password'], ['marc', '1111'])">4</button>
+  </div>
+  <div id="buttonsBDD">
     <button ion-button color="XLblueDarker" (click)='afficheUser()'>Voir user</button>
   </div>
   <div id="buttonsBDD">
-    <button ion-button color="primary" (click)='synchronise()'><ion-icon name="download"></ion-icon></button>
+    <button ion-button color="primary" (click)="synchronise('user')"><ion-icon name="download"></ion-icon></button>
     <button ion-button color="danger" (click)="viderTable('user')"><ion-icon name="trash"></ion-icon></button>
-    <button ion-button color="XLblue" (click)='synchronise()'><ion-icon name="refresh"></ion-icon></button>
+    <button ion-button color="XLblue" (click)="synchronise('user')"><ion-icon name="refresh"></ion-icon></button>
   </div>
   
 
 
 
-
+  <!--
   <ion-item class="numero_scanne">
     <div>
       <label for="codeBarre" color="primary" inline>Code-barre : </label>
@@ -52,7 +57,7 @@
     <ion-icon name="search"></ion-icon>
     Scan
   </button>
-
+  -->
 
   <!--
   <ion-list class="boutonsDeTest">
@@ -65,6 +70,7 @@
   </ion-list>
   -->
 
+  <!--
   <div id="divAjoutArticle">
       <ion-card>
         <ion-card-content class='ajoutArticle'>
@@ -72,9 +78,9 @@
         </ion-card-content>
       </ion-card>
   </div>
-
-  <ion-list *ngFor="let user of users">
-    <ion-card>Article n°{{user.username}} : <span>{{user.password}}</span></ion-card>
+  -->
+  <ion-list *ngFor="let user of userss">
+    <ion-card>Password de {{user.username}} : <span>{{user.password}}</span></ion-card>
   </ion-list>
 
 

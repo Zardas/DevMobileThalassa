@@ -32,7 +32,7 @@ interface table {
 
 interface user {
   username: string;
-  password: stirng;
+  password: string;
 }
 interface article {
   id: integer;
@@ -49,12 +49,13 @@ export class InventaireComptagePage {
 
   private pagesAccessibles: Map<String, any>;
   private database: Database;
-
+  public userss: Array<user> = [];
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams, public nav: Nav,
     private toastCtrl: ToastController,
   ) {
+
 
     this.pagesAccessibles = new Map<String, any>();
     this.pagesAccessibles['HomePage'] = HomePage;
@@ -127,40 +128,33 @@ export class InventaireComptagePage {
   /*-----------------------------*/
   /*---Ajout d'un utilisateur---*/
   /*---------------------------*/
-  addBDD() {
-    this.database.add('user', ['username', 'password'], ['johnny', '1111'], 'johnny', '1111');
+  addBDD(table: string, champs: Array<string>, values: Array<string>) {
+    this.database.add(table, champs, values);
+    this.synchronise(table);
   }
 
   /*----------------------------------------------------------------------------------------------*/
   /*---Met à jour le contenu de la variable globale users avec le retour de SELECT * FROM user---*/
   /*--------------------------------------------------------------------------------------------*/
-  synchronise() {
+  synchronise(table: string) {
     users = [];
-    this.database.getDataUser().then(function(res) {
+    this.database.getData(table).then(function(res) {
       //Ici, on ne peut accéder à rien qui appartiennent à la classe InventaireComptagePage
       //C'est pour cela que l'on doit utiliser une variable globale
       for(let i = 0 ; i < res.length ; i++) {
         users.push({username: res[i].username, password: res[i].password});
       }
     });
+    this.userss = users;
   }
 
   /*-----------------------------------------------------*/
   /*---Affiche le contenu de la variable globale users---*/
   /*-----------------------------------------------------*/
   afficheUser() {
-    /*for(let i = 0 ; i < users.length ; i++) {
+    for(let i = 0 ; i < users.length ; i++) {
       console.log("Username : " + users[i].username + " | Password : " + users[i].password);
-    }*/
-
-    console.log(this.database.getData('user'));
-  }
-
-  /*---------------------------------------*/
-  /*---Voir une trace des opérations SQL---*/
-  /*---------------------------------------*/
-  showConsoleMessage() {
-    console.log(this.database.getConsoleMessage());
+    }
   }
 
   /*--------------------------------------------------------------------------------*/
@@ -168,6 +162,7 @@ export class InventaireComptagePage {
   /*--------------------------------------------------------------------------------*/
   viderTable(table: string) {
     this.database.viderTable(table);
+    this.synchronise(table);
   }
 
   /*--------------------------------------------------------*/

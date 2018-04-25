@@ -15,7 +15,6 @@ interface table {
 @Injectable()
 export class Database {
 	
-	theConsole: string = "Console Messages";
 
 	options: any = {
 		name: 'data.db',
@@ -72,17 +71,14 @@ export class Database {
 					console.log('Commande SQL de création de la table ' + i + ' : ' + sql);
 					this.db.executeSql(sql, {})
 						.then( () => {
-							this.theConsole += 'Executed SQL' + sql;
 							console.log('La table ' + tables[i].nom + ' a été créée');
 						})
 						.catch( e => {
-							this.theConsole += "Error : " + JSON.stringify(e);
 							console.log('La table ' + tables[i].nom + ' n\'a pas pu être créée');
 						});
 				}
 			})
 			.catch(e => {
-				this.theConsole += JSON.stringify(e);
 				console.log('Ca ne marche pas du tout');
 			});
 	}
@@ -90,16 +86,10 @@ export class Database {
 
 
 
-	addTest(table: string, valeurs: Array<string>) {
-		var sql = "INSERT INTO " + table + " (username, password) VALUES (" + valeurs[0] + ", " + valeurs[1] + ")";
-
-		console.log(sql);
-		this.db.executeSql(sql, {})
-			.then( () => this.theConsole += 'Executed SQL' + sql)
-			.catch( e => this.theConsole += "Error : " + JSON.stringify(e));
-	}
-
-	add(table: string, champs: Array<string>, valeurs: Array<string>, username, password):void {
+	/*-------------------------------------------------------------------------------------------------*/
+  	/*---Ajout d'un tuple dans la table "table" avec comme values "valeurs" pour les champs "champs"---*/
+  	/*-------------------------------------------------------------------------------------------------*/
+	add(table: string, champs: Array<string>, valeurs: Array<string>):void {
 		var sql = "INSERT INTO " + table + " (";
 
 		sql = sql + champs[0];
@@ -112,29 +102,28 @@ export class Database {
 		}
 		sql = sql + ")";
 
-		//sql = "INSERT INTO user (username, password) VALUES (greg, " + 532 + ")";
-		//sql = "INSERT INTO user (username, password) VALUES ('"+username+"','"+ password+"')";
 		console.log("SQL d'ajout : " + sql);
 
 		this.db.executeSql(sql, {})
 			.then( () => {
-				this.theConsole += 'Executed SQL' + sql;
 				console.log("Le tuple a été ajouté dans la table " + table);
 			})
 			.catch( e => {
-				this.theConsole += "Error : " + JSON.stringify(e);
 				console.log("Le tuple n'a pas été ajouté dans la table " + table);
 			});
 	}
 
 	//https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
+	/*------------------------------------------------*/
+  	/*---Select tout les tuples de la table "table"---*/
+  	/*------------------------------------------------*/
 	getData(table: string) {
 		var sql = "SELECT * FROM " + table + "";
 
 		return this.db.executeSql(sql, {})
 			.then( function(result) {
-				console.log("----Nombre de tuple dans la table : " + result.rows.length + "----");
-				let toReturn: Array = [];
+				//console.log("----Nombre de tuple dans la table : " + result.rows.length + "----");
+				let toReturn: Array<any> = [];
 				for(let i = 0 ; i < result.rows.length ; i++) {
 					//toReturn += "[" + result.rows.item(i).username + " ; " + result.rows.item(i).password + "]";
 					//toReturn.push({username: result.rows.item(i).username, password: result.rows.item(i).password});
@@ -145,22 +134,17 @@ export class Database {
 	}
 
 
-
-	getConsoleMessage() {
-		return this.theConsole;
-	}
-
+	/*--------------------------------------------------*/
+  	/*---Supprime tout les tuples de la table "table"---*/
+  	/*--------------------------------------------------*/
 	viderTable(table: string) {
-		console.log(table);
 		var sql = "DELETE FROM " + table;
 
 		this.db.executeSql(sql, {})
 			.then( () => {
-				this.theConsole += 'Executed SQL' + sql;
 				console.log("La table " + table + " a été vidée");
 			})
 			.catch( e => {
-				this.theConsole += "Error : " + JSON.stringify(e);
 				console.log("La table " + table + " n'a pas pu être vidée")
 			});
 	}
