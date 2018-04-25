@@ -51,7 +51,6 @@ export class Database {
 					let sql = "CREATE TABLE IF NOT EXISTS " + tables[i].nom + "(";
 					let primarykey = "PRIMARY KEY(";
 					let firstPrimaryKey = true; //Utile puisque il ne faut pas mettre une virgule avant le champ dans le cas de la première clé primaire
-
 					//Les types des champs associés
 					for(let j = 0 ; j < tables[i].champs.length ; j++) {
 						sql = sql + tables[i].champs[j].nom + " " + tables[i].champs[j].type + ", ";
@@ -122,7 +121,7 @@ export class Database {
 
 		return this.db.executeSql(sql, {})
 			.then( function(result) {
-				//console.log("----Nombre de tuple dans la table : " + result.rows.length + "----");
+				console.log("----Nombre de tuple dans la table : " + result.rows.length + "----");
 				let toReturn: Array<any> = [];
 				for(let i = 0 ; i < result.rows.length ; i++) {
 					//toReturn += "[" + result.rows.item(i).username + " ; " + result.rows.item(i).password + "]";
@@ -132,6 +131,34 @@ export class Database {
 				return toReturn;
 			});
 	}
+
+
+
+	/*-----------------------------------------------------------------------------------------------------------------------------------------------*/
+  	/*---Update des tuples dans la table "table" avec comme values "valeur[i]" pour le champs "champs[i], le respectant la condition where "where"---*/
+  	/*-----------------------------------------------------------------------------------------------------------------------------------------------*/
+	update(table: string, champs: Array<string>, valeurs: Array<string>, where: string):void {
+		var sql = "UPDATE TABLE " + table + " SET ";
+
+		sql = sql + champs[0] + " = " + valeurs[0];
+		for(let i = 1 ; i < champs.length ; i++) {
+			sql = sql + ", " + champs[i] + " = " + valeurs[i];
+		}
+		sql = sql + " WHERE " + where;
+
+		console.log("SQL d'ajout : " + sql);
+
+		this.db.executeSql(sql, {})
+			.then( () => {
+				console.log("Les tuples ont été update dans la table " + table);
+			})
+			.catch( e => {
+				console.log("Les tuples n'ont pas pu être update dans la table " + table);
+			});
+	}
+
+
+
 
 
 	/*--------------------------------------------------*/
@@ -150,5 +177,48 @@ export class Database {
 	}
 
 
+	/*---------------------------*/
+  	/*---Drop la table "table"---*/
+  	/*---------------------------*/
+  	dropTable(table: string) {
+  		var sql = "PRAGMA foreign_keys = OFF";
 
+  		this.db.executeSql(sql, {})
+  		.then( () => {
+  			console.log("foreign_keys has been set off");
+
+  			sql = "DROP TABLE " + table;
+
+  			this.db.executeSql(sql, {})
+  			.then( () => {
+  				console.log("La table " + table + " a été drop");
+
+  				sql = "PRAGMA foreign_keys = ON";
+
+  				this.db.executeSql(sql, {})
+  				.then( () => {
+  					console.log("foreign_keys has been set on");
+  				})
+  				.catch( e => {
+  					console.log("failed to set foreign_key on");
+  				});
+  			})
+  			.catch( e => {
+  				console.log("La table " + table + " n'a pas pu être drop");
+
+  				sql = "PRAGMA foreign_keys = ON";
+
+  				this.db.executeSql(sql, {})
+  				.then( () => {
+  					console.log("foreign_keys has been set on");
+  				})
+  				.catch( e => {
+  					console.log("failed to set foreign_key on");
+  				});
+  			});
+  		})
+  		.catch( e => {
+  			console.log("failed to set foreign_key off");
+  		});
+  	}
 }

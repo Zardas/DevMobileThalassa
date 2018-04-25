@@ -25,6 +25,9 @@
 
 
 <ion-content padding>
+  <button ion-button block class="envoyerDansLaBase" color="XLblueDarker" class="transfererDonnees" (click)="presentToast('Les données ont été transférées')">
+    Ajouter les données scannées dans la base de données
+  </button>
 
   
   <div id="buttonsBDD">
@@ -43,9 +46,11 @@
   </div>
   
 
+  <ion-list *ngFor="let user of usersLocal">
+    <ion-card>Password de {{user.username}} : <span>{{user.password}}</span></ion-card>
+  </ion-list>
 
-
-  <!--
+  
   <ion-item class="numero_scanne">
     <div>
       <label for="codeBarre" color="primary" inline>Code-barre : </label>
@@ -57,7 +62,16 @@
     <ion-icon name="search"></ion-icon>
     Scan
   </button>
-  -->
+  
+  <ion-list *ngFor="let article of articlesLocal">
+    <ion-card>Article n°{{article.id}} (à {{article.prix}}€) : <span>{{article.nb}}</span></ion-card>
+  </ion-list>
+
+  <div id="buttonsBDD">
+    <button ion-button color="primary" (click)="synchronise('article')"><ion-icon name="download"></ion-icon></button>
+    <button ion-button color="danger" (click)="viderTable('article')"><ion-icon name="trash"></ion-icon></button>
+    <button ion-button color="XLblue" (click)="synchronise('article')"><ion-icon name="refresh"></ion-icon></button>
+  </div>
 
   <!--
   <ion-list class="boutonsDeTest">
@@ -79,27 +93,26 @@
       </ion-card>
   </div>
   -->
-  <ion-list *ngFor="let user of userss">
-    <ion-card>Password de {{user.username}} : <span>{{user.password}}</span></ion-card>
-  </ion-list>
+  
 
 
 
 
 
-  <button ion-button block class="envoyerDansLaBase" color="XLblueDarker" class="transfererDonnees" (click)="presentToast('Les données ont été transférées')">
-    Ajouter les données scannées dans la base de données
-  </button>
+  
+  
 
-
-  <button ion-button block icon-left icon-right color="danger" (click)="viderTableUser()">
+  <button ion-button block icon-left icon-right color="danger" (click)="dropAllTables()">
     <ion-icon name="trash"></ion-icon>
-      Vider les stocks
+      Drop les stocks
     <ion-icon name="trash"></ion-icon>
   </button>
 
+
+  <!--
 
   <button ion-button block (click)="aucuneArticleAffiche()">Aucun Article ?</button>
-
+  
+  -->
 
 </ion-content>
