@@ -31,7 +31,7 @@ export class Database {
   	/* private tables: Map<String, Array<champ>> : le string est le nom de la table
   		Chaque table est donc associé à un liste de champ (champ = nom + type + primaryKey?) */
 	constructor(private sqlite: SQLite, public tables: Array<table>) {
-		this.connectToDb(tables);
+		this.connectToDb();
 	}
 
 	/*--------------------------------------------------*/
@@ -39,29 +39,29 @@ export class Database {
   	/*--------------------------------------------------*/
   	/*  Possible problème ici : si on tente direct de faire une requête SQL après l'appel à connectToDb, 
   		on peut se retrouver dans le cas où db n'a pas encore été créé (TODO) */
-	private connectToDb(public tables: Array<table>):void {
+	private connectToDb():void {
 		this.sqlite.create(this.options)
 			.then( (db: SQLiteObject) => {
 				this.db = db;
 				
 				//Création et éxécution de la commande SQLite
-				for(let i = 0 ; i < tables.length ; i++) {
+				for(let i = 0 ; i < this.tables.length ; i++) {
 
 					//Création de la commande SQL
-					let sql = "CREATE TABLE IF NOT EXISTS " + tables[i].nom + "(";
+					let sql = "CREATE TABLE IF NOT EXISTS " + this.tables[i].nom + "(";
 					let primarykey = "PRIMARY KEY(";
 					let firstPrimaryKey = true; //Utile puisque il ne faut pas mettre une virgule avant le champ dans le cas de la première clé primaire
 					//Les types des champs associés
-					for(let j = 0 ; j < tables[i].champs.length ; j++) {
-						sql = sql + tables[i].champs[j].nom + " " + tables[i].champs[j].type + ", ";
+					for(let j = 0 ; j < this.tables[i].champs.length ; j++) {
+						sql = sql + this.tables[i].champs[j].nom + " " + this.tables[i].champs[j].type + ", ";
 
 						//Création en même temps de la dernière partie indiquant les clés primaires
-						if(tables[i].champs[j].primaryKey) {
+						if(this.tables[i].champs[j].primaryKey) {
 							if(firstPrimaryKey) {
-								primarykey = primarykey + tables[i].champs[j].nom;
+								primarykey = primarykey + this.tables[i].champs[j].nom;
 								firstPrimaryKey = false;
 							} else {
-								primarykey = primarykey + ", " + tables[i].champs[j].nom;
+								primarykey = primarykey + ", " + this.tables[i].champs[j].nom;
 							}
 						}
 					}
@@ -70,10 +70,10 @@ export class Database {
 					console.log('Commande SQL de création de la table ' + i + ' : ' + sql);
 					this.db.executeSql(sql, {})
 						.then( () => {
-							console.log('La table ' + tables[i].nom + ' a été créée');
+							console.log('La table ' + this.tables[i].nom + ' a été créée');
 						})
 						.catch( e => {
-							console.log('La table ' + tables[i].nom + ' n\'a pas pu être créée');
+							console.log('La table ' + this.tables[i].nom + ' n\'a pas pu être créée');
 						});
 				}
 			})
