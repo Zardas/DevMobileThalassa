@@ -197,7 +197,7 @@ export class InventaireComptagePage {
       //Ici, on ne peut accéder à rien qui appartiennent à la classe InventaireComptagePage
       //C'est pour cela que l'on doit utiliser une variable globale
       for(let i = 0 ; i < res.length ; i++) {
-        articles.push({id: res[i].id, nb: res[i].nb, prix: res[[i].prix]});
+        articles.push({id: parseInt(res[i].id), nb: parseInt(res[i].nb), prix: parseInt(res[i].prix)});
       }
     });
 
@@ -247,8 +247,10 @@ export class InventaireComptagePage {
 
       //TODO : problème : à cause de la synchronisation : articlesLocal est encore vide, donc on ne peut
       //pas vérifier que l'id est déjà présent
-      this.addBDD('article', ['id', 'prix', 'nb'], [article, 5, 6]);
+      //
 
+
+      //On vérifie si article est présent dans la liste des articles
       let i = 0;
       console.log("Taille locale : " + this.articlesLocal.length);
       while(i < this.articlesLocal.length && this.articlesLocal[i].id != article) {
@@ -258,9 +260,13 @@ export class InventaireComptagePage {
 
       if(i < this.articlesLocal.length) {
         console.log('Déjà présent');
+        this.update('article', ['nb'], [this.articlesLocal[i].nb + 1], "id = " + article);
       } else {
         console.log('Pas déjà présent');
+        this.addBDD('article', ['id', 'prix', 'nb'], [article, 5, 1]);
       }
+      
+
     } else {
       console.log("Aucun article scanné");
     }

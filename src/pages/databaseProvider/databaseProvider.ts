@@ -137,17 +137,16 @@ export class Database {
 	/*-----------------------------------------------------------------------------------------------------------------------------------------------*/
   	/*---Update des tuples dans la table "table" avec comme values "valeur[i]" pour le champs "champs[i], le respectant la condition where "where"---*/
   	/*-----------------------------------------------------------------------------------------------------------------------------------------------*/
-	update(table: string, champs: Array<string>, valeurs: Array<string>, where: string):void {
-		var sql = "UPDATE TABLE " + table + " SET ";
+	update(table: string, champs: Array<string>, valeurs: Array<any>, where: string):void {
+		var sql = "UPDATE " + table + " SET ";
 
-		sql = sql + champs[0] + " = " + valeurs[0];
+		sql = sql + champs[0] + " = " + valeurs[0] ;
 		for(let i = 1 ; i < champs.length ; i++) {
 			sql = sql + ", " + champs[i] + " = " + valeurs[i];
 		}
 		sql = sql + " WHERE " + where;
 
-		console.log("SQL d'ajout : " + sql);
-
+		console.log("Requête SQL d'update : " + sql);
 		this.db.executeSql(sql, {})
 			.then( () => {
 				console.log("Les tuples ont été update dans la table " + table);
