@@ -141,7 +141,7 @@ export class InventaireComptagePage {
   /*--------------------------------------------*/
   /*---Ajout d'un tuple dans la table "table"---*/
   /*--------------------------------------------*/
-  addBDD(table: string, champs: Array<string>, values: Array<string>) {
+  addBDD(table: string, champs: Array<string>, values: Array<any>) {
     this.database.add(table, champs, values);
     this.synchronise(table);
   }
@@ -149,7 +149,7 @@ export class InventaireComptagePage {
   /*--------------------------------------------*/
   /*---Update d'un tuple dans la table "table"---*/
   /*--------------------------------------------*/
-  update(table: string, champs: Array<string>, values: Array<string>, where: string) {
+  update(table: string, champs: Array<string>, values: Array<any>, where: string) {
     this.database.update(table, champs, values, where);
     this.synchronise(table);
   }
@@ -238,9 +238,13 @@ export class InventaireComptagePage {
 
 
 
+
+  /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+  /*---Ajoute l'article avec l'id inscrit dans l'input associé à code-barre dans le tableau (s'il n'existe pas déjà), ou incrément sa valeur nb de 1 s'il existe déjà---*/
+  /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
   scanArticle() {
     
-    let article = <HTMLInputElement>document.getElementById("inputScan").value;
+    let article = (document.getElementById("inputScan") as HTMLInputElement).value;
 
     
     if(this.checkFormatArticle(article)) {
@@ -253,7 +257,7 @@ export class InventaireComptagePage {
       //On vérifie si article est présent dans la liste des articles
       let i = 0;
       console.log("Taille locale : " + this.articlesLocal.length);
-      while(i < this.articlesLocal.length && this.articlesLocal[i].id != article) {
+      while(i < this.articlesLocal.length && String(this.articlesLocal[i].id) != article) {
         console.log("ArticleLocal n°" + i + " : " + this.articlesLocal[i].id);
         i++;
       }
@@ -263,7 +267,7 @@ export class InventaireComptagePage {
         this.update('article', ['nb'], [this.articlesLocal[i].nb + 1], "id = " + article);
       } else {
         console.log('Pas déjà présent');
-        this.addBDD('article', ['id', 'prix', 'nb'], [article, 5, 1]);
+        this.addBDD('article', ['id', 'prix', 'nb'], [parseInt(article), 5, 1]);
       }
       
 

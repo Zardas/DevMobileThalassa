@@ -88,7 +88,7 @@ export class Database {
 	/*-------------------------------------------------------------------------------------------------*/
   	/*---Ajout d'un tuple dans la table "table" avec comme values "valeurs" pour les champs "champs"---*/
   	/*-------------------------------------------------------------------------------------------------*/
-	add(table: string, champs: Array<string>, valeurs: Array<string>):void {
+	add(table: string, champs: Array<string>, valeurs: Array<any>):void {
 		var sql = "INSERT INTO " + table + " (";
 
 		sql = sql + champs[0];
