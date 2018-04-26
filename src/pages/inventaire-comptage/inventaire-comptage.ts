@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Nav, ToastController } from 'ionic-angular';
 import { SQLite } from '@ionic-native/sqlite';
 
-import { Database } from '../databaseProvider/databaseProvider';
+import { Database } from '../../providers/databaseProvider/databaseProvider';
 import { HomePage } from '../home/home';
 /**
  * Generated class for the InventaireComptagePage page.
