@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Nav, ToastController } from 'ionic-angular';
 import { SQLite } from '@ionic-native/sqlite';
-
+import { Camera, CameraOptions } from '@ionic-native/camera';
+import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions, CameraPreviewDimensions } from '@ionic-native/camera-preview';
 import { Database } from '../databaseProvider/databaseProvider';
+
 import { HomePage } from '../home/home';
 /**
  * Generated class for the InventaireComptagePage page.
@@ -54,10 +56,13 @@ export class InventaireComptagePage {
   public usersLocal: Array<user>;
   public articlesLocal: Array<article>;
 
+  
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams, public nav: Nav,
     private toastCtrl: ToastController,
+    private camera: Camera,
+    private cameraPreview: CameraPreview
   ) {
 
     //Initilisation des tableaux d'élements locaux à vide
@@ -126,6 +131,80 @@ export class InventaireComptagePage {
 
     toast.present();
   }
+
+
+  /*-------------------------------------------------------*/
+  /*------------Partie gestion du plugin Camera------------*/
+  /*-------------------------------------------------------*/
+
+  myphoto: any;
+  public showOrHide: string = "Cacher";
+
+  affCamera() {
+    console.log(this.camera);
+  }
+
+  takePicture() {
+    const options: CameraOptions = {
+      quality: 70,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    }
+
+    this.camera.getPicture(options).then((imageData) => {
+      // imageData is either a base64 encoded string or a file URI
+      // If it's base64:
+      this.myphoto = 'data:image/jpeg;base64,' + imageData;
+    }, (err) => {
+      // Handle error
+    });
+
+  }
+
+  showOrHideImage() {
+    let imageTaken = (document.getElementById("imgTaken") as HTMLInputElement);
+    if(this.showOrHide == "Cacher") {
+      this.showOrHide = "Afficher";
+      imageTaken.style.display = "none";
+    } else {
+      this.showOrHide = "Cacher";
+      imageTaken.style.display = "block";
+    }
+  }
+
+
+
+  displayImage(imgUri) {
+    var elem = (document.getElementById('imageFile') as HTMLInputElement);
+    elem.src = imgUri;
+  }
+
+
+  /*--------------------------------------------------------------*/
+  /*------------Partie gestion du plugin CameraPreview------------*/
+  /*--------------------------------------------------------------*/
+
+  startCameraPreview() {
+    let options = {
+      x: 0,
+      y: 50,
+      width: window.screen.width,
+      height: window.screen.height-50,
+      camera: this.cameraPreview.CAMERA_DIRECTION.BACK,
+      toBack: true,
+      tapPhoto: true,
+      tapFocus: false,
+      previewDrag: false
+    };
+
+    this.cameraPreview.startCamera(options);
+  }
+
+  stopCameraPreview() {
+    this.cameraPreview.stopCamera();
+  }
+
 
 
   /*---------------------------------------------------------*/

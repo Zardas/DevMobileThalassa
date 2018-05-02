@@ -8,6 +8,8 @@
 <script src="../../assets/sql.js"></script>
 <ion-header>
 
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: ms-appdata: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+
   <ion-navbar color="XLblue">
 
   	<button ion-button menuToggle>
@@ -25,94 +27,37 @@
 
 
 <ion-content padding>
-  <button ion-button block class="envoyerDansLaBase" color="XLblueDarker" class="transfererDonnees" (click)="presentToast('Les données ont été transférées')">
-    Ajouter les données scannées dans la base de données
-  </button>
 
-  
-  <div id="buttonsBDD">
-    <button ion-button color="XLblue" (click)="addBDD('user', ['username', 'password'], ['john', '1111'])">1</button>
-    <button ion-button color="XLblue" (click)="addBDD('user', ['username', 'password'], ['john', '3333'])">2</button>
-    <button ion-button color="XLblue" (click)="addBDD('user', ['username', 'password'], ['greg', '2222'])">3</button>
-    <button ion-button color="XLblue" (click)="addBDD('user', ['username', 'password'], ['marc', '1111'])">4</button>
-  </div>
-  <div id="buttonsBDD">
-    <button ion-button color="XLblueDarker" (click)='afficheUser()'>Voir user</button>
-  </div>
-  <div id="buttonsBDD">
-    <button ion-button color="primary" (click)="synchronise('user')"><ion-icon name="download"></ion-icon></button>
-    <button ion-button color="danger" (click)="viderTable('user')"><ion-icon name="trash"></ion-icon></button>
-    <button ion-button color="XLblue" (click)="synchronise('user')"><ion-icon name="refresh"></ion-icon></button>
-  </div>
-  
+  <!--
+  <div id="testpluginCamera">
+    <h3>Test du plugin Camera</h3>
 
-  <ion-list *ngFor="let user of usersLocal">
-    <ion-card>Password de {{user.username}} : <span>{{user.password}}</span></ion-card>
-  </ion-list>
+    <p>
+      <img src="{{ myphoto }}" id="imgTaken" />
+    </p>
 
-  
-  <ion-item class="numero_scanne">
-    <div>
-      <label for="codeBarre" color="primary" inline>Code-barre : </label>
-      <input name="codeBarre" placeholder="0000000000000" clearInput id="inputScan" size="35" maxlength="13" />
+    <div id="elemsCamera">
+      <button ion-button block round icon-right (click)="takePicture()">
+        Take Picture <ion-icon name="camera"></ion-icon>
+      </button>
+      <button ion-button round (click)="showOrHideImage()">
+        {{ showOrHide }} l'image
+      </button>
     </div>
-  </ion-item>
-
-  <button ion-button block icon-left color="XLblue" (click)="scanArticle()" class="scanner">
-    <ion-icon name="search"></ion-icon>
-    Scan
-  </button>
-  
-  <ion-list *ngFor="let article of articlesLocal">
-    <ion-card>Article n°{{article.id}} (à {{article.prix}}€) : <span>{{article.nb}}</span></ion-card>
-  </ion-list>
-
-  <div id="buttonsBDD">
-    <button ion-button color="primary" (click)="synchronise('article')"><ion-icon name="download"></ion-icon></button>
-    <button ion-button color="danger" (click)="viderTable('article')"><ion-icon name="trash"></ion-icon></button>
-    <button ion-button color="XLblue" (click)="synchronise('article')"><ion-icon name="refresh"></ion-icon></button>
-  </div>
-
-  <!--
-  <ion-list class="boutonsDeTest">
-      <button ion-button (click)="ajout('1')" color="XLblueDarker">Produit n°1</button>
-      <button ion-button (click)="ajout('2')" color="XLblueDarker">Produit n°2</button>
-      <button ion-button (click)="ajout('3')" color="XLblueDarker">Produit n°3</button>
-      <button ion-button (click)="ajout('4')" color="XLblueDarker">Produit n°4</button>
-      <button ion-button (click)="ajout('5')" color="XLblueDarker">Produit n°5</button>
-      <button ion-button (click)="ajout('6')" color="XLblueDarker">Produit n°6</button>
-  </ion-list>
-  -->
-
-  <!--
-  <div id="divAjoutArticle">
-      <ion-card>
-        <ion-card-content class='ajoutArticle'>
-          Scannez un article pour l'ajouter dans la liste.
-        </ion-card-content>
-      </ion-card>
   </div>
   -->
+
+  <div id="testpluginCameraPreview">
+    <h3 id="h3pluginCameraPreview">Test du plugin CameraPreview</h3>
+
+    <button ion-button round icon-right (click)="startCameraPreview()">
+        Start<ion-icon name="camera"></ion-icon>
+    </button>
+    <button ion-button round icon-right (click)="stopCameraPreview()">
+        Stop<ion-icon name="stop"></ion-icon>
+    </button>
+  </div>
+
   
-
-
-
-
-
-  
-  
-
-  <button ion-button block icon-left icon-right color="danger" (click)="dropAllTables()">
-    <ion-icon name="trash"></ion-icon>
-      Drop les tables
-    <ion-icon name="trash"></ion-icon>
-  </button>
-
-
-  <!--
-
-  <button ion-button block (click)="aucuneArticleAffiche()">Aucun Article ?</button>
-  
-  -->
 
 </ion-content>

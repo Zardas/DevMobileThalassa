@@ -1,52 +1,23 @@
-page-inventaire-comptage {
-
-}
-
-.transfererDonnees {
-	padding-top: 1%;
-	padding-bottom: 1%;
-	font-size: 2.5vw;
-	margin-bottom: 8%;
-}
-
-#divAjoutArticle ion-card ion-card-content {
-	text-align: center;
-	font-size: 5.0vw;
-	color: rgba(150,150,150,1);
-}
-
-#divAjoutArticle {
-	margin-bottom: 5%;
-}
-
-
-label {
-	color: rgba(0,105,162,1);
-}
-
-.numero_scanne div input {
-	border: none;
-}
-
-.boutonsDeTest {
+#elemsCamera {
 	text-align: center;
 }
-.boutonsDeTest button {
-	width: 30%;
-	padding-top: 5px;
-	padding-bottom: 5px;
-	padding-left: 1%;
-	padding-right: 1%;
-}
 
-
-.scanner {
-	margin-bottom: 10%;
-}
-ion-list ion-card span {
-	color: rgba(0,105,162,1);
-}
-
-#buttonsBDD {
+h3 {
 	text-align: center;
+}
+
+#testpluginCamera, #testpluginCameraPreview {
+	margin-bottom: 30px;
+}
+
+#testpluginCamera {
+	/*display: none;*/
+}
+
+html, body, ion-app, ion-content, ion-page, .nav-decor {
+  background-color: transparent !important;
+}
+
+#h3pluginCameraPreview {
+	color: #fafafa;
 }
