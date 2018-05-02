@@ -58,3 +58,7 @@ ion-navbar img {
 .buttonListePage:hover {
 	color: rgba(0,105,162,1);
 }
+
+ion-content:not(.background-color-transparent) {
+  background-color: #fff !important;
+}
