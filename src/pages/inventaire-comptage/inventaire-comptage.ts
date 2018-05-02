@@ -185,6 +185,8 @@ export class InventaireComptagePage {
   /*------------Partie gestion du plugin CameraPreview------------*/
   /*--------------------------------------------------------------*/
 
+  private cameraOn: boolean = false;
+
   startCameraPreview() {
     let options = {
       x: 0,
@@ -198,14 +200,32 @@ export class InventaireComptagePage {
       previewDrag: false
     };
 
+    this.cameraOn = true;
     this.cameraPreview.startCamera(options);
   }
 
   stopCameraPreview() {
     this.cameraPreview.stopCamera();
+    this.cameraOn = false
   }
 
+  /*----------------------------------------------------------------------------*/
+  /*---Active la preview si elle n'est pas activée et scanne un article sinon---*/
+  /*----------------------------------------------------------------------------*/
+  startOrScan() {
+    if(this.cameraOn == true) {
+      this.scanArticle();
+    } else {
+      this.startCameraPreview();
+    }
+  }
 
+  /*--------------------------------------------------------------------------------------------------*/
+  /*---Pour IOS, la caméra preview bug parfois, tu coup mise en place d'un bouton refresh au cas où---*/
+  /*--------------------------------------------------------------------------------------------------*/
+  refresh(){
+    window['location'].reload();
+  }
 
   /*---------------------------------------------------------*/
   /*------------Partie gestion de BDD avec SQLite------------*/
@@ -216,6 +236,8 @@ export class InventaireComptagePage {
   creationBDD(tables: Array<table>) {
       this.database = new Database(new SQLite(), tables);
   }
+
+
 
   /*--------------------------------------------*/
   /*---Ajout d'un tuple dans la table "table"---*/
