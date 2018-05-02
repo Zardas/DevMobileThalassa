@@ -90,6 +90,7 @@ export class InventaireComptagePage {
 
     this.creationBDD(tables);
 
+    this.startCameraPreview();
   }
 
 
@@ -221,10 +222,11 @@ export class InventaireComptagePage {
   }
 
   /*--------------------------------------------------------------------------------------------------*/
-  /*---Pour IOS, la caméra preview bug parfois, tu coup mise en place d'un bouton refresh au cas où---*/
+  /*---Eteinds puis rallume la cameraPreview (utile pour le chagement d'orientation qui bug un max----*/
   /*--------------------------------------------------------------------------------------------------*/
   refresh(){
-    window['location'].reload();
+    this.stopCameraPreview();
+    this.startCameraPreview();
   }
 
   /*---------------------------------------------------------*/

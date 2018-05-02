@@ -50,9 +50,11 @@
   <div id="testpluginCameraPreview">
     <h3 id="h3pluginCameraPreview">Test du plugin CameraPreview</h3>
 
-    
+    <!-- La barre rouge au milieu -->
+    <div id="barreRouge"></div>
+
     <ion-fab top right>
-          <button ion-fab mini (click)="stopCameraPreview()"><ion-icon name="close"></ion-icon></button>
+          <button ion-fab mini (click)="stopCameraPreview()" color="danger"><ion-icon name="close"></ion-icon></button>
           <button ion-fab mini (click)="refresh()"><ion-icon name="refresh"></ion-icon></button>
     </ion-fab>
 
@@ -60,6 +62,7 @@
       <button ion-fab color="XLblue" (click)="startOrScan()">
         <ion-icon name="camera"></ion-icon>
       </button>
+
     </ion-fab>
   </div>
 

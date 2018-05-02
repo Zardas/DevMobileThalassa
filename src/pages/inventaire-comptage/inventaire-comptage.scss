@@ -21,3 +21,13 @@ html, body, ion-app, ion-content, ion-page, .nav-decor {
 #h3pluginCameraPreview {
 	color: #fafafa;
 }
+
+
+#barreRouge {
+	height: 1px;
+	width: 100%;
+	position: absolute;
+	top: 50%;
+	left: 0%;
+	background-color: red;
+}
