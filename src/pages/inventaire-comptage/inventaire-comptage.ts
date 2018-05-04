@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Nav, ToastController } from 'ionic-angular';
 import { SQLite } from '@ionic-native/sqlite';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions, CameraPreviewDimensions } from '@ionic-native/camera-preview';
-import { Database } from '../databaseProvider/databaseProvider';
+import { CameraPreview } from '@ionic-native/camera-preview';
+import { Database } from '../../providers/databaseProvider/databaseProvider';
 
 import { HomePage } from '../home/home';
 /**
@@ -108,7 +108,7 @@ export class InventaireComptagePage {
   Mais la page précédente (this quoi) serra toujours derrière
   */
   open(page) {
-  	this.navCtrl.push(this.pagesAccessibles[page]);
+    this.navCtrl.push(this.pagesAccessibles[page]);
   }
   /*goTo = mettre en racine la page désirée -> différent de open
   */
