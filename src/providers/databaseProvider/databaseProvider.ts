@@ -31,7 +31,7 @@ export class Database {
   	/* private tables: Map<String, Array<champ>> : le string est le nom de la table
   		Chaque table est donc associé à un liste de champ (champ = nom + type + primaryKey?) */
 	constructor(private sqlite: SQLite, public tables: Array<table>) {
-		this.connectToDb();
+		//this.connectToDb();
 	}
 
 	/*--------------------------------------------------*/
@@ -39,8 +39,8 @@ export class Database {
   	/*--------------------------------------------------*/
   	/*  Possible problème ici : si on tente direct de faire une requête SQL après l'appel à connectToDb, 
   		on peut se retrouver dans le cas où db n'a pas encore été créé (TODO) */
-	private connectToDb():void {
-		this.sqlite.create(this.options)
+	connectToDb():void {
+		return this.sqlite.create(this.options)
 			.then( (db: SQLiteObject) => {
 				this.db = db;
 				
@@ -73,13 +73,14 @@ export class Database {
 							console.log('La table ' + this.tables[i].nom + ' a été créée');
 						})
 						.catch( e => {
-							console.log('La table ' + this.tables[i].nom + ' n\'a pas pu être créée');
+							console.warn('La table ' + this.tables[i].nom + ' n\'a pas pu être créée');
 						});
 				}
 			})
 			.catch(e => {
-				console.log('Ca ne marche pas du tout');
-			});
+				console.warn('Ca ne marche pas du tout');
+			})
+		;
 	}
 
 
@@ -103,13 +104,14 @@ export class Database {
 
 		console.log("SQL d'ajout : " + sql);
 
-		this.db.executeSql(sql, {})
+		return this.db.executeSql(sql, {})
 			.then( () => {
 				console.log("Le tuple a été ajouté dans la table " + table);
 			})
 			.catch( e => {
-				console.log("Le tuple n'a pas été ajouté dans la table " + table);
-			});
+				console.warn("Le tuple n'a pas été ajouté dans la table " + table);
+			})
+		;
 	}
 
 	//https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
@@ -120,7 +122,7 @@ export class Database {
 		var sql = "SELECT * FROM " + table + "";
 
 		return this.db.executeSql(sql, {})
-			.then( function(result) {
+			.then( result => {
 				console.log("----Nombre de tuple dans la table : " + result.rows.length + "----");
 				let toReturn: Array<any> = [];
 				for(let i = 0 ; i < result.rows.length ; i++) {
@@ -129,7 +131,11 @@ export class Database {
 					toReturn.push(result.rows.item(i));
 				}
 				return toReturn;
-			});
+			})
+			.catch( e => {
+				console.warn("Probleme avec la requête get sur la table " + table + " : " + e);
+			})
+		;
 	}
 
 
@@ -147,13 +153,14 @@ export class Database {
 		sql = sql + " WHERE " + where;
 
 		console.log("Requête SQL d'update : " + sql);
-		this.db.executeSql(sql, {})
+		return this.db.executeSql(sql, {})
 			.then( () => {
 				console.log("Les tuples ont été update dans la table " + table);
 			})
 			.catch( e => {
-				console.log("Les tuples n'ont pas pu être update dans la table " + table);
-			});
+				console.warn("Les tuples n'ont pas pu être update dans la table " + table + " : " + e);
+			})
+		;
 	}
 
 
@@ -166,13 +173,14 @@ export class Database {
 	viderTable(table: string) {
 		var sql = "DELETE FROM " + table;
 
-		this.db.executeSql(sql, {})
+		return this.db.executeSql(sql, {})
 			.then( () => {
 				console.log("La table " + table + " a été vidée");
 			})
 			.catch( e => {
-				console.log("La table " + table + " n'a pas pu être vidée")
-			});
+				console.warn("La table " + table + " n'a pas pu être vidée : " + e)
+			})
+		;
 	}
 
 
@@ -182,43 +190,44 @@ export class Database {
   	dropTable(table: string) {
   		var sql = "PRAGMA foreign_keys = OFF";
 
-  		this.db.executeSql(sql, {})
-  		.then( () => {
-  			console.log("foreign_keys has been set off");
+  		return this.db.executeSql(sql, {})
+	  		.then( () => {
+	  			console.log("foreign_keys has been set off");
 
-  			sql = "DROP TABLE " + table;
+	  			sql = "DROP TABLE " + table;
 
-  			this.db.executeSql(sql, {})
-  			.then( () => {
-  				console.log("La table " + table + " a été drop");
+	  			this.db.executeSql(sql, {})
+	  			.then( () => {
+	  				console.log("La table " + table + " a été drop");
 
-  				sql = "PRAGMA foreign_keys = ON";
+	  				sql = "PRAGMA foreign_keys = ON";
 
-  				this.db.executeSql(sql, {})
-  				.then( () => {
-  					console.log("foreign_keys has been set on");
-  				})
-  				.catch( e => {
-  					console.log("failed to set foreign_key on");
-  				});
-  			})
-  			.catch( e => {
-  				console.log("La table " + table + " n'a pas pu être drop");
+	  				this.db.executeSql(sql, {})
+	  				.then( () => {
+	  					console.log("foreign_keys has been set on");
+	  				})
+	  				.catch( e => {
+	  					console.warn("failed to set foreign_key on : " + e);
+	  				});
+	  			})
+	  			.catch( e => {
+	  				console.warn("La table " + table + " n'a pas pu être drop : " + e);
 
-  				sql = "PRAGMA foreign_keys = ON";
+	  				sql = "PRAGMA foreign_keys = ON";
 
-  				this.db.executeSql(sql, {})
-  				.then( () => {
-  					console.log("foreign_keys has been set on");
-  				})
-  				.catch( e => {
-  					console.log("failed to set foreign_key on");
-  				});
-  			});
-  		})
-  		.catch( e => {
-  			console.log("failed to set foreign_key off");
-  		});
+	  				this.db.executeSql(sql, {})
+	  				.then( () => {
+	  					console.log("foreign_keys has been set on");
+	  				})
+	  				.catch( e => {
+	  					console.warn("failed to set foreign_key on : " + e);
+	  				});
+	  			});
+	  		})
+	  		.catch( e => {
+	  			console.warn("failed to set foreign_key off : " + e);
+	  		})
+	  	;
   	}
 
 

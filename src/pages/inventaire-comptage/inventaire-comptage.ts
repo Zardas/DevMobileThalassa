@@ -11,13 +11,17 @@ import { HomePage } from '../home/home';
  * Ionic pages and navigation.
  */
 
-/* Si jamais window et document ne sont pas reconnus
-const win: any = window;
-const doc: any = document;
+/* 
+  Si jamais window et document ne sont pas reconnus
+  const win: any = window;
+  const doc: any = document;
 */
 
-var users: Array<user> = [];
-var articles: Array<article> = [];
+/*
+  Note d'utilisation : lorsque une table doit être rajoutée, penser à modifier les fonctions parametrageTables et synchronise
+  pour qu'elle puisse la prendre en compte
+*/
+
 
 interface champ {
   nom: string;
@@ -30,6 +34,7 @@ interface table {
   champs: Array<champ>;
 }
 
+/*
 interface user {
   username: string;
   password: string;
@@ -39,6 +44,7 @@ interface article {
   nb: number;
   prix: number;
 }
+*/
 
 @IonicPage()
 @Component({
@@ -50,9 +56,11 @@ export class InventaireComptagePage {
 
   private pagesAccessibles: Map<String, any>;
   private database: Database;
+  private tailleCodeBarre: number;
+  private tables: Array<table>;
 
-  public usersLocal: Array<user>;
-  public articlesLocal: Array<article>;
+  private localData: Map<String, Array<any>>;
+
 
   constructor(
     public navCtrl: NavController,
@@ -60,15 +68,24 @@ export class InventaireComptagePage {
     private toastCtrl: ToastController,
   ) {
 
-    //Initilisation des tableaux d'élements locaux à vide
-    this.usersLocal = [];
-    this.articlesLocal = [];
+    this.tailleCodeBarre = 13;
 
 
     this.pagesAccessibles = new Map<String, any>();
     this.pagesAccessibles['HomePage'] = HomePage;
 
-    let tables: Array<table> = [];
+    this.parametrageTables();    
+
+    this.creationBDD(this.tables);
+
+  }
+
+
+  /*-------------------------------------------------------------------------------------------------------*/
+  /*------------Fonction de paramétrage des tables ! A modifier lorsque l'on ajoute une table !------------*/
+  /*-------------------------------------------------------------------------------------------------------*/
+  parametrageTables() {
+    this.tables = [];
 
     /* Création de l'array de configuration des tables */
     let champsTableUser: Array<champ> = [];
@@ -80,15 +97,14 @@ export class InventaireComptagePage {
     champsTableArticle.push({nom: 'nb', type: 'VARCHAR(255)', primaryKey: false});
     champsTableArticle.push({nom: 'prix', type: 'VARCHAR(255)', primaryKey: false});
 
-    tables.push({nom: 'user', champs: champsTableUser});
-    tables.push({nom: 'article', champs: champsTableArticle});
+    this.tables.push({nom: 'user', champs: champsTableUser});
+    this.tables.push({nom: 'article', champs: champsTableArticle});
 
-    this.creationBDD(tables);
-
+    this.localData = new Map<String, Array<any>>();
+    this.localData['user'] = [];
+    this.localData['article'] = [];
   }
 
-
-  //On créer ICI l'équivalent de la fonction promiseEqual
 
   ionViewDidLoad() {
     console.log('InventaireComptage didLoad()');
@@ -111,21 +127,10 @@ export class InventaireComptagePage {
   }
 
 
-  //Affichage d'un toast en bas de l'écran
-  presentToast(textToDisplay) {
-    let toast = this.toastCtrl.create({
-      message: textToDisplay,
-      duration: 4000,
-      position: 'bottom',
-      showCloseButton: true
-    });
 
-    toast.onDidDismiss( () => {
-      console.log('Toast Dismissed');
-    });
 
-    toast.present();
-  }
+
+
 
 
   /*---------------------------------------------------------*/
@@ -135,73 +140,74 @@ export class InventaireComptagePage {
   /*---Création BDD---*/
   /*------------------*/
   creationBDD(tables: Array<table>) {
+      //Création d'une nouvelle base de données
       this.database = new Database(new SQLite(), tables);
+
+      //Création des tables associées à cette base /! VOIR le tuto très bien fait pour ça : https://javascript.developpez.com/actu/146280/Comprendre-les-Promises-en-JavaScript-TypeScript-article-de-yahiko/
+      return this.database.connectToDb()
+        .then(data => {
+
+          console.log("Connexion avec la BDD réussie");
+          for(let i of tables) {
+            this.synchronise(i.nom);
+          }
+
+        })
+        .catch(err => {
+
+          console.warn('Problème lors de la création des tables : ' + err);
+
+        })
+      ;
+
   }
+
 
   /*--------------------------------------------*/
   /*---Ajout d'un tuple dans la table "table"---*/
   /*--------------------------------------------*/
   addBDD(table: string, champs: Array<string>, values: Array<any>) {
-    this.database.add(table, champs, values);
-    this.synchronise(table);
+    this.database.add(table, champs, values)
+      .then(data => {
+        this.synchronise(table);
+      })
+      .catch(err => {
+        console.warn("Problème avec l'ajout sur la table " + table + " : " + e);
+      })
+    ;
   }
 
-  /*--------------------------------------------*/
+
+  /*---------------------------------------------*/
   /*---Update d'un tuple dans la table "table"---*/
-  /*--------------------------------------------*/
+  /*---------------------------------------------*/
   update(table: string, champs: Array<string>, values: Array<any>, where: string) {
-    this.database.update(table, champs, values, where);
-    this.synchronise(table);
+    this.database.update(table, champs, values, where)
+      .then(data => {
+        this.synchronise(table);
+      })
+      .catch(err => {
+        console.warn("Problème avec l'update sur la table " + table + " : " + e);
+      })
+    ;
   }
+
 
   /*-----------------------------------------------------------------------------------------------------------------------------------------------------------*/
   /*---Met à jour le contenu de la variable globale relative à "table" et de la variable locale qui lui est associée avec le retour de SELECT * FROM "table"---*/
   /*-----------------------------------------------------------------------------------------------------------------------------------------------------------*/
   synchronise(table: string) {
-    switch(table) {
-      case 'user': {
-        this.synchroniseUser();
-        break;
-      }
-      case 'article': {
-        this.synchroniseArticle();
-        break;
-      }
-    }
-  }
-
-  /*--------------------------------------------------------------------------------------------------------------------------*/
-  /*---Met à jour le contenu de la variable globale users et de la variable usersLocal avec le retour de SELECT * FROM user---*/
-  /*--------------------------------------------------------------------------------------------------------------------------*/
-  synchroniseUser() {
-    users = [];
-    //this.database.getData('user', function (res) {}).then(function(res) {
-      this.database.getData('user').then(function(res) {
-      //Ici, on ne peut accéder à rien qui appartiennent à la classe InventaireComptagePage
-      //C'est pour cela que l'on doit utiliser une variable globale
-      for(let i = 0 ; i < res.length ; i++) {
-        users.push({username: res[i].username, password: res[i].password});
-      }
-    });
-
-    this.usersLocal = users;
-  }
-
-  /*-----------------------------------------------------------------------------------------------------------------------------------*/
-  /*---Met à jour le contenu de la variable globale articles et de la variable articlesLocal avec le retour de SELECT * FROM article---*/
-  /*-----------------------------------------------------------------------------------------------------------------------------------*/
-  synchroniseArticle() {
-    articles = [];
-    //this.database.getData('user', function (res) {}).then(function(res) {
-      this.database.getData('article').then(function(res) {
-      //Ici, on ne peut accéder à rien qui appartiennent à la classe InventaireComptagePage
-      //C'est pour cela que l'on doit utiliser une variable globale
-      for(let i = 0 ; i < res.length ; i++) {
-        articles.push({id: parseInt(res[i].id), nb: parseInt(res[i].nb), prix: parseInt(res[i].prix)});
-      }
-    });
-
-    this.articlesLocal = articles;
+    this.database.getData(table)
+      .then( data => {
+        this.localData[table] = [];
+        for(let i = 0 ;  i < data.length ; i++) {
+          this.localData[table].push(data[i]);
+        }
+      })
+      .catch( err => {
+        console.warn("Problème pour synchroniser le contenu local la base de donénes " + err);
+      })
+    ;
   }
 
 
@@ -209,36 +215,34 @@ export class InventaireComptagePage {
   /*---Affiche le contenu de la variable globale users---*/
   /*-----------------------------------------------------*/
   afficheUser() {
-    for(let i = 0 ; i < users.length ; i++) {
-      console.log("Username : " + users[i].username + " | Password : " + users[i].password);
+    for(let i = 0 ; i < this.localData['user'].length ; i++) {
+      console.log("Username : " + this.localData['user'][i].username + " | Password : " + this.localData['user'][i].password);
     }
   }
+
 
   /*-------------------------------------------------------------------------------*/
   /*---Supprime le contenu de la table "table" et de la variable globle associée---*/
   /*-------------------------------------------------------------------------------*/
   viderTable(table: string) {
-    this.database.viderTable(table);
-    this.synchronise(table);
-  }
-
-  /*--------------------------------------------------------*/
-  /*---Renvoit true si la variable globale users est vide---*/
-  /*--------------------------------------------------------*/
-  aucuneArticle() {
-    return (users.length == 0);
-  }
-
-  /*-----------------------------------------------------------------------*/
-  /*---Affiche true dans la console si la variable global users est vide---*/
-  /*-----------------------------------------------------------------------*/
-  aucuneArticleAffiche() {
-    console.log(this.aucuneArticle());
+    this.database.viderTable(table)
+      .then( data => {
+        this.synchronise(table);
+      })
+      .catch( err => {
+        console.log("Problème avec le vidage de la table " + table + " : " + err);
+      })
   }
 
 
 
 
+
+
+
+  /*---------------------------------*/
+  /*---Fonctions relatives au scan---*/
+  /*---------------------------------*/
   /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
   /*---Ajoute l'article avec l'id inscrit dans l'input associé à code-barre dans le tableau (s'il n'existe pas déjà), ou incrément sa valeur nb de 1 s'il existe déjà---*/
   /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -249,27 +253,21 @@ export class InventaireComptagePage {
     
     if(this.checkFormatArticle(article)) {
 
-      //TODO : problème : à cause de la synchronisation : articlesLocal est encore vide, donc on ne peut
-      //pas vérifier que l'id est déjà présent
-      //
-
 
       //On vérifie si article est présent dans la liste des articles
       let i = 0;
-      console.log("Taille locale : " + this.articlesLocal.length);
-      while(i < this.articlesLocal.length && String(this.articlesLocal[i].id) != article) {
-        console.log("ArticleLocal n°" + i + " : " + this.articlesLocal[i].id);
+      console.log("Taille locale : " + this.localData['article'].length);
+      while(i < this.localData['article'].length && String(this.localData['article'][i].id) != article) {
         i++;
       }
 
-      if(i < this.articlesLocal.length) {
+      if(i < this.localData['article'].length) {
         console.log('Déjà présent');
-        this.update('article', ['nb'], [this.articlesLocal[i].nb + 1], "id = " + article);
+        this.update('article', ['nb'], [parseInt(this.localData['article'][i].nb) + 1], "id = " + article);
       } else {
         console.log('Pas déjà présent');
         this.addBDD('article', ['id', 'prix', 'nb'], [parseInt(article), 5, 1]);
       }
-      
 
     } else {
       console.log("Aucun article scanné");
@@ -280,7 +278,7 @@ export class InventaireComptagePage {
   /*---Vérifie si l'article scanné est au bon format (13 chiffres)---*/
   /*-----------------------------------------------------------------*/
   checkFormatArticle(toCheck: any) {
-    return (toCheck.length == 13);
+    return (toCheck.length == this.tailleCodeBarre);
   }
 
   /*-----------------------------------------------------------------------*/
@@ -305,14 +303,41 @@ export class InventaireComptagePage {
     }
   }
 
-  /*----------------------------*/
-  /*---Drop toutes les tables---*/
-  /*----------------------------*/
-  dropAllTables() {
-    this.database.dropTable('user');
-    this.database.dropTable('article');
-  }
-  
+
+
+
+/*------------------------------------------*/
+/*------------Fonctions diverses------------*/
+/*------------------------------------------*/
+/*--------------------------------------------------------------*/
+/*------------Affichage d'un toast en bas de l'écran------------*/
+/*--------------------------------------------------------------*/
+presentToast(textToDisplay) {
+  let toast = this.toastCtrl.create({
+    message: textToDisplay,
+    duration: 4000,
+    position: 'bottom',
+    showCloseButton: true
+  });
+
+  toast.onDidDismiss( () => {
+    console.log('Toast Dismissed');
+  });
+
+  toast.present();
+}
+
+
+/*----------------------------*/
+/*---Drop toutes les tables---*/
+/*----------------------------*/
+dropAllTables() {
+  this.viderTable('user');
+  this.viderTable('article');
+
+  this.database.dropTable('user');
+  this.database.dropTable('article');
+}
 
 
   

@@ -29,7 +29,7 @@
     Ajouter les données scannées dans la base de données
   </button>
 
-  <!--
+  
   <div id="buttonsBDD">
     <button ion-button color="XLblue" (click)="addBDD('user', ['username', 'password'], ['john', '1111'])">1</button>
     <button ion-button color="XLblue" (click)="addBDD('user', ['username', 'password'], ['john', '3333'])">2</button>
@@ -46,10 +46,10 @@
   </div>
   
 
-  <ion-list *ngFor="let user of usersLocal">
+  <ion-list *ngFor="let user of localData['user']">
     <ion-card>Password de {{user.username}} : <span>{{user.password}}</span></ion-card>
   </ion-list>
-  -->
+  
   
   <ion-item class="numero_scanne">
     <div>
@@ -63,7 +63,7 @@
     Scan
   </button>
   
-  <ion-list *ngFor="let article of articlesLocal">
+  <ion-list *ngFor="let article of localData['article']">
     <ion-card>Article n°{{article.id}} (à {{article.prix}}€) : <span>{{article.nb}}</span></ion-card>
   </ion-list>
 
@@ -109,12 +109,8 @@
   </button>
 
 
-  <!--
-
+<!--
   <button ion-button block (click)="aucuneArticleAffiche()">Aucun Article ?</button>
-  
   -->
-
-  <button ion-button block (click)="testAsync(3, 3)">Test async</button>
 
 </ion-content>
