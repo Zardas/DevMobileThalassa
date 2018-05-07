@@ -88,7 +88,7 @@ export class InventaireComptagePage {
   }
 
 
-
+  //On créer ICI l'équivalent de la fonction promiseEqual
 
   ionViewDidLoad() {
     console.log('InventaireComptage didLoad()');
@@ -312,6 +312,9 @@ export class InventaireComptagePage {
     this.database.dropTable('user');
     this.database.dropTable('article');
   }
+  
+
+
   
 
 
