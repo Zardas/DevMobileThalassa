@@ -39,7 +39,7 @@ export class Database {
   	/*--------------------------------------------------*/
   	/*  Possible problème ici : si on tente direct de faire une requête SQL après l'appel à connectToDb, 
   		on peut se retrouver dans le cas où db n'a pas encore été créé (TODO) */
-	connectToDb():void {
+	connectToDb() {
 		return this.sqlite.create(this.options)
 			.then( (db: SQLiteObject) => {
 				this.db = db;
@@ -89,7 +89,7 @@ export class Database {
 	/*-------------------------------------------------------------------------------------------------*/
   	/*---Ajout d'un tuple dans la table "table" avec comme values "valeurs" pour les champs "champs"---*/
   	/*-------------------------------------------------------------------------------------------------*/
-	add(table: string, champs: Array<string>, valeurs: Array<any>):void {
+	add(table: string, champs: Array<string>, valeurs: Array<any>) {
 		var sql = "INSERT INTO " + table + " (";
 
 		sql = sql + champs[0];
@@ -105,7 +105,7 @@ export class Database {
 		console.log("SQL d'ajout : " + sql);
 
 		return this.db.executeSql(sql, {})
-			.then( () => {
+			.then( data => {
 				console.log("Le tuple a été ajouté dans la table " + table);
 			})
 			.catch( e => {
@@ -118,8 +118,8 @@ export class Database {
 	/*------------------------------------------------*/
   	/*---Select tout les tuples de la table "table"---*/
   	/*------------------------------------------------*/
-	getData(table: string) {
-		var sql = "SELECT * FROM " + table + "";
+	getData(table: string, where: string): Promise<any> {
+		var sql = "SELECT * FROM " + table + where;
 
 		return this.db.executeSql(sql, {})
 			.then( result => {
@@ -130,6 +130,7 @@ export class Database {
 					//toReturn.push({username: result.rows.item(i).username, password: result.rows.item(i).password});
 					toReturn.push(result.rows.item(i));
 				}
+				console.log('Taille de toReturn : ' + toReturn.length);
 				return toReturn;
 			})
 			.catch( e => {
@@ -143,7 +144,7 @@ export class Database {
 	/*-----------------------------------------------------------------------------------------------------------------------------------------------*/
   	/*---Update des tuples dans la table "table" avec comme values "valeur[i]" pour le champs "champs[i], le respectant la condition where "where"---*/
   	/*-----------------------------------------------------------------------------------------------------------------------------------------------*/
-	update(table: string, champs: Array<string>, valeurs: Array<any>, where: string):void {
+	update(table: string, champs: Array<string>, valeurs: Array<any>, where: string) {
 		var sql = "UPDATE " + table + " SET ";
 
 		sql = sql + champs[0] + " = " + valeurs[0] ;

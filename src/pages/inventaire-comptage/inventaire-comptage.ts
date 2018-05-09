@@ -168,11 +168,31 @@ export class InventaireComptagePage {
   /*--------------------------------------------*/
   addBDD(table: string, champs: Array<string>, values: Array<any>) {
     this.database.add(table, champs, values)
-      .then(data => {
+      .then( data => {
         this.synchronise(table);
-      })
-      .catch(err => {
-        console.warn("Problème avec l'ajout sur la table " + table + " : " + e);
+
+        //On cherche le tuple ajouté dans la base pour pouvoir l'ajouter en local
+        /*let where = " WHERE " + champs[0] + " = '" + values[0] + "'";
+        for(let i = 1 ; i < champs.length ; i++) {
+          where = where + " AND " + champs[i] + " = '" + values[i] + "'";
+        }
+
+        this.database.getData(table, where)
+          .then( data => {
+            for(let i = 0 ;  i < data.length ; i++) {
+              //TODO : tester si la donnée est déjà dans le tableau
+              this.localData[table].push(data[i]);
+            }
+          })
+          .catch( err => {
+            console.warn("Problème pour trouver le tuple ajouté dans la BDD : " + err);
+          })
+        ;*/
+       
+
+        })
+      .catch( err => {
+        console.warn("Problème avec l'ajout sur la table " + table + " : " + err);
       })
     ;
   }
@@ -187,7 +207,7 @@ export class InventaireComptagePage {
         this.synchronise(table);
       })
       .catch(err => {
-        console.warn("Problème avec l'update sur la table " + table + " : " + e);
+        console.warn("Problème avec l'update sur la table " + table + " : " + err);
       })
     ;
   }
@@ -197,7 +217,7 @@ export class InventaireComptagePage {
   /*---Met à jour le contenu de la variable globale relative à "table" et de la variable locale qui lui est associée avec le retour de SELECT * FROM "table"---*/
   /*-----------------------------------------------------------------------------------------------------------------------------------------------------------*/
   synchronise(table: string) {
-    this.database.getData(table)
+    this.database.getData(table, "")
       .then( data => {
         this.localData[table] = [];
         for(let i = 0 ;  i < data.length ; i++) {
@@ -233,6 +253,7 @@ export class InventaireComptagePage {
         console.log("Problème avec le vidage de la table " + table + " : " + err);
       })
   }
+
 
 
 
@@ -340,8 +361,18 @@ dropAllTables() {
 }
 
 
-  
 
+  test() {
+    let where = " WHERE username = 'john' AND password = '1111'";
+    this.database.getData('user', where)
+      .then( data => {
+        console.log(data.length);
+      })
+      .catch( err => {
+        console.warn('AAAA : ' + err);
+      })
+    ;
+  }
 
 }
 
