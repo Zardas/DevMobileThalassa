@@ -162,17 +162,18 @@ export class InventaireComptagePage {
 
   }
 
-
+  
   /*--------------------------------------------*/
   /*---Ajout d'un tuple dans la table "table"---*/
   /*--------------------------------------------*/
   addBDD(table: string, champs: Array<string>, values: Array<any>) {
+
     this.database.add(table, champs, values)
       .then( data => {
-        this.synchronise(table);
+        //this.synchronise(table);
 
         //On cherche le tuple ajouté dans la base pour pouvoir l'ajouter en local
-        /*let where = " WHERE " + champs[0] + " = '" + values[0] + "'";
+        let where = " WHERE " + champs[0] + " = '" + values[0] + "'";
         for(let i = 1 ; i < champs.length ; i++) {
           where = where + " AND " + champs[i] + " = '" + values[i] + "'";
         }
@@ -180,14 +181,29 @@ export class InventaireComptagePage {
         this.database.getData(table, where)
           .then( data => {
             for(let i = 0 ;  i < data.length ; i++) {
-              //TODO : tester si la donnée est déjà dans le tableau
-              this.localData[table].push(data[i]);
+
+              //Ce truc ne marche pas puisque champs[h] est de type string
+              /*while(j < this.localData[table].length && dejaAjoute == false) {
+                let h = 0;
+                while(h < champs.length && dejaAjoute == false) {
+                  dejaAjoute = dejaAjoute || (data[i].champs[h] == this.localData[table][j].champs[h]);
+                  h++;
+                }
+                j++;
+              }*/
+
+              //TODO : faire fonctionner le fichu truc au dessus pour éviter à avoir à trimballer le switch immonde
+
+              
+              if(this.findElem(table, data[i]) == -1) {
+                this.localData[table].push(data[i]);
+              }
             }
           })
           .catch( err => {
             console.warn("Problème pour trouver le tuple ajouté dans la BDD : " + err);
           })
-        ;*/
+        ;
        
 
         })
@@ -198,13 +214,50 @@ export class InventaireComptagePage {
   }
 
 
+  
+
   /*---------------------------------------------*/
   /*---Update d'un tuple dans la table "table"---*/
   /*---------------------------------------------*/
   update(table: string, champs: Array<string>, values: Array<any>, where: string) {
     this.database.update(table, champs, values, where)
       .then(data => {
-        this.synchronise(table);
+        
+         //On cherche le tuple ajouté dans la base pour pouvoir l'ajouter en local
+        let where = " WHERE " + champs[0] + " = '" + values[0] + "'";
+        for(let i = 1 ; i < champs.length ; i++) {
+          where = where + " AND " + champs[i] + " = '" + values[i] + "'";
+        }
+
+        this.database.getData(table, where)
+          .then( data => {
+            for(let i = 0 ;  i < data.length ; i++) {
+
+              //Ce truc ne marche pas puisque champs[h] est de type string
+              /*while(j < this.localData[table].length && dejaAjoute == false) {
+                let h = 0;
+                while(h < champs.length && dejaAjoute == false) {
+                  dejaAjoute = dejaAjoute || (data[i].champs[h] == this.localData[table][j].champs[h]);
+                  h++;
+                }
+                j++;
+              }*/
+
+              //TODO : faire fonctionner le fichu truc au dessus pour éviter à avoir à trimballer le switch immonde
+
+              let pos = this.findElem(table, data[i]);
+              if(pos == -1) {
+                console.warn("Vous tentez de modifier une valeur qui n'existe pas encore à la position " + pos);
+              } else {
+                this.localData[table][pos] = data[i];
+              }
+            }
+          })
+          .catch( err => {
+            console.warn("Problème pour trouver le tuple ajouté dans la BDD : " + err);
+          })
+        ;
+
       })
       .catch(err => {
         console.warn("Problème avec l'update sur la table " + table + " : " + err);
@@ -327,52 +380,71 @@ export class InventaireComptagePage {
 
 
 
-/*------------------------------------------*/
-/*------------Fonctions diverses------------*/
-/*------------------------------------------*/
-/*--------------------------------------------------------------*/
-/*------------Affichage d'un toast en bas de l'écran------------*/
-/*--------------------------------------------------------------*/
-presentToast(textToDisplay) {
-  let toast = this.toastCtrl.create({
-    message: textToDisplay,
-    duration: 4000,
-    position: 'bottom',
-    showCloseButton: true
-  });
+  /*------------------------------------------*/
+  /*------------Fonctions diverses------------*/
+  /*------------------------------------------*/
+  /*--------------------------------------------------------------*/
+  /*------------Affichage d'un toast en bas de l'écran------------*/
+  /*--------------------------------------------------------------*/
+  presentToast(textToDisplay) {
+    let toast = this.toastCtrl.create({
+      message: textToDisplay,
+      duration: 4000,
+      position: 'bottom',
+      showCloseButton: true
+    });
 
-  toast.onDidDismiss( () => {
-    console.log('Toast Dismissed');
-  });
+    toast.onDidDismiss( () => {
+      console.log('Toast Dismissed');
+    });
 
-  toast.present();
-}
-
-
-/*----------------------------*/
-/*---Drop toutes les tables---*/
-/*----------------------------*/
-dropAllTables() {
-  this.viderTable('user');
-  this.viderTable('article');
-
-  this.database.dropTable('user');
-  this.database.dropTable('article');
-}
-
-
-
-  test() {
-    let where = " WHERE username = 'john' AND password = '1111'";
-    this.database.getData('user', where)
-      .then( data => {
-        console.log(data.length);
-      })
-      .catch( err => {
-        console.warn('AAAA : ' + err);
-      })
-    ;
+    toast.present();
   }
+
+
+  /*----------------------------*/
+  /*---Drop toutes les tables---*/
+  /*----------------------------*/
+  dropAllTables() {
+    this.viderTable('user');
+    this.viderTable('article');
+
+    this.database.dropTable('user');
+    this.database.dropTable('article');
+  }
+
+  /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+  /*---Retourne la position de l'élément "data" dans la table "table" de localData, -1 si l'élement n'est pas dedans (impossible d'utiliser indexOf car data n'est pas du type des élément de localData["table"]---*/
+  /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+  findElem(table: string, data: any) {
+    let j = 0;
+    let dejaAjoute = false;
+
+    switch(table) {
+      case 'user': {
+        while(j < this.localData[table].length && dejaAjoute == false) {
+          dejaAjoute = dejaAjoute || (data.username == this.localData[table][j].username && data.password == this.localData[table][j].password);
+          j++;
+        }
+        break;
+      }
+      case 'article': {
+        while(j < this.localData[table].length && dejaAjoute == false) {
+          //C'est normal que l'on ne vérifie pas pour nb
+          dejaAjoute = dejaAjoute || (data.id == this.localData[table][j].id && data.prix == this.localData[table][j].prix);
+          j++;
+        }
+        break;
+      }
+    }
+
+    if(dejaAjoute == true) {
+      return (j-1);
+    } else {
+      return -1;
+    }
+  }
+
 
 }
 
