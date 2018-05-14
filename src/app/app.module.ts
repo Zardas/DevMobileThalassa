@@ -22,7 +22,7 @@ import { InventaireComptagePage } from '../pages/inventaire-comptage/inventaire-
     SplashScreen,
     SQLite,
     BarcodeScanner,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
   ]
 })
 

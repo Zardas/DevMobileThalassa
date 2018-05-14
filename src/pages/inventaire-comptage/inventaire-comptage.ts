@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Nav, ToastController } from 'ionic-angular';
 import { SQLite } from '@ionic-native/sqlite';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 
 import { Database } from '../../providers/databaseProvider/databaseProvider';
 import { HomePage } from '../home/home';
@@ -61,11 +62,20 @@ export class InventaireComptagePage {
 
   private localData: Map<String, Array<any>>;
   
+  //Options pour le scanner
+  private BarcodeOptions = {
+    showFlipCameraButton: true,
+    showTorchButton: true,
+    resultDisplayDuration: 0,
+    prompt: "Placer le code-barre au niveau du trait rouge (et entièrement dans la zone de scan)"
+  };
+
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams, public nav: Nav,
     private toastCtrl: ToastController,
+    private barcodeScanner: BarcodeScanner
   ) {
 
     this.tailleCodeBarre = 13;
@@ -303,12 +313,28 @@ export class InventaireComptagePage {
   /*---------------------------------*/
   /*---Fonctions relatives au scan---*/
   /*---------------------------------*/
+  /*-----------------------*/
+  /*---Fonctions de scan---*/
+  /*-----------------------*/
+  scanBarcode() {
+    this.barcodeScanner.scan(this.BarcodeOptions)
+      .then( barcodeData => {
+        this.presentToast("We got a barcode\n" +
+                          "Result : " + barcodeData.text + "\n" +
+                          "Format : " + barcodeData.format + "\n" +
+                          "Cancelled : " + barcodeData.cancelled);
+        this.scanArticle(barcodeData.text);
+      })
+      .catch( err => {
+        this.presentToast('Erreur avec le scan : ' + err);
+      })
+    ;
+  }
+
   /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
   /*---Ajoute l'article avec l'id inscrit dans l'input associé à code-barre dans le tableau (s'il n'existe pas déjà), ou incrément sa valeur nb de 1 s'il existe déjà---*/
   /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-  scanArticle() {
-    
-    let article = (document.getElementById("inputScan") as HTMLInputElement).value;
+  scanArticle(article: string) {
 
     
     if(this.checkFormatArticle(article)) {
@@ -322,9 +348,11 @@ export class InventaireComptagePage {
       }
 
       if(i < this.localData['article'].length) {
+        //Cas UPDATE : l'article est déjà présent : on incrémente sa quantité 1
         console.log('Déjà présent');
         this.update('article', ['nb'], [parseInt(this.localData['article'][i].nb) + 1], "id = " + article);
       } else {
+        //Cas ADD : l'article n'est pas présent, on l'add avec une quantité de 1
         console.log('Pas déjà présent');
         this.addBDD('article', ['id', 'prix', 'nb'], [parseInt(article), 5, 1]);
       }
