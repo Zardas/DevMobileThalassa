@@ -60,7 +60,7 @@ export class InventaireComptagePage {
   private tables: Array<table>;
 
   private localData: Map<String, Array<any>>;
-
+  
 
   constructor(
     public navCtrl: NavController,
@@ -180,21 +180,7 @@ export class InventaireComptagePage {
 
         this.database.getData(table, where)
           .then( data => {
-            for(let i = 0 ;  i < data.length ; i++) {
-
-              //Ce truc ne marche pas puisque champs[h] est de type string
-              /*while(j < this.localData[table].length && dejaAjoute == false) {
-                let h = 0;
-                while(h < champs.length && dejaAjoute == false) {
-                  dejaAjoute = dejaAjoute || (data[i].champs[h] == this.localData[table][j].champs[h]);
-                  h++;
-                }
-                j++;
-              }*/
-
-              //TODO : faire fonctionner le fichu truc au dessus pour éviter à avoir à trimballer le switch immonde
-
-              
+            for(let i = 0 ;  i < data.length ; i++) {              
               if(this.findElem(table, data[i]) == -1) {
                 this.localData[table].push(data[i]);
               }
