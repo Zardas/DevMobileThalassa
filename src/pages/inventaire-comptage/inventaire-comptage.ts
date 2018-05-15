@@ -361,7 +361,7 @@ export class InventaireComptagePage {
                           "Format : " + barcodeData.format + "\n" +
                           "Cancelled : " + barcodeData.cancelled);
         //On ajoute le code-barre scanné en local et dans la BDD
-        this.scanArticle(barcodeData.text);
+        //this.scanArticle(barcodeData.text);
       })
       .catch( err => {
         this.presentToast('Erreur avec le scan : ' + err);
@@ -372,7 +372,7 @@ export class InventaireComptagePage {
   /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
   /*---Ajoute l'article avec l'id inscrit dans l'input associé à code-barre dans le tableau (s'il n'existe pas déjà), ou incrément sa valeur nb de 1 s'il existe déjà---*/
   /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-  scanArticle(article: string) {
+  scanArticle(/*article: string*/) {
 
     let article = (document.getElementById("inputScan") as HTMLInputElement).value;
     
@@ -499,7 +499,4 @@ export class InventaireComptagePage {
 
 
 }
-
-
-
 
