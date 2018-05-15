@@ -19,8 +19,8 @@ import { HomePage } from '../home/home';
 */
 
 /*
-  Note d'utilisation : lorsque une table doit être rajoutée, penser à modifier les fonctions parametrageTables et synchronise
-  pour qu'elle puisse la prendre en compte
+  Note d'utilisation : lorsque une table doit être rajoutée, penser à modifier les fonctions parametrageTables, findElem
+  et dropAllTables pour qu'elle puisse la prendre en compte
 */
 
 
@@ -55,39 +55,64 @@ interface article {
 
 export class InventaireComptagePage {
 
+  //Liste des pages accessibles, utiliser pour les fonctions de navigation afin d'éviter que l'on puisse aller n'importe où
   private pagesAccessibles: Map<String, any>;
+
+  //Base de donnée sur laquelle les différentes requêtes seront effectuées
   private database: Database;
+
+  //Taille des codes barres à scanner (typiquement 13)
   private tailleCodeBarre: number;
+
+  //Liste des tables de database
   private tables: Array<table>;
 
+  //Données en local utilisé par angular pour afficher les valeurs dynamiquement dans le html et synchronisé avec le contenu de la base à chaque requête et chargement de cette page
   private localData: Map<String, Array<any>>;
   
+
   //Options pour le scanner
   private BarcodeOptions = {
+    //Afficher le bouton pour changer l'orientation de la caméra
     showFlipCameraButton: true,
+    //Affiche le bouton allumant la lumière de la caméra
     showTorchButton: true,
+    //Temps où le résultat est affiché (0 ne l'affiche pas)
     resultDisplayDuration: 0,
+    //Texte afficher en bas de la fenêtre de scan et donnant des instructions à l'utilisateur
     prompt: "Placer le code-barre au niveau du trait rouge (et entièrement dans la zone de scan)"
   };
 
 
+  /*------------------------------------*/
+  /*------------Constructeur------------*/
+  /*------------------------------------*/
   constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams, public nav: Nav,
-    private toastCtrl: ToastController,
-    private barcodeScanner: BarcodeScanner
+    public navCtrl: NavController,         //Pile de pages
+    public navParams: NavParams,           //Paramètres de navigation
+    public nav: Nav,                       //Gestionnaire de navigation
+    private toastCtrl: ToastController,    //Contrôleur des toast (les petits popup)
+    private barcodeScanner: BarcodeScanner //Scanner des code-barrres
   ) {
 
     this.tailleCodeBarre = 13;
 
-
-    this.pagesAccessibles = new Map<String, any>();
-    this.pagesAccessibles['HomePage'] = HomePage;
+    this.parametragePagesAccessibles();
 
     this.parametrageTables();    
 
     this.creationBDD(this.tables);
 
+  }
+
+
+  /*---------------------------------------------------------------------*/
+  /*------------Fonction de paramétrage des pages accessibles------------*/
+  /*---------------------------------------------------------------------*/
+  parametragePagesAccessibles() {
+    this.pagesAccessibles = new Map<String, any>();
+
+    this.pagesAccessibles['HomePage'] = HomePage;
   }
 
 
@@ -97,19 +122,22 @@ export class InventaireComptagePage {
   parametrageTables() {
     this.tables = [];
 
-    /* Création de l'array de configuration des tables */
+    /* Pour la table user */
     let champsTableUser: Array<champ> = [];
     champsTableUser.push({nom: 'username', type: 'VARCHAR(255)', primaryKey: true});
     champsTableUser.push({nom: 'password', type: 'VARCHAR(255)', primaryKey: false});
 
+    /* Pour la table article */
     let champsTableArticle: Array<champ> = [];
     champsTableArticle.push({nom: 'id', type: 'VARCHAR(255)', primaryKey: true});
     champsTableArticle.push({nom: 'nb', type: 'VARCHAR(255)', primaryKey: false});
     champsTableArticle.push({nom: 'prix', type: 'VARCHAR(255)', primaryKey: false});
 
+    /* On met tout ça dans les tables qui seront créées plus tard */
     this.tables.push({nom: 'user', champs: champsTableUser});
     this.tables.push({nom: 'article', champs: champsTableArticle});
 
+    /* Et on en profite pour créer les donénes en local (puisque elle sont liées aux tables à créer */
     this.localData = new Map<String, Array<any>>();
     this.localData['user'] = [];
     this.localData['article'] = [];
@@ -159,6 +187,7 @@ export class InventaireComptagePage {
 
           console.log("Connexion avec la BDD réussie");
           for(let i of tables) {
+            /* Création de la  BDD réussie : on synchronise les données en local avec */
             this.synchronise(i.nom);
           }
 
@@ -182,15 +211,14 @@ export class InventaireComptagePage {
       .then( data => {
         //this.synchronise(table);
 
-        //On cherche le tuple ajouté dans la base pour pouvoir l'ajouter en local
-        let where = " WHERE " + champs[0] + " = '" + values[0] + "'";
-        for(let i = 1 ; i < champs.length ; i++) {
-          where = where + " AND " + champs[i] + " = '" + values[i] + "'";
-        }
+        //Ici, data ne peut pas être ajouté directement dans this.localData[table] à cause d'un problème de type
+        //On cherche donc le tuple ajouté dans la base pour pouvoir l'ajouter en local
+        let where = this.createWhere(champs, values);
 
         this.database.getData(table, where)
           .then( data => {
-            for(let i = 0 ;  i < data.length ; i++) {              
+            for(let i = 0 ;  i < data.length ; i++) {
+              //On vérifie que l'élément ajouté n'est pas déjà présent
               if(this.findElem(table, data[i]) == -1) {
                 this.localData[table].push(data[i]);
               }
@@ -216,14 +244,14 @@ export class InventaireComptagePage {
   /*---Update d'un tuple dans la table "table"---*/
   /*---------------------------------------------*/
   update(table: string, champs: Array<string>, values: Array<any>, where: string) {
+
     this.database.update(table, champs, values, where)
       .then(data => {
-        
-         //On cherche le tuple ajouté dans la base pour pouvoir l'ajouter en local
-        let where = " WHERE " + champs[0] + " = '" + values[0] + "'";
-        for(let i = 1 ; i < champs.length ; i++) {
-          where = where + " AND " + champs[i] + " = '" + values[i] + "'";
-        }
+        //this.synchronise(table);
+
+        //Ici, data ne peut pas être ajouté directement dans this.localData[table] à cause d'un problème de type
+        //On cherche donc le tuple ajouté dans la base pour pouvoir l'ajouter en local
+        let where = this.createWhere(champs, values);
 
         this.database.getData(table, where)
           .then( data => {
@@ -241,6 +269,7 @@ export class InventaireComptagePage {
 
               //TODO : faire fonctionner le fichu truc au dessus pour éviter à avoir à trimballer le switch immonde
 
+              //On vérifie que la valeur ajouté ne se trouve pas déjà en local
               let pos = this.findElem(table, data[i]);
               if(pos == -1) {
                 console.warn("Vous tentez de modifier une valeur qui n'existe pas encore à la position " + pos);
@@ -262,14 +291,29 @@ export class InventaireComptagePage {
   }
 
 
+  /*------------------------------------------------*/
+  /*---Créer le where, utilisé pour update et add---*/
+  /*------------------------------------------------*/
+  createWhere(champs: Array<string>, values: Array<any>) {
+    let where = " WHERE " + champs[0] + " = '" + values[0] + "'";
+    for(let i = 1 ; i < champs.length ; i++) {
+      where = where + " AND " + champs[i] + " = '" + values[i] + "'";
+    }
+    return where;
+  }
+
+
   /*-----------------------------------------------------------------------------------------------------------------------------------------------------------*/
   /*---Met à jour le contenu de la variable globale relative à "table" et de la variable locale qui lui est associée avec le retour de SELECT * FROM "table"---*/
   /*-----------------------------------------------------------------------------------------------------------------------------------------------------------*/
   synchronise(table: string) {
+    //on prend tout les tuples de la table désirée
     this.database.getData(table, "")
       .then( data => {
+        //On remet les données associées à la table en local à 0
         this.localData[table] = [];
         for(let i = 0 ;  i < data.length ; i++) {
+          //On reremplit les dnnées associées à la table en local avec le contenu de la bdd pour la table désirée
           this.localData[table].push(data[i]);
         }
       })
@@ -279,15 +323,6 @@ export class InventaireComptagePage {
     ;
   }
 
-
-  /*-----------------------------------------------------*/
-  /*---Affiche le contenu de la variable globale users---*/
-  /*-----------------------------------------------------*/
-  afficheUser() {
-    for(let i = 0 ; i < this.localData['user'].length ; i++) {
-      console.log("Username : " + this.localData['user'][i].username + " | Password : " + this.localData['user'][i].password);
-    }
-  }
 
 
   /*-------------------------------------------------------------------------------*/
@@ -317,12 +352,15 @@ export class InventaireComptagePage {
   /*---Fonctions de scan---*/
   /*-----------------------*/
   scanBarcode() {
+    //On appel la fonction scan sur le barcodeScanner
     this.barcodeScanner.scan(this.BarcodeOptions)
       .then( barcodeData => {
+        //On affiche un message de succès (optionnel)
         this.presentToast("We got a barcode\n" +
                           "Result : " + barcodeData.text + "\n" +
                           "Format : " + barcodeData.format + "\n" +
                           "Cancelled : " + barcodeData.cancelled);
+        //On ajoute le code-barre scanné en local et dans la BDD
         this.scanArticle(barcodeData.text);
       })
       .catch( err => {
@@ -336,9 +374,9 @@ export class InventaireComptagePage {
   /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
   scanArticle(article: string) {
 
+    let article = (document.getElementById("inputScan") as HTMLInputElement).value;
     
     if(this.checkFormatArticle(article)) {
-
 
       //On vérifie si article est présent dans la liste des articles
       let i = 0;

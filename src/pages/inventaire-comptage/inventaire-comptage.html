@@ -58,7 +58,7 @@
     </div>
   </ion-item>
 
-  <button ion-button block icon-left color="XLblue" (click)="scanBarcode()" class="scanner">
+  <button ion-button block icon-left color="XLblue" (click)="scanArticle('test')" class="scanner">
     <ion-icon name="search"></ion-icon>
     Scan
   </button>
@@ -66,6 +66,11 @@
   <ion-list *ngFor="let article of localData['article']">
     <ion-card>Article n°{{article.id}} (à {{article.prix}}€) : <span>{{article.nb}}</span></ion-card>
   </ion-list>
+
+  <button ion-button block icon-left color="XLblue" (click)="scanBarcode()" class="scanner">
+    <ion-icon name="camera"></ion-icon>
+    barcodeScanner
+  </button>
 
   <div id="buttonsBDD">
     <button ion-button color="primary" (click)="synchronise('article')"><ion-icon name="download"></ion-icon></button>

@@ -15,13 +15,14 @@ interface table {
 @Injectable()
 export class Database {
 	
-
+	//Options de la base de données
 	options: any = {
 		name: 'data.db',
 		location: 'default',
 		createFromLocation: 1
 	}
 
+	//Base de donénes
 	private db: SQLiteObject;
 
 
@@ -31,17 +32,23 @@ export class Database {
   	/* private tables: Map<String, Array<champ>> : le string est le nom de la table
   		Chaque table est donc associé à un liste de champ (champ = nom + type + primaryKey?) */
 	constructor(private sqlite: SQLite, public tables: Array<table>) {
-		//this.connectToDb();
+		this.connectToDb();
 	}
+
+
+	/*
+		Dans toutes les fonctions suivantes, la variable sql représente la reuqête sql à exécuter, elle est construite
+		au fur et à mesure en fonctions des paramètre passés en argument de la fonction
+	*/
 
 	/*--------------------------------------------------*/
   	/*---Création de la base de données et des tables---*/
   	/*--------------------------------------------------*/
-  	/*  Possible problème ici : si on tente direct de faire une requête SQL après l'appel à connectToDb, 
-  		on peut se retrouver dans le cas où db n'a pas encore été créé (TODO) */
 	connectToDb() {
+		//Création de la BDD
 		return this.sqlite.create(this.options)
 			.then( (db: SQLiteObject) => {
+
 				this.db = db;
 				
 				//Création et éxécution de la commande SQLite
@@ -126,8 +133,6 @@ export class Database {
 				console.log("----Nombre de tuple dans la table : " + result.rows.length + "----");
 				let toReturn: Array<any> = [];
 				for(let i = 0 ; i < result.rows.length ; i++) {
-					//toReturn += "[" + result.rows.item(i).username + " ; " + result.rows.item(i).password + "]";
-					//toReturn.push({username: result.rows.item(i).username, password: result.rows.item(i).password});
 					toReturn.push(result.rows.item(i));
 				}
 				console.log('Taille de toReturn : ' + toReturn.length);
