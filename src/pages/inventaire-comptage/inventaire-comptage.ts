@@ -217,12 +217,7 @@ export class InventaireComptagePage {
 
         this.database.getData(table, where)
           .then( data => {
-            for(let i = 0 ;  i < data.length ; i++) {
-              //On vérifie que l'élément ajouté n'est pas déjà présent
-              if(this.findElem(table, data[i]) == -1) {
-                this.localData[table].push(data[i]);
-              }
-            }
+            this.ajouteDataLocal(table, data);
           })
           .catch( err => {
             console.warn("Problème pour trouver le tuple ajouté dans la BDD : " + err);
@@ -238,7 +233,14 @@ export class InventaireComptagePage {
   }
 
 
-  
+  ajouteDataLocal(table: string, data) {
+    for(let i = 0 ;  i < data.length ; i++) {
+      //On vérifie que l'élément ajouté n'est pas déjà présent
+      if(this.findElem(table, data[i]) == -1) {
+        this.localData[table].push(data[i]);
+      }
+    }
+  }
 
   /*---------------------------------------------*/
   /*---Update d'un tuple dans la table "table"---*/
@@ -255,17 +257,18 @@ export class InventaireComptagePage {
 
         this.database.getData(table, where)
           .then( data => {
-            for(let i = 0 ;  i < data.length ; i++) {
+            
+            /*for(let i = 0 ;  i < data.length ; i++) {
 
               //Ce truc ne marche pas puisque champs[h] est de type string
-              /*while(j < this.localData[table].length && dejaAjoute == false) {
+              while(j < this.localData[table].length && dejaAjoute == false) {
                 let h = 0;
                 while(h < champs.length && dejaAjoute == false) {
                   dejaAjoute = dejaAjoute || (data[i].champs[h] == this.localData[table][j].champs[h]);
                   h++;
                 }
                 j++;
-              }*/
+              }
 
               //TODO : faire fonctionner le fichu truc au dessus pour éviter à avoir à trimballer le switch immonde
 
@@ -276,7 +279,11 @@ export class InventaireComptagePage {
               } else {
                 this.localData[table][pos] = data[i];
               }
-            }
+
+
+            }*/
+
+            this.updateDataLocal(table, data);
           })
           .catch( err => {
             console.warn("Problème pour trouver le tuple ajouté dans la BDD : " + err);
@@ -288,6 +295,18 @@ export class InventaireComptagePage {
         console.warn("Problème avec l'update sur la table " + table + " : " + err);
       })
     ;
+  }
+
+
+  updateDataLocal(table: string, data) {
+    for(let i = 0 ;  i < data.length ; i++) {
+      let pos = this.findElem(table, data[i]);
+      if(pos == -1) {
+        console.warn("Vous tentez de modifier une valeur qui n'existe pas encore à la position " + pos);
+      } else {
+        this.localData[table][pos] = data[i];
+      }
+    }
   }
 
 
