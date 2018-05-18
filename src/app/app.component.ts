@@ -29,6 +29,7 @@ export class MyApp {
       { title: 'Accueil', component: HomePage },
       { title: 'Inventaire', component: InventaireComptagePage },
     ];
+
   }
 
   initializeApp() {

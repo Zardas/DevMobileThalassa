@@ -4,6 +4,8 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
+
+<script src="../../assets/sql.js"></script>
 <ion-header>
 
   <ion-navbar color="XLblue">
@@ -27,18 +29,56 @@
     Ajouter les données scannées dans la base de données
   </button>
 
+  
+  <div id="buttonsBDD">
+    <button ion-button color="XLblue" (click)="addBDD('user', ['username', 'password'], ['john', '1111'])">1</button>
+    <button ion-button color="XLblue" (click)="addBDD('user', ['username', 'password'], ['john', '3333'])">2</button>
+    <button ion-button color="XLblue" (click)="addBDD('user', ['username', 'password'], ['greg', '2222'])">3</button>
+    <button ion-button color="XLblue" (click)="addBDD('user', ['username', 'password'], ['marc', '1111'])">4</button>
+  </div>
+  <div id="buttonsBDD">
+    <button ion-button color="XLblueDarker" (click)='afficheUser()'>Voir user</button>
+  </div>
+  <div id="buttonsBDD">
+    <button ion-button color="primary" (click)="synchronise('user')"><ion-icon name="download"></ion-icon></button>
+    <button ion-button color="danger" (click)="viderTable('user')"><ion-icon name="trash"></ion-icon></button>
+    <button ion-button color="XLblue" (click)="synchronise('user')"><ion-icon name="refresh"></ion-icon></button>
+  </div>
+  
 
-  <ion-card>
-    <ion-card-content class="ajoutArticle">
-      Scannez un article pour l'ajouter dans la liste.
-    </ion-card-content>
-  </ion-card>
-
+  <ion-list *ngFor="let user of localData['user']">
+    <ion-card>Password de {{user.username}} : <span>{{user.password}}</span></ion-card>
+  </ion-list>
+  
+  
   <ion-item class="numero_scanne">
-    <ion-label color="primary" inline>Numéro scanné : </ion-label>
-    <ion-input placeholder="Juste ici" clearInput></ion-input>
+    <div>
+      <label for="codeBarre" color="primary" inline>Code-barre : </label>
+      <input name="codeBarre" placeholder="0000000000000" clearInput id="inputScan" size="35" maxlength="13" />
+    </div>
   </ion-item>
 
+  <button ion-button block icon-left color="XLblue" (click)="scanArticle('test')" class="scanner">
+    <ion-icon name="search"></ion-icon>
+    Scan
+  </button>
+  
+  <ion-list *ngFor="let article of localData['article']">
+    <ion-card>Article n°{{article.id}} (à {{article.prix}}€) : <span>{{article.nb}}</span></ion-card>
+  </ion-list>
+
+  <button ion-button block icon-left color="XLblue" (click)="scanBarcode()" class="scanner">
+    <ion-icon name="camera"></ion-icon>
+    barcodeScanner
+  </button>
+
+  <div id="buttonsBDD">
+    <button ion-button color="primary" (click)="synchronise('article')"><ion-icon name="download"></ion-icon></button>
+    <button ion-button color="danger" (click)="viderTable('article')"><ion-icon name="trash"></ion-icon></button>
+    <button ion-button color="XLblue" (click)="synchronise('article')"><ion-icon name="refresh"></ion-icon></button>
+  </div>
+
+  <!--
   <ion-list class="boutonsDeTest">
       <button ion-button (click)="ajout('1')" color="XLblueDarker">Produit n°1</button>
       <button ion-button (click)="ajout('2')" color="XLblueDarker">Produit n°2</button>
@@ -47,10 +87,35 @@
       <button ion-button (click)="ajout('5')" color="XLblueDarker">Produit n°5</button>
       <button ion-button (click)="ajout('6')" color="XLblueDarker">Produit n°6</button>
   </ion-list>
+  -->
 
-  <ion-list *ngFor="let article of listeProduit">
-    <ion-card>Article n°{{article[0]}} : <span>{{article[1]}}</span></ion-card>
-  </ion-list>
+  <!--
+  <div id="divAjoutArticle">
+      <ion-card>
+        <ion-card-content class='ajoutArticle'>
+          Scannez un article pour l'ajouter dans la liste.
+        </ion-card-content>
+      </ion-card>
+  </div>
+  -->
+  
 
+
+
+
+
+  
+  
+
+  <button ion-button block icon-left icon-right color="danger" (click)="dropAllTables()">
+    <ion-icon name="trash"></ion-icon>
+      Drop les tables
+    <ion-icon name="trash"></ion-icon>
+  </button>
+
+
+<!--
+  <button ion-button block (click)="aucuneArticleAffiche()">Aucun Article ?</button>
+  -->
 
 </ion-content>
