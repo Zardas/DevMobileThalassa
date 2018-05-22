@@ -10,13 +10,15 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { InventaireComptagePage } from '../pages/inventaire-comptage/inventaire-comptage';
+import { AccueilComptagePage } from '../pages/accueil-comptage/accueil-comptage';
+import { ParametresComptagePage } from '../pages/parametres-comptage/parametres-comptage';
 
 @NgModule({
 
-  declarations: [MyApp, HomePage, InventaireComptagePage],
+  declarations: [MyApp, HomePage, AccueilComptagePage, InventaireComptagePage, ParametresComptagePage],
   imports: [BrowserModule, HttpModule, IonicModule.forRoot(MyApp)],
   bootstrap: [IonicApp],
-  entryComponents: [MyApp, HomePage, InventaireComptagePage],
+  entryComponents: [MyApp, HomePage, AccueilComptagePage, InventaireComptagePage, ParametresComptagePage],
   providers: [
     StatusBar,
     SplashScreen,
