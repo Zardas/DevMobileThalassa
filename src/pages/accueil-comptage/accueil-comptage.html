@@ -29,4 +29,14 @@
 
 <ion-content padding>
 
+  <div id="toTextAlignCenter">
+    <button ion-button color="XLblue" (click)="addBDD('user', ['username', 'password'], ['randy', '4258'])">1</button>
+    <button ion-button color="danger" (click)="viderTable('user')"><ion-icon name="trash"></ion-icon></button>
+  </div>
+
+  <ion-list *ngFor="let user of localData['user']">
+    <ion-card>Password de {{user.username}} : <span>{{user.password}}</span></ion-card>
+  </ion-list>
+
+
 </ion-content>

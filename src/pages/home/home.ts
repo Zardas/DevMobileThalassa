@@ -29,7 +29,11 @@ export class HomePage {
 
     //console.log('NavParams : ' + navParams.get('database'));
 
-    this.localData = new Map<String, Array<any>>();
+    //this.localData = new Map<String, Array<any>>();
+
+    if(this.bdd == undefined) {
+      this.refreshBDD();
+    }
   }
 
   ionViewDidLoad() {
@@ -47,10 +51,7 @@ export class HomePage {
 
   //goTo = mettre en racine la page désirée -> différent de open
   goTo(page) {
-    //this.nav.setRoot(this.pagesAccessibles[page], {a: this.a});
-
-
-    this.nav.setRoot(AccueilComptagePage, {param1: 3});
+    this.nav.setRoot(AccueilComptagePage, {database: this.bdd, localData: this.localData});
   }
 
 
@@ -58,6 +59,11 @@ export class HomePage {
   addBDD(user: string, champs: Array<any>, values: Array<any>) {
     this.bdd.addBDD(this.localData, user, champs, values);
   }
+
+  viderTable(table: string) {
+    this.bdd.viderTable(this.localData, table);
+  }
+
 
   refreshBDD() {
     this.localData = new Map<String, Array<any>>();

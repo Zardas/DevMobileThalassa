@@ -5,7 +5,7 @@ import { HomePage } from '../home/home';
 import { InventaireComptagePage } from '../inventaire-comptage/inventaire-comptage';
 import { ParametresComptagePage } from '../parametres-comptage/parametres-comptage';
 
-import { Database } from '../../providers/databaseProvider/databaseProvider';
+import { DatabaseUtilisation } from '../../providers/databaseProvider/databaseProviderUtilisation';
 /**
  * Generated class for the AccueilComptagePage page.
  *
@@ -23,10 +23,8 @@ export class AccueilComptagePage {
 
 	private pagesAccessibles: Map<String, any>;
 
-  //Base de donnée sur laquelle les différentes requêtes seront effectuées
-  private database: Database;
-
-  private b: string;
+  private bdd: DatabaseUtilisation;
+  public localData: Map<String, Array<any>>;
 
  	constructor(
   		public navCtrl: NavController,
@@ -35,12 +33,11 @@ export class AccueilComptagePage {
   	) {
 
  		this.parametragePagesAccessibles();
-    /*this.b = navParams.get('a');
-    console.log('AAAAAA : ' + this.b);*/
+    
+    this.bdd = navParams.get('database');
+    this.localData = navParams.get('localData');
 
 
-
-    console.log(navParams.get('param1'));
  	}
 
 
@@ -57,19 +54,29 @@ export class AccueilComptagePage {
   
  	//goTo = mettre en racine la page désirée -> différent de open
  	goTo(page) {
-    	this.nav.setRoot(this.pagesAccessibles[page]);
+    	this.nav.setRoot(this.pagesAccessibles[page], {database: this.bdd, localData: this.localData});
  	}
 
  	/*---------------------------------------------------------------------*/
-  	/*------------Fonction de paramétrage des pages accessibles------------*/
-  	/*---------------------------------------------------------------------*/
-  	parametragePagesAccessibles() {
-    	this.pagesAccessibles = new Map<String, any>();
+  /*------------Fonction de paramétrage des pages accessibles------------*/
+  /*---------------------------------------------------------------------*/
+  parametragePagesAccessibles() {
+   	this.pagesAccessibles = new Map<String, any>();
+   	this.pagesAccessibles['HomePage'] = HomePage;
+   	this.pagesAccessibles['InventaireComptagePage'] = InventaireComptagePage;
+   	this.pagesAccessibles['ParametresComptagePage'] = ParametresComptagePage;
+ 	}
 
-    	this.pagesAccessibles['HomePage'] = HomePage;
-    	this.pagesAccessibles['InventaireComptagePage'] = InventaireComptagePage;
-    	this.pagesAccessibles['ParametresComptagePage'] = ParametresComptagePage;
-  	}
 
 
+
+  addBDD(user: string, champs: Array<any>, values: Array<any>) {
+    this.bdd.addBDD(this.localData, user, champs, values);
+  }
+
+  viderTable(table: string) {
+    this.bdd.viderTable(this.localData, table);
+  }
+
+  
 }

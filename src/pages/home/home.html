@@ -33,22 +33,24 @@
     <ion-icon name="arrow-forward"></ion-icon>
   </button>
 
+  
   <div id="buttonsBDD">
     <button ion-button color="XLblue" (click)="addBDD('user', ['username', 'password'], ['john', '1111'])">1</button>
     <button ion-button color="XLblue" (click)="addBDD('user', ['username', 'password'], ['john', '3333'])">2</button>
     <button ion-button color="XLblue" (click)="addBDD('user', ['username', 'password'], ['greg', '2222'])">3</button>
     <button ion-button color="XLblue" (click)="addBDD('user', ['username', 'password'], ['marc', '1111'])">4</button>
+    <button ion-button color="danger" (click)="viderTable('user')"><ion-icon name="trash"></ion-icon></button>
   </div>
 
   <ion-list *ngFor="let user of localData['user']">
     <ion-card>Password de {{user.username}} : <span>{{user.password}}</span></ion-card>
   </ion-list>
+  
 
-
-  <div id="totextAlignCenter">
-    <button ion-button color="danger" (click)="refreshBDD()">
+  <ion-fab bottom center>
+    <button ion-fab color="danger" (click)="refreshBDD()">
       <ion-icon name="refresh"></ion-icon>
     </button>
-  </div>
+  </ion-fab>
 
 </ion-content>
