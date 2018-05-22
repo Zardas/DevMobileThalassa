@@ -6,6 +6,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
 import { InventaireComptagePage } from '../pages/inventaire-comptage/inventaire-comptage';
+import { AccueilComptagePage } from '../pages/accueil-comptage/accueil-comptage';
+import { ParametresComptagePage } from '../pages/parametres-comptage/parametres-comptage';
 
 @Component({
   templateUrl: 'app.html'
@@ -15,6 +17,7 @@ export class MyApp {
 
   rootPage = HomePage;
   pages: Array<{title: string, component: any}>;
+
 
   constructor(
     public platform: Platform,
@@ -28,6 +31,8 @@ export class MyApp {
     this.pages = [
       { title: 'Accueil', component: HomePage },
       { title: 'Inventaire', component: InventaireComptagePage },
+      { title: 'AccueilComptage', component: AccueilComptagePage },
+      { title: 'ParametresComptage', component: ParametresComptagePage }
     ];
 
   }
@@ -47,5 +52,7 @@ export class MyApp {
     // navigate to the new page if it is not the current page
     this.nav.setRoot(page.component);
   }
+
+
 }
 

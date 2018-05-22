@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, Nav } from 'ionic-angular';
 
-import { InventaireComptagePage } from '../inventaire-comptage/inventaire-comptage';
+import { AccueilComptagePage } from '../accueil-comptage/accueil-comptage';
 
 @Component({
   selector: 'page-home',
@@ -21,7 +21,7 @@ export class HomePage {
     
     this.pagesAccessibles = new Map<String, any>();
     
-    this.pagesAccessibles['InventaireComptage'] = InventaireComptagePage;
+    this.pagesAccessibles['AccueilComptagePage'] = AccueilComptagePage;
   }
 
   ionViewDidLoad() {

@@ -4,14 +4,28 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
+<script src="../../assets/sql.js"></script>
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>accueilComptage</ion-title>
+  <ion-navbar color="XLblue">
+
+
+  	<!-- Bouton logo (retourne au menu) -->
+    <img src="assets/imgs/logoXLSoft.png" (click)="goTo('HomePage')" id="img_title_left" />
+
+
+    <ion-title id="title" icon-right>
+    	XLComptage
+    	
+    </ion-title>
+    
+    <ion-title id="icons" icon-right>
+    	<ion-icon name="search" color="White"></ion-icon>
+    	<ion-icon name="more" color="White"></ion-icon>
+    </ion-title>
   </ion-navbar>
 
 </ion-header>
-
 
 <ion-content padding>
 
