@@ -3,8 +3,9 @@ import { NavController, NavParams, Nav } from 'ionic-angular';
 
 import { HomePage } from '../home/home';
 import { InventaireComptagePage } from '../inventaire-comptage/inventaire-comptage';
-import { AccueilComptagePage } from '../accueil-comptage/accueil-comptage';
+import { ParametresComptagePage } from '../parametres-comptage/parametres-comptage';
 
+import { Database } from '../../providers/databaseProvider/databaseProvider';
 /**
  * Generated class for the AccueilComptagePage page.
  *
@@ -22,6 +23,9 @@ export class AccueilComptagePage {
 
 	private pagesAccessibles: Map<String, any>;
 
+  //Base de donnée sur laquelle les différentes requêtes seront effectuées
+  private database: Database;
+
  	constructor(
   		public navCtrl: NavController,
   		public navParams: NavParams,
@@ -29,7 +33,9 @@ export class AccueilComptagePage {
   	) {
 
  		this.parametragePagesAccessibles();
+
  	}
+
 
  	ionViewDidLoad() {
     	console.log('ionViewDidLoad AccueilComptagePage');
@@ -55,7 +61,8 @@ export class AccueilComptagePage {
 
     	this.pagesAccessibles['HomePage'] = HomePage;
     	this.pagesAccessibles['InventaireComptagePage'] = InventaireComptagePage;
-    	this.pagesAccessibles['AccueilComptagePage'] = AccueilComptagePage;
+    	this.pagesAccessibles['ParametresComptagePage'] = ParametresComptagePage;
   	}
+
 
 }
