@@ -26,6 +26,8 @@ export class AccueilComptagePage {
   //Base de donnée sur laquelle les différentes requêtes seront effectuées
   private database: Database;
 
+  private b: string;
+
  	constructor(
   		public navCtrl: NavController,
   		public navParams: NavParams,
@@ -33,7 +35,12 @@ export class AccueilComptagePage {
   	) {
 
  		this.parametragePagesAccessibles();
+    /*this.b = navParams.get('a');
+    console.log('AAAAAA : ' + this.b);*/
 
+
+
+    console.log(navParams.get('param1'));
  	}
 
 

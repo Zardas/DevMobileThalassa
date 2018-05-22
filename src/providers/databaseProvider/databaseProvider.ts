@@ -110,6 +110,7 @@ export class Database {
 		sql = sql + ")";
 
 		console.log("SQL d'ajout : " + sql);
+		console.log("SQLiteObject : " + this.db);
 
 		return this.db.executeSql(sql, {})
 			.then( data => {
