@@ -44,8 +44,8 @@
   </div>
   
 
-  <ion-list *ngFor="let user of localData['article']">
-    <ion-card>{{user.codeBarre}} : <span>{{user.designation}}</span> ({{user.prix}}€ - {{user.stock}})</ion-card>
+  <ion-list *ngFor="let article of localData['article']">
+    <ion-card>{{article.codeBarre}} : <span>{{article.designation}}</span> ({{article.prix}}€ - {{article.stock}})</ion-card>
   </ion-list>
   
 
@@ -75,6 +75,20 @@
 
   <ion-list *ngFor="let comptage of localData['comptage']">
     <ion-card>{{comptage.idComptage}} ({{comptage.idMagasin}}): <span>{{comptage.dateDebut}} par {{comptage.dateDebut}}</span> (ouvert : {{comptage.ouvert}})</ion-card>
+  </ion-list>
+
+
+  <div id="buttonsBDD">
+    <button ion-button color="XLblue" (click)="addBDD('typeComptage', ['idTypeComptage', 'nom'], [4, 'Comptage stock'])">4</button>
+    <button ion-button color="XLblue" (click)="addBDD('typeComptage', ['idTypeComptage', 'nom'], [5, 'Vérification prix'])">5</button>
+    <button ion-button color="XLblue" (click)="addBDD('typeComptage', ['idTypeComptage', 'nom'], [6, 'Correction Prix'])">6</button>
+    <button ion-button color="XLblue" (click)="addBDD('typeComptage', ['idTypeComptage', 'nom'], [8, 'Vérification livraison'])">8</button>
+    <button ion-button color="danger" (click)="viderTable('typeComptage')"><ion-icon name="trash"></ion-icon></button>
+  </div>
+  
+
+  <ion-list *ngFor="let typeComptage of localData['typeComptage']">
+    <ion-card>{{typeComptage.idTypeComptage}} : <span>{{typeComptage.nom}}</span></ion-card>
   </ion-list>
 
 

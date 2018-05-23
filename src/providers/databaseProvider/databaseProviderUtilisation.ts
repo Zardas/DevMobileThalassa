@@ -44,32 +44,51 @@ export class DatabaseUtilisation {
 
     /* Pour la table article */
     let champsTableArticle: Array<champ> = [];
-    champsTableArticle.push({nom: 'codeBarre', type: 'VARCHAR(255)', foreignKey: '', primaryKey: true});
-    champsTableArticle.push({nom: 'designation', type: 'VARCHAR(255)', foreignKey: '', primaryKey: false});
+    champsTableArticle.push({nom: 'codeBarre', type: 'TEXT', foreignKey: '', primaryKey: true});
+    champsTableArticle.push({nom: 'designation', type: 'TEXT', foreignKey: '', primaryKey: false});
     champsTableArticle.push({nom: 'prix', type: 'REAL', foreignKey: '', primaryKey: false});
     champsTableArticle.push({nom: 'stock', type: 'REAL', foreignKey: '', primaryKey: false});
 
     let champsTableMagasin: Array<champ> = [];
     champsTableMagasin.push({nom: 'idMagasin', type: 'INTEGER', foreignKey: '', primaryKey: true});
-    champsTableMagasin.push({nom: 'nom', type: 'VARCHAR(255)', foreignKey: '', primaryKey: false});
+    champsTableMagasin.push({nom: 'nom', type: 'TEXT', foreignKey: '', primaryKey: false});
+
+    let champsTableTypeComptage: Array<champ> = [];
+    champsTableTypeComptage.push({nom: 'idTypeComptage', type: 'INTEGER', foreignKey: '', primaryKey: true});
+    champsTableTypeComptage.push({nom: 'nom', type: 'TEXT', foreignKey: '', primaryKey: false});
 
     let champsTableComptage: Array<champ> = [];
     champsTableComptage.push({nom: 'idComptage', type: 'INTEGER', foreignKey: '', primaryKey: true});
     champsTableComptage.push({nom: 'idMagasin', type: 'INTEGER', foreignKey: 'magasin(idMagasin)', primaryKey: false});
-    champsTableComptage.push({nom: 'dateDebut', type: 'DATE', foreignKey: '', primaryKey: false});
-    champsTableComptage.push({nom: 'idTypeComptage', type: 'INTEGER', foreignKey: '', primaryKey: false});
-    champsTableComptage.push({nom: 'auteur', type: 'VARCHAR(255)', foreignKey: '', primaryKey: false});
-    champsTableComptage.push({nom: 'ouvert', type: 'BOOLEAN', foreignKey: '', primaryKey: false});
+    champsTableComptage.push({nom: 'dateDebut', type: 'TEXT', foreignKey: '', primaryKey: false});
+    champsTableComptage.push({nom: 'idTypeComptage', type: 'INTEGER', foreignKey: 'typeComptage(idTypeComptage)', primaryKey: false});
+    champsTableComptage.push({nom: 'auteur', type: 'TEXT', foreignKey: '', primaryKey: false});
+    champsTableComptage.push({nom: 'ouvert', type: 'NUMERIC', foreignKey: '', primaryKey: false});
+
+    let champsTableScan: Array<champs> = [];
+    champsTableScan.push({nom: 'dateScan', type: 'TEXT', foreignKey: '', primaryKey: true});
+    champsTableScan.push({nom: 'codeBarre', type: 'TEXT', foreignKey: '', primaryKey: false});
+    champsTableScan.push({nom: 'designation', type: 'TEXT', foreignKey: '', primaryKey: false});
+    champsTableScan.push({nom: 'idComptage', type: 'INTEGER', foreignKey: 'comptage(idComptage)', primaryKey: false});
+    champsTableScan.push({nom: 'quantite', type: 'INTEGER', foreignKey: '', primaryKey: false});
+    champsTableScan.push({nom: 'auteur', type: 'TEXT', foreignKey: '', primaryKey: true});
+    champsTableScan.push({nom: 'prixEtiquette', type: 'REAL', foreignKey: '', primaryKey: false});
+    champsTableScan.push({nom: 'prixBase', type: 'REAL', foreignKey: '', primaryKey: false});
 
     /* On met tout ça dans les tables qui seront créées plus tard */
     this.tables.push({nom: 'article', champs: champsTableArticle});
     this.tables.push({nom: 'magasin', champs: champsTableMagasin});
+    this.tables.push({nom: 'typeComptage', champs: champsTableTypeComptage});
     this.tables.push({nom: 'comptage', champs: champsTableComptage});
+    this.tables.push({nom: 'scan', champs: champsTableScan});
 
     /* Et on en profite pour créer les donénes en local (puisque elle sont liées aux tables à créer */
     localData['article'] = [];
     localData['magasin'] = [];
+    localData['typeComptage'] = [];
     localData['comptage'] = [];
+    localData['scan'] = [];
+
   }
 
   /*------------------*/
@@ -261,13 +280,19 @@ export class DatabaseUtilisation {
   /*---Drop toutes les tables---*/
   /*----------------------------*/
   dropAllTables(localData: Map<String, Array<any>>) {
+    /* ATTENTION : L'ORDRE DE DROP ET DE VIDAGE EST IMPORTANT (RAPPORT AUX CLES ETRANGERES) */
     this.viderTable(localData, 'article');
-    this.viderTable(localData, 'magasin');
+    this.viderTable(localData, 'scan');
     this.viderTable(localData, 'comptage');
+    this.viderTable(localData, 'typeComptage');
+    this.viderTable(localData, 'magasin');
 
     this.database.dropTable('article');
-    this.database.dropTable('magasin');
+    this.database.dropTable('scan');
     this.database.dropTable('comptage');
+    this.database.dropTable('typeComptage');
+    this.database.dropTable('magasin');
+
   }
 
 
@@ -282,24 +307,35 @@ export class DatabaseUtilisation {
     switch(table) {
       case 'article': {
         while(j < localData[table].length && dejaAjoute == false) {
-          //C'est normal que l'on ne vérifie pas pour nb
           dejaAjoute = dejaAjoute || (data.codeBarre == localData[table][j].codeBarre);
           j++;
         }
         break;
       }
-      case 'article': {
+      case 'magasin': {
         while(j < localData[table].length && dejaAjoute == false) {
-          //C'est normal que l'on ne vérifie pas pour nb
           dejaAjoute = dejaAjoute || (data.idMagasin == localData[table][j].idMagasin);
+          j++;
+        }
+        break;
+      }
+      case 'typeComptage': {
+        while(j < localData[table].length && dejaAjoute == false) {
+          dejaAjoute = dejaAjoute || (data.idTypeComptage == localData[table][j].idTypeComptage);
           j++;
         }
         break;
       }
       case 'comptage': {
         while(j < localData[table].length && dejaAjoute == false) {
-          //C'est normal que l'on ne vérifie pas pour nb
           dejaAjoute = dejaAjoute || (data.idComptage == localData[table][j].idComptage);
+          j++;
+        }
+        break;
+      }
+      case 'scan': {
+        while(j < localData[table].length && dejaAjoute == false) {
+          dejaAjoute = dejaAjoute || (data.dateScan == localData[table][j].dateScan && data.auteur == localData[table][j].auteur);
           j++;
         }
         break;
