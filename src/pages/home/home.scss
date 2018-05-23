@@ -20,3 +20,15 @@ page-home {
 #totextAlignCenter {
 	text-align: center;
 }
+
+ion-header #title {
+	text-align: left;
+	width: 50%;
+}
+
+ion-header #img_title_left {
+	float: left;
+	margin-left: 1px;
+	margin-top: 1px;
+	margin-bottom: 1px;
+}

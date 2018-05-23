@@ -31,9 +31,15 @@ export class HomePage {
 
     //this.localData = new Map<String, Array<any>>();
 
-    if(this.bdd == undefined) {
+    if(navParams.get('database') == undefined || navParams.get('localData') == undefined) {
+      console.log('FLAG A');
       this.refreshBDD();
+    } else {
+      console.log('FLAG B');
+      this.bdd = navParams.get('database');
+      this.localData = navParams.get('localData');
     }
+    
   }
 
   ionViewDidLoad() {

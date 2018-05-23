@@ -5,17 +5,18 @@
   
 
   <ion-navbar color="XLblue">
-
+    
   	<button ion-button menuToggle class="buttonToggleMenu">
   		<ion-icon name="menu"></ion-icon>
   	</button>
+    
 
-    <ion-title>
+    <ion-title id="title">
       Titre Principal
     </ion-title>
 
     <!-- Bouton logo (retourne au menu) -->
-    <img src="assets/imgs/logoXLSoft.png" />
+    <img src="assets/imgs/logoXLSoft.png" id="img_title_left" />
       <!--<ion-icon name="apps"></ion-icon>-->
 
   </ion-navbar>
@@ -41,6 +42,7 @@
     <button ion-button color="XLblue" (click)="addBDD('user', ['username', 'password'], ['marc', '1111'])">4</button>
     <button ion-button color="danger" (click)="viderTable('user')"><ion-icon name="trash"></ion-icon></button>
   </div>
+  
 
   <ion-list *ngFor="let user of localData['user']">
     <ion-card>Password de {{user.username}} : <span>{{user.password}}</span></ion-card>
