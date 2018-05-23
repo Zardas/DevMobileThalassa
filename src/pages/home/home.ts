@@ -70,7 +70,10 @@ export class HomePage {
     this.bdd.viderTable(this.localData, table);
   }
 
-
+  dropAllTables() {
+    this.bdd.dropAllTables(this.localData);
+  }
+  
   refreshBDD() {
     this.localData = new Map<String, Array<any>>();
     this.bdd = new DatabaseUtilisation(this.localData);

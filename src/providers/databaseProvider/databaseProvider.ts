@@ -5,8 +5,10 @@ import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 interface champ {
 	nom: string;
 	type: string;
+	foreignKey: string;
 	primaryKey: boolean;
 }
+
 interface table {
   nom: string;
   champs: Array<champ>;
@@ -45,44 +47,62 @@ export class Database {
   	/*---Création de la base de données et des tables---*/
   	/*--------------------------------------------------*/
 	connectToDb() {
+
 		//Création de la BDD
 		return this.sqlite.create(this.options)
 			.then( (db: SQLiteObject) => {
 
 				this.db = db;
 				
-				//Création et éxécution de la commande SQLite
-				for(let i = 0 ; i < this.tables.length ; i++) {
+				var sql = "PRAGMA foreign_keys = ON";
 
-					//Création de la commande SQL
-					let sql = "CREATE TABLE IF NOT EXISTS " + this.tables[i].nom + "(";
-					let primarykey = "PRIMARY KEY(";
-					let firstPrimaryKey = true; //Utile puisque il ne faut pas mettre une virgule avant le champ dans le cas de la première clé primaire
-					//Les types des champs associés
-					for(let j = 0 ; j < this.tables[i].champs.length ; j++) {
-						sql = sql + this.tables[i].champs[j].nom + " " + this.tables[i].champs[j].type + ", ";
+				return this.db.executeSql(sql, {})
+	  				.then( () => {
+						//Création et éxécution de la commande SQLite
+						for(let i = 0 ; i < this.tables.length ; i++) {
 
-						//Création en même temps de la dernière partie indiquant les clés primaires
-						if(this.tables[i].champs[j].primaryKey) {
-							if(firstPrimaryKey) {
-								primarykey = primarykey + this.tables[i].champs[j].nom;
-								firstPrimaryKey = false;
-							} else {
-								primarykey = primarykey + ", " + this.tables[i].champs[j].nom;
+							//Création de la commande SQL
+							sql = "CREATE TABLE IF NOT EXISTS " + this.tables[i].nom + "(";
+							let foreignKey = "";
+							let primarykey = "PRIMARY KEY(";
+							let firstPrimaryKey = true; //Utile puisque il ne faut pas mettre une virgule avant le champ dans le cas de la première clé primaire
+
+							//Les types des champs associés
+							for(let j = 0 ; j < this.tables[i].champs.length ; j++) {
+								sql = sql + this.tables[i].champs[j].nom + " " + this.tables[i].champs[j].type + ", ";
+
+								//Création en même temps de la partie indiquant les clés étrangères
+								if(this.tables[i].champs[j].foreignKey != 'null' && this.tables[i].champs[j].foreignKey != '') {
+									foreignKey = foreignKey + "FOREIGN KEY (" + this.tables[i].champs[j].nom + ") REFERENCES " + this.tables[i].champs[j].foreignKey + ", ";
+								}
+								//Création en même temps de la dernière partie indiquant les clés primaires
+								if(this.tables[i].champs[j].primaryKey) {
+									if(firstPrimaryKey) {
+										primarykey = primarykey + this.tables[i].champs[j].nom;
+										firstPrimaryKey = false;
+									} else {
+										primarykey = primarykey + ", " + this.tables[i].champs[j].nom;
+									}
+								}
 							}
+							sql = sql + foreignKey + primarykey + "))";
+							
+							console.log('Commande SQL de création de la table ' + i + ' : ' + sql);
+							this.db.executeSql(sql, {})
+								.then( () => {
+									console.log('La table ' + this.tables[i].nom + ' a été créée');
+								})
+								.catch( e => {
+									console.warn('La table ' + this.tables[i].nom + ' n\'a pas pu être créée');
+								});
 						}
-					}
-					sql = sql + primarykey + "))";
-					
-					console.log('Commande SQL de création de la table ' + i + ' : ' + sql);
-					this.db.executeSql(sql, {})
-						.then( () => {
-							console.log('La table ' + this.tables[i].nom + ' a été créée');
-						})
-						.catch( e => {
-							console.warn('La table ' + this.tables[i].nom + ' n\'a pas pu être créée');
-						});
-				}
+					})
+					.catch( err => {
+						console.log("Problème pour set les foreingKeys on : " + err);
+					})
+				;
+
+
 			})
 			.catch(e => {
 				console.warn('Ca ne marche pas du tout');
@@ -136,7 +156,6 @@ export class Database {
 				for(let i = 0 ; i < result.rows.length ; i++) {
 					toReturn.push(result.rows.item(i));
 				}
-				console.log('Taille de toReturn : ' + toReturn.length);
 				return toReturn;
 			})
 			.catch( e => {

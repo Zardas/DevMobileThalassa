@@ -36,18 +36,51 @@
 
   
   <div id="buttonsBDD">
-    <button ion-button color="XLblue" (click)="addBDD('user', ['username', 'password'], ['john', '1111'])">1</button>
-    <button ion-button color="XLblue" (click)="addBDD('user', ['username', 'password'], ['john', '3333'])">2</button>
-    <button ion-button color="XLblue" (click)="addBDD('user', ['username', 'password'], ['greg', '2222'])">3</button>
-    <button ion-button color="XLblue" (click)="addBDD('user', ['username', 'password'], ['marc', '1111'])">4</button>
-    <button ion-button color="danger" (click)="viderTable('user')"><ion-icon name="trash"></ion-icon></button>
+    <button ion-button color="XLblue" (click)="addBDD('article', ['codeBarre', 'designation', 'prix', 'stock'], ['1111111111111', 'un bon jambon', 2.5, 3000])">1</button>
+    <button ion-button color="XLblue" (click)="addBDD('article', ['codeBarre', 'designation', 'prix', 'stock'], ['955883215133', 'anneau unique', 13, 1])">2</button>
+    <button ion-button color="XLblue" (click)="addBDD('article', ['codeBarre', 'designation', 'prix', 'stock'], ['654445566663', 'maison portative', 52, 36])">3</button>
+    <button ion-button color="XLblue" (click)="addBDD('article', ['codeBarre', 'designation', 'prix', 'stock'], ['888765465466', 'lot aggraphes', 0.02, 25000])">4</button>
+    <button ion-button color="danger" (click)="viderTable('article')"><ion-icon name="trash"></ion-icon></button>
   </div>
   
 
-  <ion-list *ngFor="let user of localData['user']">
-    <ion-card>Password de {{user.username}} : <span>{{user.password}}</span></ion-card>
+  <ion-list *ngFor="let user of localData['article']">
+    <ion-card>{{user.codeBarre}} : <span>{{user.designation}}</span> ({{user.prix}}€ - {{user.stock}})</ion-card>
   </ion-list>
   
+
+
+  <div id="buttonsBDD">
+    <button ion-button color="XLblue" (click)="addBDD('magasin', ['idMagasin', 'nom'], ['1', 'mag1'])">1</button>
+    <button ion-button color="XLblue" (click)="addBDD('magasin', ['idMagasin', 'nom'], ['1', 'mag2'])">1</button>
+    <button ion-button color="XLblue" (click)="addBDD('magasin', ['idMagasin', 'nom'], ['3', 'mag3'])">3</button>
+    <button ion-button color="XLblue" (click)="addBDD('magasin', ['idMagasin', 'nom'], ['4', 'mag4'])">4</button>
+    <button ion-button color="danger" (click)="viderTable('magasin')"><ion-icon name="trash"></ion-icon></button>
+  </div>
+  
+
+  <ion-list *ngFor="let magasin of localData['magasin']">
+    <ion-card>{{magasin.idMagasin}} : <span>{{magasin.nom}}</span></ion-card>
+  </ion-list>
+
+
+  <div id="buttonsBDD">
+    <button ion-button color="XLblue" (click)="addBDD('comptage', ['idComptage', 'idMagasin', 'dateDebut', 'idTypeComptage', 'auteur', 'ouvert'], ['1', '1', '2018-06-30', '4', 'user1', 'true'])">1</button>
+    <button ion-button color="XLblue" (click)="addBDD('comptage', ['idComptage', 'idMagasin', 'dateDebut', 'idTypeComptage', 'auteur', 'ouvert'], ['2', '1', '2018-06-31', '5', 'user1', 'false'])">2</button>
+    <button ion-button color="XLblue" (click)="addBDD('comptage', ['idComptage', 'idMagasin', 'dateDebut', 'idTypeComptage', 'auteur', 'ouvert'], ['2', '4', '2018-06-30', '6', 'user3', 'true'])">2</button>
+    <button ion-button color="XLblue" (click)="addBDD('comptage', ['idComptage', 'idMagasin', 'dateDebut', 'idTypeComptage', 'auteur', 'ouvert'], ['4', '7', '2018-06-30', '8', 'user11', 'false'])">4</button>
+    <button ion-button color="danger" (click)="viderTable('comptage')"><ion-icon name="trash"></ion-icon></button>
+  </div>
+  
+
+  <ion-list *ngFor="let comptage of localData['comptage']">
+    <ion-card>{{comptage.idComptage}} ({{comptage.idMagasin}}): <span>{{comptage.dateDebut}} par {{comptage.dateDebut}}</span> (ouvert : {{comptage.ouvert}})</ion-card>
+  </ion-list>
+
+
+  <button ion-button block color="danger" (click)="dropAllTables()">
+    <ion-icon name="trash"></ion-icon>
+  </button>
 
   <ion-fab bottom center>
     <button ion-fab color="danger" (click)="refreshBDD()">

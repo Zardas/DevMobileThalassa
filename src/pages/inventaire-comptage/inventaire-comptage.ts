@@ -27,6 +27,7 @@ import { HomePage } from '../home/home';
 interface champ {
   nom: string;
   type: string;
+  foreignKey: string;
   primaryKey: boolean;
 }
 
@@ -122,23 +123,15 @@ export class InventaireComptagePage {
     this.tables = [];
 
     /* Pour la table user */
-    let champsTableUser: Array<champ> = [];
-    champsTableUser.push({nom: 'username', type: 'VARCHAR(255)', primaryKey: true});
-    champsTableUser.push({nom: 'password', type: 'VARCHAR(255)', primaryKey: false});
-
-    /* Pour la table article */
     let champsTableArticle: Array<champ> = [];
-    champsTableArticle.push({nom: 'id', type: 'VARCHAR(255)', primaryKey: true});
-    champsTableArticle.push({nom: 'nb', type: 'VARCHAR(255)', primaryKey: false});
-    champsTableArticle.push({nom: 'prix', type: 'VARCHAR(255)', primaryKey: false});
+    champsTableArticle.push({nom: 'username', type: 'VARCHAR(255)', foreignKey: '', primaryKey: true});
+    champsTableArticle.push({nom: 'password', type: 'VARCHAR(255)', foreignKey: '', primaryKey: false});
 
     /* On met tout ça dans les tables qui seront créées plus tard */
-    this.tables.push({nom: 'user', champs: champsTableUser});
     this.tables.push({nom: 'article', champs: champsTableArticle});
 
     /* Et on en profite pour créer les donénes en local (puisque elle sont liées aux tables à créer */
     this.localData = new Map<String, Array<any>>();
-    this.localData['user'] = [];
     this.localData['article'] = [];
   }
 

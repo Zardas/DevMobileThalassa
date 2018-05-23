@@ -5,6 +5,7 @@ import { Database } from './databaseProvider';
 interface champ {
   nom: string;
   type: string;
+  foreignKey: string;
   primaryKey: boolean;
 }
 
@@ -39,26 +40,36 @@ export class DatabaseUtilisation {
   /*------------Fonction de paramétrage des tables ! A modifier lorsque l'on ajoute une table !------------*/
   /*-------------------------------------------------------------------------------------------------------*/
   parametrageTables(localData: Map<String, Array<any>>) {
-	this.tables = [];
-
-    /* Pour la table user */
-    let champsTableUser: Array<champ> = [];
-    champsTableUser.push({nom: 'username', type: 'VARCHAR(255)', primaryKey: true});
-    champsTableUser.push({nom: 'password', type: 'VARCHAR(255)', primaryKey: false});
+    this.tables = [];
 
     /* Pour la table article */
     let champsTableArticle: Array<champ> = [];
-    champsTableArticle.push({nom: 'id', type: 'VARCHAR(255)', primaryKey: true});
-    champsTableArticle.push({nom: 'nb', type: 'VARCHAR(255)', primaryKey: false});
-    champsTableArticle.push({nom: 'prix', type: 'VARCHAR(255)', primaryKey: false});
+    champsTableArticle.push({nom: 'codeBarre', type: 'VARCHAR(255)', foreignKey: '', primaryKey: true});
+    champsTableArticle.push({nom: 'designation', type: 'VARCHAR(255)', foreignKey: '', primaryKey: false});
+    champsTableArticle.push({nom: 'prix', type: 'REAL', foreignKey: '', primaryKey: false});
+    champsTableArticle.push({nom: 'stock', type: 'REAL', foreignKey: '', primaryKey: false});
+
+    let champsTableMagasin: Array<champ> = [];
+    champsTableMagasin.push({nom: 'idMagasin', type: 'INTEGER', foreignKey: '', primaryKey: true});
+    champsTableMagasin.push({nom: 'nom', type: 'VARCHAR(255)', foreignKey: '', primaryKey: false});
+
+    let champsTableComptage: Array<champ> = [];
+    champsTableComptage.push({nom: 'idComptage', type: 'INTEGER', foreignKey: '', primaryKey: true});
+    champsTableComptage.push({nom: 'idMagasin', type: 'INTEGER', foreignKey: 'magasin(idMagasin)', primaryKey: false});
+    champsTableComptage.push({nom: 'dateDebut', type: 'DATE', foreignKey: '', primaryKey: false});
+    champsTableComptage.push({nom: 'idTypeComptage', type: 'INTEGER', foreignKey: '', primaryKey: false});
+    champsTableComptage.push({nom: 'auteur', type: 'VARCHAR(255)', foreignKey: '', primaryKey: false});
+    champsTableComptage.push({nom: 'ouvert', type: 'BOOLEAN', foreignKey: '', primaryKey: false});
 
     /* On met tout ça dans les tables qui seront créées plus tard */
-    this.tables.push({nom: 'user', champs: champsTableUser});
     this.tables.push({nom: 'article', champs: champsTableArticle});
+    this.tables.push({nom: 'magasin', champs: champsTableMagasin});
+    this.tables.push({nom: 'comptage', champs: champsTableComptage});
 
     /* Et on en profite pour créer les donénes en local (puisque elle sont liées aux tables à créer */
-    localData['user'] = [];
     localData['article'] = [];
+    localData['magasin'] = [];
+    localData['comptage'] = [];
   }
 
   /*------------------*/
@@ -226,7 +237,7 @@ export class DatabaseUtilisation {
         }
       })
       .catch( err => {
-        console.warn("Problème pour synchroniser le contenu local la base de donénes " + err);
+        console.warn("Problème pour synchroniser le contenu local la base de données " + err);
       })
     ;
   }
@@ -250,11 +261,13 @@ export class DatabaseUtilisation {
   /*---Drop toutes les tables---*/
   /*----------------------------*/
   dropAllTables(localData: Map<String, Array<any>>) {
-    this.viderTable(localData, 'user');
     this.viderTable(localData, 'article');
+    this.viderTable(localData, 'magasin');
+    this.viderTable(localData, 'comptage');
 
-    this.database.dropTable('user');
     this.database.dropTable('article');
+    this.database.dropTable('magasin');
+    this.database.dropTable('comptage');
   }
 
 
@@ -267,9 +280,10 @@ export class DatabaseUtilisation {
     let dejaAjoute = false;
 
     switch(table) {
-      case 'user': {
+      case 'article': {
         while(j < localData[table].length && dejaAjoute == false) {
-          dejaAjoute = dejaAjoute || (data.username == localData[table][j].username && data.password == localData[table][j].password);
+          //C'est normal que l'on ne vérifie pas pour nb
+          dejaAjoute = dejaAjoute || (data.codeBarre == localData[table][j].codeBarre);
           j++;
         }
         break;
@@ -277,7 +291,15 @@ export class DatabaseUtilisation {
       case 'article': {
         while(j < localData[table].length && dejaAjoute == false) {
           //C'est normal que l'on ne vérifie pas pour nb
-          dejaAjoute = dejaAjoute || (data.id == localData[table][j].id && data.prix == localData[table][j].prix);
+          dejaAjoute = dejaAjoute || (data.idMagasin == localData[table][j].idMagasin);
+          j++;
+        }
+        break;
+      }
+      case 'comptage': {
+        while(j < localData[table].length && dejaAjoute == false) {
+          //C'est normal que l'on ne vérifie pas pour nb
+          dejaAjoute = dejaAjoute || (data.idComptage == localData[table][j].idComptage);
           j++;
         }
         break;
