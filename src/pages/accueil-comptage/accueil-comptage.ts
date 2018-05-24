@@ -28,6 +28,8 @@ export class AccueilComptagePage {
 
   public bdd: DatabaseUtilisation;
 
+  public isSearchbarOpened = false;
+
  	constructor(
   		public navCtrl: NavController,
   		public navParams: NavParams,
@@ -111,11 +113,15 @@ export class AccueilComptagePage {
       //On a bien trouvé l'indice
       return this.bdd.localData['typeComptage'][i].nom;
     } else {
+      //On n'a pas trouvé l'indice
       return 'Type de Comptage inconnu';
     }
   }
 
-
+  /*------------------------------------------------------------------------------------
+   * Trouve le nombre de scan (quantité, pas scan individuels) relatif au comptage this
+   * Utilisé pour le badge à gauche de chaque comptage dans la liste
+   *----------------------------------------------------------------------------------*/
   findNBArticles(comptage) {
     let nb = 0;
     for(let i = 0 ; i < this.bdd.localData['scan'].length; i++) {
@@ -126,8 +132,18 @@ export class AccueilComptagePage {
     return nb;
   }
 
+  getNameIcon() {
+    if(this.isSearchbarOpened) {
+      return "close";
+    } else {
+      return "search";
+    }
+  }
 
 
+  /*-----------------------------------------------------------------------------------------------------*/
+  /*------------Fonctions pour générer des scans d'exemple (pas utile pour la version finale)------------*/
+  /*-----------------------------------------------------------------------------------------------------*/
   ajouteScanExemple(comptage: any) {
     this.addBDD('scan', ['dateScan', 'codeBarre', 'designation', 'idComptage', 'quantite', 'auteur', 'prixEtiquette', 'prixBase'], [this.getRandomDate(2018), '1111111111111', 'Exemple', comptage.idComptage, this.getRandomInt(11), 'Lexempleur', 30.5, 40.8]);
   }

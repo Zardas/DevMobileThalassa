@@ -14,32 +14,34 @@
     <img src="assets/imgs/logoXLSoft.png" (click)="goTo('HomePage')" id="img_title_left" />
 
 
-    <ion-title id="title" icon-right>
-    	XLComptage
-    	
-    </ion-title>
+    <ion-title id="title" icon-right >XLComptage</ion-title>
     
     <ion-title id="icons" icon-right>
-    	<ion-icon name="search" color="White"></ion-icon>
-    	<ion-icon name="more" color="White"></ion-icon>
+      <button (click)="isSearchbarOpened=!isSearchbarOpened"><ion-icon [name]="getNameIcon()" color="White"></ion-icon></button>
+      <ion-icon name="more" color="White"></ion-icon>
     </ion-title>
+
+    <!--Searchbar-->
+    <ion-searchbar *ngIf="isSearchbarOpened" showCancelButton="true" (ionCancel)="isSearchbarOpened=false"></ion-searchbar>
+
   </ion-navbar>
 
 </ion-header>
 
 <ion-content padding>
 
-  <ion-item *ngFor="let comptage of bdd.localData['comptage']">
-    <ion-badge item-begin id="badge" [style.background-color]="setColorBadge(comptage)">
-      {{findNBArticles(comptage)}}
-      <button ion-button (click)="ajouteScanExemple(comptage)" small><ion-icon name="add"></ion-icon></button>
-    </ion-badge>
-    <div id="item_comptage_sans_badge">
-      <h1>{{comptage.nom}}</h1>
-      <p>{{findNomTypeComptage(comptage.idTypeComptage)}}</p>
-      <p id="dateComptage">{{comptage.dateDebut}}</p>
-    </div>
-  </ion-item>
+      <ion-item *ngFor="let comptage of bdd.localData['comptage']">
+        <ion-badge item-begin id="badge" [style.background-color]="setColorBadge(comptage)">
+          {{findNBArticles(comptage)}}
+          <button ion-button (click)="ajouteScanExemple(comptage)" small><ion-icon name="add"></ion-icon></button>
+        </ion-badge>
+        <div id="item_comptage_sans_badge">
+          <h1>{{comptage.nom}}</h1>
+          <p>{{findNomTypeComptage(comptage.idTypeComptage)}}</p>
+          <p id="dateComptage">{{comptage.dateDebut}}</p>
+        </div>
+      </ion-item>
+
 
 
 </ion-content>

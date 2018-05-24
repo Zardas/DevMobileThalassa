@@ -1,6 +1,7 @@
 page-accueil-comptage {
-	
+
 }
+
 
 $XLBlue: #0cb3e8;
 $XLBlueDarker: #0069a2;
@@ -11,6 +12,7 @@ ion-header {
 	#title {
 		text-align: left;
 		width: 50%;
+		float: left;
 	}
 	#img_title_left {
 		float: left;
@@ -22,8 +24,11 @@ ion-header {
 		float: right;
 		text-align: right;
 		width: 30%;
-
 		ion-icon {
+			vertical-align: middle;
+		}
+		button {
+			background-color: rgba(12,179,232,0);
 			vertical-align: middle;
 		}
 	}
@@ -34,20 +39,23 @@ ion-header {
 
 /*	AFFICHAGE COMPTAGES	*/
 
-#badge {
-	/*background-color: $XLBlue;*/
-	display: inline-block;
-	vertical-align: top;
-}
-
-#item_comptage_sans_badge {
-	display: inline-block;
+ion-item {
 	border: 1px solid black;
+	background-color: red;
 
-	#dateComptage {
-		font-style: italic;
+	#badge {
+		/*background-color: $XLBlue;*/
+		display: inline-block;
+		vertical-align: top;
 	}
 
-	
+	#item_comptage_sans_badge {
+		display: inline-block;
+
+		#dateComptage {
+			font-style: italic;
+		}	
+	}
 }
+
 
