@@ -29,7 +29,7 @@
 
 <ion-content padding>
 
-  <ion-item *ngFor="let comptage of localData['comptage']">
+  <ion-item *ngFor="let comptage of bdd.localData['comptage']">
     <ion-badge item-begin id="badge">NB</ion-badge>
     <div id="item_comptage_sans_badge">
       <h1>{{comptage.nom}}</h1>

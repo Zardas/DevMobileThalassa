@@ -24,8 +24,7 @@ export class AccueilComptagePage {
 
 	private pagesAccessibles: Map<String, any>;
 
-  private bdd: DatabaseUtilisation;
-  public localData: Map<String, Array<any>>;
+  public bdd: DatabaseUtilisation;
 
  	constructor(
   		public navCtrl: NavController,
@@ -36,9 +35,6 @@ export class AccueilComptagePage {
  		this.parametragePagesAccessibles();
     
     this.bdd = navParams.get('database');
-    this.localData = navParams.get('localData');
-
-
  	}
 
 
@@ -55,7 +51,7 @@ export class AccueilComptagePage {
   
  	//goTo = mettre en racine la page désirée -> différent de open
  	goTo(page) {
-    	this.nav.setRoot(this.pagesAccessibles[page], {database: this.bdd, localData: this.localData});
+    	this.nav.setRoot(this.pagesAccessibles[page], {database: this.bdd});
  	}
 
  	/*---------------------------------------------------------------------*/
@@ -73,11 +69,11 @@ export class AccueilComptagePage {
 
 
   addBDD(user: string, champs: Array<any>, values: Array<any>) {
-    this.bdd.addBDD(this.localData, user, champs, values);
+    this.bdd.addBDD(user, champs, values);
   }
 
   viderTable(table: string) {
-    this.bdd.viderTable(this.localData, table);
+    this.bdd.viderTable(table);
   }
 
   

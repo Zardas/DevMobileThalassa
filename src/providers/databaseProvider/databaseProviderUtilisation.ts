@@ -24,16 +24,14 @@ export class DatabaseUtilisation {
 	private tables: Array<table>;
 
 	//Données en local utilisé par angular pour afficher les valeurs dynamiquement dans le html et synchronisé avec le contenu de la base à chaque requête et chargement de cette page
-	//private localData: Map<String, Array<any>>;
+	public localData: Map<String, Array<any>>;
 
 	/*------------------------------------*/
  	/*------------Constructeur------------*/
  	/*------------------------------------*/
- 	constructor(
-    	public localData: Map<String, Array<any>>,    //Contrôleur des toast (les petits popup)
-  	) {
-    	this.parametrageTables(localData);
-    	this.creationBDD(localData, this.tables);
+ 	constructor() {
+    	this.parametrageTables();
+    	this.creationBDD(this.tables);
   }
 
   /*-------------------------------------------------------------------------------------------------------*/
@@ -84,18 +82,19 @@ export class DatabaseUtilisation {
     this.tables.push({nom: 'scan', champs: champsTableScan});
 
     /* Et on en profite pour créer les donénes en local (puisque elle sont liées aux tables à créer */
-    localData['article'] = [];
-    localData['magasin'] = [];
-    localData['typeComptage'] = [];
-    localData['comptage'] = [];
-    localData['scan'] = [];
+    this.localData = new Map<String, Array<any>>();
+    this.localData['article'] = [];
+    this.localData['magasin'] = [];
+    this.localData['typeComptage'] = [];
+    this.localData['comptage'] = [];
+    this.localData['scan'] = [];
 
   }
 
   /*------------------*/
   /*---Création BDD---*/
   /*------------------*/
-  creationBDD(localData: Map<String, Array<any>>, tables: Array<table>) {
+  creationBDD(tables: Array<table>) {
       //Création d'une nouvelle base de données
       this.database = new Database(new SQLite(), tables);
 
@@ -106,7 +105,7 @@ export class DatabaseUtilisation {
           console.log("Connexion avec la BDD réussie");
           for(let i of tables) {
             /* Création de la  BDD réussie : on synchronise les données en local avec */
-            this.synchronise(localData, i.nom);
+            this.synchronise(i.nom);
           }
 
         })
@@ -123,7 +122,7 @@ export class DatabaseUtilisation {
   /*--------------------------------------------*/
   /*---Ajout d'un tuple dans la table "table"---*/
   /*--------------------------------------------*/
-  addBDD(localData: Map<String, Array<any>>, table: string, champs: Array<string>, values: Array<any>) {
+  addBDD(table: string, champs: Array<string>, values: Array<any>) {
 
     this.database.add(table, champs, values)
       .then( data => {
@@ -135,7 +134,7 @@ export class DatabaseUtilisation {
 
         this.database.getData(table, where)
           .then( data => {
-            this.ajouteDataLocal(localData, table, data);
+            this.ajouteDataLocal(table, data);
           })
           .catch( err => {
             console.warn("Problème pour trouver le tuple ajouté dans la BDD : " + err);
@@ -150,11 +149,11 @@ export class DatabaseUtilisation {
     ;
   }
 
-  ajouteDataLocal(localData: Map<String, Array<any>>, table: string, data) {
+  ajouteDataLocal(table: string, data) {
     for(let i = 0 ;  i < data.length ; i++) {
       //On vérifie que l'élément ajouté n'est pas déjà présent
-      if(this.findElem(localData, table, data[i]) == -1) {
-        localData[table].push(data[i]);
+      if(this.findElem(table, data[i]) == -1) {
+        this.localData[table].push(data[i]);
       }
     }
   }
@@ -164,7 +163,7 @@ export class DatabaseUtilisation {
   /*---------------------------------------------*/
   /*---Update d'un tuple dans la table "table"---*/
   /*---------------------------------------------*/
-  update(localData: Map<String, Array<any>>, table: string, champs: Array<string>, values: Array<any>, where: string) {
+  update(table: string, champs: Array<string>, values: Array<any>, where: string) {
 
     this.database.update(table, champs, values, where)
       .then(data => {
@@ -202,7 +201,7 @@ export class DatabaseUtilisation {
 
             }*/
 
-            this.updateDataLocal(localData, table, data);
+            this.updateDataLocal(table, data);
           })
           .catch( err => {
             console.warn("Problème pour trouver le tuple ajouté dans la BDD : " + err);
@@ -217,13 +216,13 @@ export class DatabaseUtilisation {
   }
 
 
-  updateDataLocal(localData: Map<String, Array<any>>, table: string, data) {
+  updateDataLocal(table: string, data) {
     for(let i = 0 ;  i < data.length ; i++) {
-      let pos = this.findElem(localData, table, data[i]);
+      let pos = this.findElem(table, data[i]);
       if(pos == -1) {
         console.warn("Vous tentez de modifier une valeur qui n'existe pas encore à la position " + pos);
       } else {
-        localData[table][pos] = data[i];
+        this.localData[table][pos] = data[i];
       }
     }
   }
@@ -245,15 +244,15 @@ export class DatabaseUtilisation {
   /*-----------------------------------------------------------------------------------------------------------------------------------------------------------*/
   /*---Met à jour le contenu de la variable globale relative à "table" et de la variable locale qui lui est associée avec le retour de SELECT * FROM "table"---*/
   /*-----------------------------------------------------------------------------------------------------------------------------------------------------------*/
-  synchronise(localData: Map<String, Array<any>>, table: string) {
+  synchronise(table: string) {
     //on prend tout les tuples de la table désirée
     this.database.getData(table, "")
       .then( data => {
         //On remet les données associées à la table en local à 0
-        localData[table] = [];
+        this.localData[table] = [];
         for(let i = 0 ;  i < data.length ; i++) {
           //On reremplit les dnnées associées à la table en local avec le contenu de la bdd pour la table désirée
-          localData[table].push(data[i]);
+          this.localData[table].push(data[i]);
         }
       })
       .catch( err => {
@@ -266,10 +265,10 @@ export class DatabaseUtilisation {
   /*-------------------------------------------------------------------------------*/
   /*---Supprime le contenu de la table "table" et de la variable globle associée---*/
   /*-------------------------------------------------------------------------------*/
-  viderTable(localData: Map<String, Array<any>>, table: string) {
+  viderTable(table: string) {
     this.database.viderTable(table)
       .then( data => {
-        this.synchronise(localData, table);
+        this.synchronise(table);
       })
       .catch( err => {
         console.log("Problème avec le vidage de la table " + table + " : " + err);
@@ -280,13 +279,13 @@ export class DatabaseUtilisation {
   /*----------------------------*/
   /*---Drop toutes les tables---*/
   /*----------------------------*/
-  dropAllTables(localData: Map<String, Array<any>>) {
+  dropAllTables() {
     /* ATTENTION : L'ORDRE DE DROP ET DE VIDAGE EST IMPORTANT (RAPPORT AUX CLES ETRANGERES) */
-    this.viderTable(localData, 'article');
-    this.viderTable(localData, 'scan');
-    this.viderTable(localData, 'comptage');
-    this.viderTable(localData, 'typeComptage');
-    this.viderTable(localData, 'magasin');
+    this.viderTable('article');
+    this.viderTable('scan');
+    this.viderTable('comptage');
+    this.viderTable('typeComptage');
+    this.viderTable('magasin');
 
     this.database.dropTable('article');
     this.database.dropTable('scan');
@@ -301,42 +300,42 @@ export class DatabaseUtilisation {
   /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
   /*---Retourne la position de l'élément "data" dans la table "table" de localData, -1 si l'élement n'est pas dedans (impossible d'utiliser indexOf car data n'est pas du type des élément de localData["table"]---*/
   /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-  findElem(localData: Map<String, Array<any>>, table: string, data: any) {
+  findElem(table: string, data: any) {
     let j = 0;
     let dejaAjoute = false;
 
     switch(table) {
       case 'article': {
-        while(j < localData[table].length && dejaAjoute == false) {
-          dejaAjoute = dejaAjoute || (data.codeBarre == localData[table][j].codeBarre);
+        while(j < this.localData[table].length && dejaAjoute == false) {
+          dejaAjoute = dejaAjoute || (data.codeBarre == this.localData[table][j].codeBarre);
           j++;
         }
         break;
       }
       case 'magasin': {
-        while(j < localData[table].length && dejaAjoute == false) {
-          dejaAjoute = dejaAjoute || (data.idMagasin == localData[table][j].idMagasin);
+        while(j < this.localData[table].length && dejaAjoute == false) {
+          dejaAjoute = dejaAjoute || (data.idMagasin == this.localData[table][j].idMagasin);
           j++;
         }
         break;
       }
       case 'typeComptage': {
-        while(j < localData[table].length && dejaAjoute == false) {
-          dejaAjoute = dejaAjoute || (data.idTypeComptage == localData[table][j].idTypeComptage);
+        while(j < this.localData[table].length && dejaAjoute == false) {
+          dejaAjoute = dejaAjoute || (data.idTypeComptage == this.localData[table][j].idTypeComptage);
           j++;
         }
         break;
       }
       case 'comptage': {
-        while(j < localData[table].length && dejaAjoute == false) {
-          dejaAjoute = dejaAjoute || (data.idComptage == localData[table][j].idComptage);
+        while(j < this.localData[table].length && dejaAjoute == false) {
+          dejaAjoute = dejaAjoute || (data.idComptage == this.localData[table][j].idComptage);
           j++;
         }
         break;
       }
       case 'scan': {
-        while(j < localData[table].length && dejaAjoute == false) {
-          dejaAjoute = dejaAjoute || (data.dateScan == localData[table][j].dateScan && data.auteur == localData[table][j].auteur);
+        while(j < this.localData[table].length && dejaAjoute == false) {
+          dejaAjoute = dejaAjoute || (data.dateScan == this.localData[table][j].dateScan && data.auteur == this.localData[table][j].auteur);
           j++;
         }
         break;

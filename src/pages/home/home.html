@@ -24,6 +24,9 @@
 
 <ion-content padding>
 
+  <ion-list *ngFor="let article of bdd.test">
+    <ion-card>{{article}}</ion-card>
+  </ion-list>
 
 
   <button ion-button block icon-left icon-right color="XLblueDarker" (click)="goTo('AccueilComptagePage')" class="passerInventaire">
@@ -44,7 +47,7 @@
   </div>
   
 
-  <ion-list *ngFor="let article of localData['article']">
+  <ion-list *ngFor="let article of bdd.localData['article']">
     <ion-card>{{article.codeBarre}} : <span>{{article.designation}}</span> ({{article.prix}}€ - {{article.stock}})</ion-card>
   </ion-list>
   
@@ -59,7 +62,7 @@
   </div>
   
 
-  <ion-list *ngFor="let magasin of localData['magasin']">
+  <ion-list *ngFor="let magasin of bdd.localData['magasin']">
     <ion-card>{{magasin.idMagasin}} : <span>{{magasin.nom}}</span></ion-card>
   </ion-list>
 
@@ -73,7 +76,7 @@
   </div>
   
 
-  <ion-list *ngFor="let comptage of localData['comptage']">
+  <ion-list *ngFor="let comptage of bdd.localData['comptage']">
     <ion-card>{{comptage.idComptage}} ({{comptage.idMagasin}}): <span>{{comptage.dateDebut}} par {{comptage.dateDebut}}</span> (ouvert : {{comptage.ouvert}})</ion-card>
   </ion-list>
 
@@ -87,7 +90,7 @@
   </div>
   
 
-  <ion-list *ngFor="let typeComptage of localData['typeComptage']">
+  <ion-list *ngFor="let typeComptage of bdd.localData['typeComptage']">
     <ion-card>{{typeComptage.idTypeComptage}} : <span>{{typeComptage.nom}}</span></ion-card>
   </ion-list>
 

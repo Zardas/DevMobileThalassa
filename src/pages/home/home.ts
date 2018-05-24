@@ -14,8 +14,7 @@ export class HomePage {
 
   private pagesAccessibles: Map<String, any>;
 
-  private bdd: DatabaseUtilisation;
-  public localData: Map<String, Array<any>>;
+  public bdd: DatabaseUtilisation;
 
   constructor(
     public navCtrl: NavController,
@@ -28,11 +27,10 @@ export class HomePage {
     this.pagesAccessibles['AccueilComptagePage'] = AccueilComptagePage;
 
 
-    if(navParams.get('database') == undefined || navParams.get('localData') == undefined) {
+    if(navParams.get('database') == undefined) {
       this.refreshBDD();
     } else {
       this.bdd = navParams.get('database');
-      this.localData = navParams.get('localData');
     }
     
   }
@@ -52,25 +50,24 @@ export class HomePage {
 
   //goTo = mettre en racine la page désirée -> différent de open
   goTo(page) {
-    this.nav.setRoot(AccueilComptagePage, {database: this.bdd, localData: this.localData});
+    this.nav.setRoot(AccueilComptagePage, {database: this.bdd});
   }
 
 
 
   addBDD(user: string, champs: Array<any>, values: Array<any>) {
-    this.bdd.addBDD(this.localData, user, champs, values);
+    this.bdd.addBDD(user, champs, values);
   }
 
   viderTable(table: string) {
-    this.bdd.viderTable(this.localData, table);
+    this.bdd.viderTable(table);
   }
 
   dropAllTables() {
-    this.bdd.dropAllTables(this.localData);
+    this.bdd.dropAllTables();
   }
   
   refreshBDD() {
-    this.localData = new Map<String, Array<any>>();
-    this.bdd = new DatabaseUtilisation(this.localData);
+    this.bdd = new DatabaseUtilisation();
   }
 }
