@@ -37,14 +37,17 @@ ion-header {
 #badge {
 	/*background-color: $XLBlue;*/
 	display: inline-block;
-	vertical-align: middle;
+	vertical-align: top;
 }
 
 #item_comptage_sans_badge {
 	display: inline-block;
 	border: 1px solid black;
 
-	h1 {
-		font-weight: bold;
+	#dateComptage {
+		font-style: italic;
 	}
+
+	
 }
+

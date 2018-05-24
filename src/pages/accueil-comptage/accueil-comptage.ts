@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+
 import { NavController, NavParams, Nav } from 'ionic-angular';
 
 import { HomePage } from '../home/home';
@@ -29,7 +31,8 @@ export class AccueilComptagePage {
  	constructor(
   		public navCtrl: NavController,
   		public navParams: NavParams,
-  		public nav: Nav
+  		public nav: Nav,
+      private sanitizer: DomSanitizer
   	) {
 
  		this.parametragePagesAccessibles();
@@ -68,13 +71,72 @@ export class AccueilComptagePage {
 
 
 
-  addBDD(user: string, champs: Array<any>, values: Array<any>) {
-    this.bdd.addBDD(user, champs, values);
+  addBDD(table: string, champs: Array<any>, values: Array<any>) {
+    this.bdd.addBDD(table, champs, values);
   }
 
   viderTable(table: string) {
     this.bdd.viderTable(table);
   }
 
-  
+  /*-------------------------------------------------------------------------------------------------------------*/
+  /*------------Retourne la couleur du fond du badge en fonction de l'état (fermé ou non) du comptage------------*/
+  /*-------------------------------------------------------------------------------------------------------------*/
+  setColorBadge(comptage: any) {
+    //Explication : https://angular.io/api/platform-browser/DomSanitizer
+    if(comptage.ouvert == 'true') {
+      //Cas ouvert, on est en XLBlue
+      return this.sanitizer.bypassSecurityTrustStyle('#0cb3e8');
+    } else if(comptage.ouvert == 'false') {
+      //Cas fermé, on est en rouge
+      return this.sanitizer.bypassSecurityTrustStyle('#f44336');
+    } else {
+      //Cas inconnu, on met en gris moche
+      return this.sanitizer.bypassSecurityTrustStyle('rgb(120,120,120)');
+    }
+  }
+
+
+  /*---------------------------------------------------------------------------------*/
+  /*------------Retourne le nom du type de comptage associé à un comptage------------*/
+  /*---------------------------------------------------------------------------------*/
+  findNomTypeComptage(idTypeComptage: number) {
+    //On trouve l'indice de l'élément
+    let i = 0;
+    while(i < this.bdd.localData['typeComptage'].length && this.bdd.localData['typeComptage'][i].idTypeComptage != idTypeComptage) {
+      i++;
+    }
+
+    if(i < this.bdd.localData['typeComptage'].length) {
+      //On a bien trouvé l'indice
+      return this.bdd.localData['typeComptage'][i].nom;
+    } else {
+      return 'Type de Comptage inconnu';
+    }
+  }
+
+
+  findNBArticles(comptage) {
+    let nb = 0;
+    for(let i = 0 ; i < this.bdd.localData['scan'].length; i++) {
+      if(this.bdd.localData['scan'][i].idComptage == comptage.idComptage) {
+        nb = nb + this.bdd.localData['scan'][i].quantite;
+      }
+    }
+    return nb;
+  }
+
+
+
+  ajouteScanExemple(comptage: any) {
+    this.addBDD('scan', ['dateScan', 'codeBarre', 'designation', 'idComptage', 'quantite', 'auteur', 'prixEtiquette', 'prixBase'], [this.getRandomDate(2018), '1111111111111', 'Exemple', comptage.idComptage, this.getRandomInt(11), 'Lexempleur', 30.5, 40.8]);
+  }
+
+  getRandomInt(max: number) {
+    return Math.floor(Math.random() * Math.floor(max));
+  }
+
+  getRandomDate(annee: number) {
+    return this.getRandomInt(annee) + "-" + this.getRandomInt(13) + "-" + this.getRandomInt(32);
+  }
 }

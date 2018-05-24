@@ -55,8 +55,8 @@ export class HomePage {
 
 
 
-  addBDD(user: string, champs: Array<any>, values: Array<any>) {
-    this.bdd.addBDD(user, champs, values);
+  addBDD(table: string, champs: Array<any>, values: Array<any>) {
+    this.bdd.addBDD(table, champs, values);
   }
 
   viderTable(table: string) {

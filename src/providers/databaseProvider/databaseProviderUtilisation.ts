@@ -37,7 +37,7 @@ export class DatabaseUtilisation {
   /*-------------------------------------------------------------------------------------------------------*/
   /*------------Fonction de paramétrage des tables ! A modifier lorsque l'on ajoute une table !------------*/
   /*-------------------------------------------------------------------------------------------------------*/
-  parametrageTables(localData: Map<String, Array<any>>) {
+  parametrageTables() {
     this.tables = [];
 
     /* Pour la table article */
