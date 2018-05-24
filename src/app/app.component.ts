@@ -8,6 +8,7 @@ import { HomePage } from '../pages/home/home';
 import { InventaireComptagePage } from '../pages/inventaire-comptage/inventaire-comptage';
 import { AccueilComptagePage } from '../pages/accueil-comptage/accueil-comptage';
 import { ParametresComptagePage } from '../pages/parametres-comptage/parametres-comptage';
+import { NouveauComptagePage } from '../pages/nouveau-comptage/nouveau-comptage';
 
 @Component({
   templateUrl: 'app.html'
@@ -32,7 +33,8 @@ export class MyApp {
       { title: 'Accueil', component: HomePage },
       { title: 'Inventaire', component: InventaireComptagePage },
       { title: 'AccueilComptage', component: AccueilComptagePage },
-      { title: 'ParametresComptage', component: ParametresComptagePage }
+      { title: 'ParametresComptage', component: ParametresComptagePage },
+      { title: 'Nouveau Comptage', component: NouveauComptagePage }
     ];
 
   }

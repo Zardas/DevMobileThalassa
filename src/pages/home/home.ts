@@ -27,9 +27,6 @@ export class HomePage {
     
     this.pagesAccessibles['AccueilComptagePage'] = AccueilComptagePage;
 
-    //console.log('NavParams : ' + navParams.get('database'));
-
-    //this.localData = new Map<String, Array<any>>();
 
     if(navParams.get('database') == undefined || navParams.get('localData') == undefined) {
       this.refreshBDD();

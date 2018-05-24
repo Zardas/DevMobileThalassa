@@ -12,13 +12,14 @@ import { HomePage } from '../pages/home/home';
 import { InventaireComptagePage } from '../pages/inventaire-comptage/inventaire-comptage';
 import { AccueilComptagePage } from '../pages/accueil-comptage/accueil-comptage';
 import { ParametresComptagePage } from '../pages/parametres-comptage/parametres-comptage';
+import { NouveauComptagePage } from '../pages/nouveau-comptage/nouveau-comptage';
 
 @NgModule({
 
-  declarations: [MyApp, HomePage, AccueilComptagePage, InventaireComptagePage, ParametresComptagePage],
+  declarations: [MyApp, HomePage, AccueilComptagePage, InventaireComptagePage, ParametresComptagePage, NouveauComptagePage],
   imports: [BrowserModule, HttpModule, IonicModule.forRoot(MyApp)],
   bootstrap: [IonicApp],
-  entryComponents: [MyApp, HomePage, AccueilComptagePage, InventaireComptagePage, ParametresComptagePage],
+  entryComponents: [MyApp, HomePage, AccueilComptagePage, InventaireComptagePage, ParametresComptagePage, NouveauComptagePage],
   providers: [
     StatusBar,
     SplashScreen,

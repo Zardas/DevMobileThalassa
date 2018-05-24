@@ -64,8 +64,9 @@ export class DatabaseUtilisation {
     champsTableComptage.push({nom: 'idTypeComptage', type: 'INTEGER', foreignKey: 'typeComptage(idTypeComptage)', primaryKey: false});
     champsTableComptage.push({nom: 'auteur', type: 'TEXT', foreignKey: '', primaryKey: false});
     champsTableComptage.push({nom: 'ouvert', type: 'NUMERIC', foreignKey: '', primaryKey: false});
+    champsTableComptage.push({nom: 'nom', type: 'TEXT', foreignKey: '', primaryKey: false});
 
-    let champsTableScan: Array<champs> = [];
+    let champsTableScan: Array<champ> = [];
     champsTableScan.push({nom: 'dateScan', type: 'TEXT', foreignKey: '', primaryKey: true});
     champsTableScan.push({nom: 'codeBarre', type: 'TEXT', foreignKey: '', primaryKey: false});
     champsTableScan.push({nom: 'designation', type: 'TEXT', foreignKey: '', primaryKey: false});

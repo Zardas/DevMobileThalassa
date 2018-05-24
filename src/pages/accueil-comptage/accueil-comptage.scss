@@ -2,24 +2,49 @@ page-accueil-comptage {
 	
 }
 
-ion-header #title {
-	text-align: left;
-	width: 50%;
+$XLBlue: #0cb3e8;
+$XLBlueDarker: #0069a2;
+
+/*	HEADER	*/
+
+ion-header {
+	#title {
+		text-align: left;
+		width: 50%;
+	}
+	#img_title_left {
+		float: left;
+		margin-left: 1px;
+		margin-top: 1px;
+		margin-bottom: 1px;
+	}
+	#icons {
+		float: right;
+		text-align: right;
+		width: 30%;
+
+		ion-icon {
+			vertical-align: middle;
+		}
+	}
 }
 
-ion-header #img_title_left {
-	float: left;
-	margin-left: 1px;
-	margin-top: 1px;
-	margin-bottom: 1px;
-}
 
-ion-header #icons {
-	float: right;
-	text-align: right;
-	width: 30%;
-}
 
-ion-header #icons ion-icon {
+
+/*	AFFICHAGE COMPTAGES	*/
+
+#badge {
+	/*background-color: $XLBlue;*/
+	display: inline-block;
 	vertical-align: middle;
+}
+
+#item_comptage_sans_badge {
+	display: inline-block;
+	border: 1px solid black;
+
+	h1 {
+		font-weight: bold;
+	}
 }

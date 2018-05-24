@@ -4,6 +4,7 @@ import { NavController, NavParams, Nav } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { InventaireComptagePage } from '../inventaire-comptage/inventaire-comptage';
 import { ParametresComptagePage } from '../parametres-comptage/parametres-comptage';
+import { NouveauComptagePage } from '../nouveau-comptage/nouveau-comptage';
 
 import { DatabaseUtilisation } from '../../providers/databaseProvider/databaseProviderUtilisation';
 /**
@@ -65,6 +66,7 @@ export class AccueilComptagePage {
    	this.pagesAccessibles['HomePage'] = HomePage;
    	this.pagesAccessibles['InventaireComptagePage'] = InventaireComptagePage;
    	this.pagesAccessibles['ParametresComptagePage'] = ParametresComptagePage;
+    this.pagesAccessibles['NouveauComptagePage'] = NouveauComptagePage;
  	}
 
 
