@@ -30,18 +30,21 @@
 
 <ion-content padding>
 
-      <ion-item *ngFor="let comptage of bdd.localData['comptage']">
-        <ion-badge item-begin id="badge" [style.background-color]="setColorBadge(comptage)">
-          {{findNBArticles(comptage)}}
-          <button ion-button (click)="ajouteScanExemple(comptage)" small><ion-icon name="add"></ion-icon></button>
-        </ion-badge>
-        <div id="item_comptage_sans_badge">
-          <h1>{{comptage.nom}}</h1>
-          <p>{{findNomTypeComptage(comptage.idTypeComptage)}}</p>
-          <p id="dateComptage">{{comptage.dateDebut}}</p>
-        </div>
-      </ion-item>
+  <ion-item *ngFor="let comptage of bdd.localData['comptage']">
+    <ion-badge item-begin id="badge" [style.background-color]="setColorBadge(comptage)">
+      {{findNBArticles(comptage)}}
+      <button ion-button (click)="ajouteScanExemple(comptage)" small><ion-icon name="add"></ion-icon></button>
+    </ion-badge>
+    <div id="item_comptage_sans_badge">
+      <h1>{{comptage.nom}}</h1>
+      <p>{{findNomTypeComptage(comptage.idTypeComptage)}}</p>
+      <p id="dateComptage">{{comptage.dateDebut}}</p>
+    </div>
+  </ion-item>
 
-
-
+  <ion-fab bottom center>
+    <button ion-fab color="primary" (click)="goTo('NouveauComptagePage')">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
 </ion-content>

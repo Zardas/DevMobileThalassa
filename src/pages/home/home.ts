@@ -12,8 +12,10 @@ import { DatabaseUtilisation } from '../../providers/databaseProvider/databasePr
 
 export class HomePage {
 
+  //Liste des pages accessibles, utiliser pour les fonctions de navigation afin d'éviter que l'on puisse aller n'importe où
   private pagesAccessibles: Map<String, any>;
 
+  //Provider possédant à la fois la base de donnée et la hash-map localData
   public bdd: DatabaseUtilisation;
 
   constructor(
@@ -22,10 +24,7 @@ export class HomePage {
     public nav: Nav
   ) {
     
-    this.pagesAccessibles = new Map<String, any>();
-    
-    this.pagesAccessibles['AccueilComptagePage'] = AccueilComptagePage;
-
+    this.parametragePagesAccessibles();
 
     if(navParams.get('database') == undefined) {
       this.refreshBDD();
@@ -50,8 +49,20 @@ export class HomePage {
 
   //goTo = mettre en racine la page désirée -> différent de open
   goTo(page) {
-    this.nav.setRoot(AccueilComptagePage, {database: this.bdd});
+    this.nav.setRoot(this.pagesAccessibles[page], {database: this.bdd});
   }
+
+
+  /*---------------------------------------------------------------------*/
+  /*------------Fonction de paramétrage des pages accessibles------------*/
+  /*---------------------------------------------------------------------*/
+  parametragePagesAccessibles() {
+    this.pagesAccessibles = new Map<String, any>();
+
+    this.pagesAccessibles['AccueilComptagePage'] = AccueilComptagePage;
+  }
+
+
 
 
 

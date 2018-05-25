@@ -4,15 +4,52 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
+<script src="../../assets/sql.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>nouveauComptage</ion-title>
+  <ion-navbar color="XLblue">
+  	<ion-buttons begin>
+  		<button ion-button (click)="goTo('AccueilComptagePage')" id="button">
+        <ion-icon name="arrow-back"></ion-icon>
+        Annuler
+      </button>
+  	</ion-buttons>
+
+    <ion-buttons end>
+    	<button ion-button (click)="enregistrerComptage()">Enregistrer</button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+  <ion-title>Nouveau Comptage</ion-title>
 
+  <ion-item id="item_nouveauNom">
+    <ion-label stacked id="label_nom">
+      <span [innerHTML]="getNameLength()"></span>
+      /50
+    </ion-label>
+    <ion-input type="text" [(ngModel)]="nomComptage" id="newName" placeholder="Saisir un nom"></ion-input>
+  </ion-item>
+
+  <ion-list radio-group>
+
+    <ion-item *ngFor="let typeComptage of bdd.localData['typeComptage']">
+      <ion-label>{{typeComptage.nom}}</ion-label>
+      <ion-radio checked="false"></ion-radio>
+    </ion-item>
+  </ion-list>
+
+  <ion-item>
+    <ion-label>Magasin</ion-label>
+    <ion-select [(ngModel)]="magasin" id="magasinSelect">
+      <ion-option *ngFor="let magasin of bdd.localData['magasin']" [value]="magasin.nom">{{magasin.nom}}</ion-option>
+    </ion-select>
+  </ion-item>
+
+
+  <ion-input [(ngModel)]="myInput" (ionInput)="logChange($event)"></ion-input>
 </ion-content>

@@ -11,3 +11,5 @@ import { AccueilComptagePage } from './accueil-comptage';
   ],
 })
 export class AccueilComptagePageModule {}
+
+

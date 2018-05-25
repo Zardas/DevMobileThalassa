@@ -24,6 +24,7 @@ import { DatabaseUtilisation } from '../../providers/databaseProvider/databasePr
 })
 export class AccueilComptagePage {
 
+  //Liste des pages accessibles, utiliser pour les fonctions de navigation afin d'éviter que l'on puisse aller n'importe où
 	private pagesAccessibles: Map<String, any>;
 
   public bdd: DatabaseUtilisation;
@@ -39,7 +40,11 @@ export class AccueilComptagePage {
 
  		this.parametragePagesAccessibles();
     
-    this.bdd = navParams.get('database');
+    if(navParams.get('database') == undefined) {
+      this.refreshBDD();
+    } else {
+      this.bdd = navParams.get('database');
+    }
  	}
 
 
@@ -70,7 +75,11 @@ export class AccueilComptagePage {
     this.pagesAccessibles['NouveauComptagePage'] = NouveauComptagePage;
  	}
 
+  refreshBDD() {
+    this.bdd = new DatabaseUtilisation();
+  }
 
+  
 
 
   addBDD(table: string, champs: Array<any>, values: Array<any>) {
