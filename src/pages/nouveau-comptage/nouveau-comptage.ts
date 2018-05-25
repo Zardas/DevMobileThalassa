@@ -33,6 +33,9 @@ export class NouveauComptagePage {
   //Magasin du nouveau comptage
   public magasinComptage;
 
+  //Taille maximale du nom
+  public tailleMaxNom: number;
+
  	constructor(
   	public navCtrl: NavController,
   	public navParams: NavParams,
@@ -45,6 +48,8 @@ export class NouveauComptagePage {
     } else {
       this.bdd = navParams.get('database');
     }
+
+    this.tailleMaxNom = 50;
   }
 
   ionViewDidLoad() {
@@ -72,11 +77,23 @@ export class NouveauComptagePage {
   }
 
 
+  /*----------------------------------------------------------------------------------*/
+  /*------------Créer une nouvelle base de données (avec les bonnes tables------------*/
+  /*----------------------------------------------------------------------------------*/
   refreshBDD() {
     this.bdd = new DatabaseUtilisation();
   }
 
 
+  addBDD(table: string, champs: Array<any>, values: Array<any>) {
+    this.bdd.addBDD(table, champs, values);
+  }
+
+
+  /*------------------------------------------------------------------------------------
+   * Retourne la taille du nom de comptage actuellement rentré
+   * Utilisé pour afficher en direct la taille du nom
+   *----------------------------------------------------------------------------------*/
   getNameLength() {
     if(this.nomComptage == undefined) {
       return 0
@@ -91,13 +108,147 @@ export class NouveauComptagePage {
   /*------------Ajoute un comptage dans la base grâce aux informations rentrées------------*/
   /*---------------------------------------------------------------------------------------*/
   enregistrerComptage() {
-    console.log('MyInput : ' + this.myInput);
+    console.log('Nom Comptage : ' + this.nomComptage);
+    console.log('Type Comptage : ' + this.typeComptage);
+    console.log('Magasin Comptage : ' + this.magasinComptage);
+
+    let nomValide = this.nomComptageValide();
+    let typeValide = this.idTypeComptageValide();
+    let magasinValide = this.idMagasinValide();
+
+    console.log("Nom : " + nomValide);
+    console.log("Type : " + typeValide);
+    console.log("Magasin : " + magasinValide);
+
+    //Affichage message d'erreur si le nom est invalide (trop long)
+    let invalidMessage_nom = document.getElementById("invalidMessage_nom") as HTMLElement;
+    if(!nomValide) {
+      invalidMessage_nom.innerHTML = "Vous devez rentrer un nom valide";
+    } else {
+      invalidMessage_nom.innerHTML = "";
+    }
+
+    //Affichage message d'erreur si le type est invalide (pas cohérent avec la bdd)
+    let invalidMessage_type = document.getElementById("invalidMessage_type") as HTMLElement;
+    if(!typeValide) {
+      invalidMessage_type.innerHTML = "Vous devez rentrer un type valide";
+    } else {
+      invalidMessage_type.innerHTML = "";
+    }
+
+    //Affichage message d'erreur si le magasin est invalide (pas cohérent avec la bdd)
+    let invalidMessage_magasin = document.getElementById("invalidMessage_magasin") as HTMLElement;
+    if(!magasinValide) {
+      invalidMessage_magasin.innerHTML = "Vous devez rentrer un magasin valide";
+    } else {
+      invalidMessage_magasin.innerHTML = "";
+    }
+
+    //On ajoute dans la BDD si toute les validations sont passées
+    if(nomValide && typeValide && magasinValide) {
+      //TODO : gérer l'auteur
+      this.addBDD('comptage', ['idComptage', 'idMagasin', 'dateDebut', 'idTypeComptage', 'auteur', 'ouvert', 'nom'], [this.getIdNouveauComptage(), this.magasinComptage, this.getCurrentDate(), this.typeComptage, 'Testeur', true, this.nomComptage]);
+      this.goTo('AccueilComptagePage');
+      //console.log(this.getIdNouveauComptage());
+      //console.log(this.getCurrentDate());
+    }
   }
 
-  public myInput;
-  logChange(event) {
-  console.log(event);
-}
 
+  /*---------------------------------------------------------------------------------------------------------------*/
+  /*------------Renvoie true si le nom du nouveau comptage est valide (infèrieure à la taille maximale)------------*/
+  /*---------------------------------------------------------------------------------------------------------------*/
+  nomComptageValide() {
+    if(this.nomComptage == undefined) {
+      return false;
+    } else {
+      return (this.nomComptage.length <= this.tailleMaxNom);
+    }
+  }
+
+  /*---------------------------------------------------------------------------------------------------------------------------------------*/
+  /*------------Renvoie true si l'id rentrée pour le type de comptage du nouveau comptage est valide (est présente dans la bdd)------------*/
+  /*---------------------------------------------------------------------------------------------------------------------------------------*/
+  idTypeComptageValide() {
+    if(this.typeComptage == undefined) {
+      return false;
+    } else {
+      let i = 0;
+      while(i < this.bdd.localData['typeComptage'].length && this.bdd.localData['typeComptage'][i].idTypeComptage != this.typeComptage) {
+        i++
+      }
+      return (i < this.bdd.localData['typeComptage'].length);
+    }
+  }
+
+  /*------------------------------------------------------------------------------------------------------------------------------*/
+  /*------------Renvoie true si l'id rentrée pour le magasin du nouveau comptage est valide (est présente dans la bdd)------------*/
+  /*------------------------------------------------------------------------------------------------------------------------------*/
+  idMagasinValide() {
+    if(this.magasinComptage == undefined) {
+      return false;
+    } else {
+      let i = 0;
+      while(i < this.bdd.localData['magasin'].length && this.bdd.localData['magasin'][i].idMagasin != this.magasinComptage) {
+        i++
+      }
+      return (i < this.bdd.localData['magasin'].length);
+    }
+  }
+
+  /*----------------------------------------------------------------------------------------------------*/
+  /*------------Renvoie l'id a attribuer au nouveau comptage (le premier qui est disponible)------------*/
+  /*----------------------------------------------------------------------------------------------------*/
+  getIdNouveauComptage() {
+    //On remplit un tableau initialisé à (-1) avec tout les id présents de manière à ce qu'il l'id i soit à l'indice i du tableau
+    let tab: Array<number> = new Array<number>();
+    let tailleMax = this.findIdComptageMax(); //La taille maximale du tableau est logiquement l'idComptage la plus élevée de localData['comptage']
+    console.log("Taille max : " + tailleMax);
+    for(let i = 1 ; i <= tailleMax ; i++) {
+      tab[i] = -1;
+    }
+    for(let i = 0 ; i < this.bdd.localData['comptage'].length ; i++) {
+      tab[this.bdd.localData['comptage'][i].idComptage] = this.bdd.localData['comptage'][i].idComptage;
+    }
+
+    //Puis on cherche le premier -1 dans le tableau (la première case qui n'est pas été remplie avec la correspondance ci-dessus)
+    let i = 1;
+    while(i <= tailleMax && tab[i] != -1) {
+      console.log('Tab[' + i + '] = ' + tab[i]);
+      i++
+    }
+
+    return i;
+  }
+
+  findIdComptageMax() {
+    let idMax = -1;
+
+    for(let i = 0 ; i < this.bdd.localData['comptage'].length ; i++) {
+      if(this.bdd.localData['comptage'][i].idComptage > idMax) {
+        idMax = this.bdd.localData['comptage'][i].idComptage;
+      }
+    }
+    return idMax;
+  }
+
+  /*------------------------------------------------------------------------*/
+  /*------------Renvoie a date actuelle sous la forme YYYY-MM-DD------------*/
+  /*------------------------------------------------------------------------*/
+  getCurrentDate() {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1;
+    var yyyy = today.getFullYear();
+
+    if(dd < 10) { //Pour l'affichage
+      dd = '0' + dd;
+    }
+    if(mm < 10) { //Pour l'affichage
+      mm = '0' + mm
+    }
+
+    return (yyyy + '-' + mm + '-' + dd);
+  }
 
 }

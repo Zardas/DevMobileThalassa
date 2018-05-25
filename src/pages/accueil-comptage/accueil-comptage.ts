@@ -75,6 +75,10 @@ export class AccueilComptagePage {
     this.pagesAccessibles['NouveauComptagePage'] = NouveauComptagePage;
  	}
 
+
+  /*----------------------------------------------------------------------------------*/
+  /*------------Créer une nouvelle base de données (avec les bonnes tables------------*/
+  /*----------------------------------------------------------------------------------*/
   refreshBDD() {
     this.bdd = new DatabaseUtilisation();
   }

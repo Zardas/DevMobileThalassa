@@ -1,5 +1,6 @@
 $XLBlue: #0cb3e8;
 $XLBlueDarker: #0069a2;
+$redSoft: #f44336;
 
 page-nouveau-comptage {
 
@@ -20,12 +21,15 @@ page-nouveau-comptage {
 			#label_nom {
 				text-align: right;
 			}
+		}
 
+		#invalidMessage_nom, #invalidMessage_type, #invalidMessage_magasin {
 			margin-bottom: 20px;
+			text-align: center;
+			color: $redSoft;
 		}
 
 		ion-list {
-			border: 1px solid black;
 		}
 	}
 }

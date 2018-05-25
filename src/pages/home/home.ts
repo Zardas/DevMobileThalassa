@@ -62,9 +62,14 @@ export class HomePage {
     this.pagesAccessibles['AccueilComptagePage'] = AccueilComptagePage;
   }
 
+  /*----------------------------------------------------------------------------------*/
+  /*------------Créer une nouvelle base de données (avec les bonnes tables------------*/
+  /*----------------------------------------------------------------------------------*/
+  refreshBDD() {
+    this.bdd = new DatabaseUtilisation();
+  }
 
-
-
+  
 
   addBDD(table: string, champs: Array<any>, values: Array<any>) {
     this.bdd.addBDD(table, champs, values);
@@ -78,7 +83,6 @@ export class HomePage {
     this.bdd.dropAllTables();
   }
   
-  refreshBDD() {
-    this.bdd = new DatabaseUtilisation();
-  }
+
+  
 }
