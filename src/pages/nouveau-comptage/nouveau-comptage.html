@@ -34,7 +34,7 @@
       <span [innerHTML]="getNameLength()"></span>
       /{{tailleMaxNom}}
     </ion-label>
-    <ion-input type="text" [(ngModel)]="nomComptage" id="newName" placeholder="Saisir un nom"></ion-input>
+    <ion-input type="text" [(ngModel)]="nomComptage" id="newName" placeholder="Saisir un nom" [maxlength]="tailleMaxNom"></ion-input>
     <span>Vous devez rentrer un nom valide</span>
   </ion-item>
   <p id="invalidMessage_nom"></p>

@@ -239,16 +239,23 @@ export class NouveauComptagePage {
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth()+1;
-    var yyyy = today.getFullYear();
+    var yyyy = (today.getFullYear()).toString();
 
+    var new_dd;
     if(dd < 10) { //Pour l'affichage
-      dd = '0' + dd;
-    }
-    if(mm < 10) { //Pour l'affichage
-      mm = '0' + mm
+      new_dd = '0' + dd.toString();
+    } else {
+      new_dd = dd.toString();
     }
 
-    return (yyyy + '-' + mm + '-' + dd);
+    var new_mm;
+    if(mm < 10) { //Pour l'affichage
+      new_mm = '0' + mm.toString();
+    } else {
+      new_mm = mm.toString();
+    }
+
+    return (yyyy + '-' + new_mm + '-' + new_dd);
   }
 
 }

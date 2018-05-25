@@ -27,8 +27,10 @@ export class AccueilComptagePage {
   //Liste des pages accessibles, utiliser pour les fonctions de navigation afin d'éviter que l'on puisse aller n'importe où
 	private pagesAccessibles: Map<String, any>;
 
+  //Provider possédant à la fois la base de donnée et la hash-map localData
   public bdd: DatabaseUtilisation;
 
+  //Indique si la searchbar est ouverte ou fermée
   public isSearchbarOpened = false;
 
  	constructor(
@@ -49,20 +51,26 @@ export class AccueilComptagePage {
 
 
  	ionViewDidLoad() {
-    	console.log('ionViewDidLoad AccueilComptagePage');
+    console.log('ionViewDidLoad AccueilComptagePage');
  	}
 
 	/*open = on met la page désirée sur le devant de la scène
  	Mais la page précédente (this quoi) serra toujours derrière
  	*/
  	open(page) {
-  		this.navCtrl.push(this.pagesAccessibles[page]);
+  	this.navCtrl.push(this.pagesAccessibles[page]);
  	}
   
  	//goTo = mettre en racine la page désirée -> différent de open
  	goTo(page) {
-    	this.nav.setRoot(this.pagesAccessibles[page], {database: this.bdd});
+    this.nav.setRoot(this.pagesAccessibles[page], {database: this.bdd});
  	}
+
+  //Un goTo spéciale pour aller à un comptage en particulier car il faut aussi fournir l'id du comptage
+  goToComptage(idComptage: number) {
+    this.nav.setRoot(InventaireComptagePage, {database: this.bdd, idComptage: idComptage});
+  }
+
 
  	/*---------------------------------------------------------------------*/
   /*------------Fonction de paramétrage des pages accessibles------------*/
@@ -168,4 +176,5 @@ export class AccueilComptagePage {
   getRandomDate(annee: number) {
     return this.getRandomInt(annee) + "-" + this.getRandomInt(13) + "-" + this.getRandomInt(32);
   }
+
 }
