@@ -30,6 +30,21 @@ page-inventaire-comptage {
 		ion-title {
 			text-align: center;
 		}
+
+		#item_scanned {
+			width: 100%;
+			padding-left: 0;
+			padding-right: 0;
+
+			#item_comptage_sans_badge  {
+				
+			}
+			span {
+				float: right;
+				font-weight: bold;
+			}
+		}
+		
 	}
 
 

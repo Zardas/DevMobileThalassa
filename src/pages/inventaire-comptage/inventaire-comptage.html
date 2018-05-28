@@ -37,19 +37,19 @@
   <button ion-button block class="envoyerDansLaBase" color="XLblueDarker" class="transfererDonnees" (click)="presentToast('Les données ont été transférées')">
     Ajouter les données scannées dans la base de données
   </button>
+
   
-  
-  <ion-item *ngFor="let scan of scans_searched">
-    <div *ngIf="scan.idComptage==comptage.idComptage">
+  <ion-item *ngFor="let scan of scans_searched" id="item_scanned">
       <ion-badge item-begin id="badge" big>
         {{scan.quantite}}
       </ion-badge>
       <div id="item_comptage_sans_badge">
-        <h1>{{getPrimaryText(scan)}}</h1>
-        <p>{{getSecondaryText(scan)}}</p>
-        <span>{{scan.prixEtiquette}}</span>
+        <div id="primary_plus_secondary">
+          <h1>{{getPrimaryText(scan)}}</h1>
+          <p>{{getSecondaryText(scan)}}</p>
+        </div>
       </div>
-    </div>
+      <span>{{scan.prixEtiquette}}€</span>
   </ion-item>
   
 
@@ -59,8 +59,8 @@
     </button>
   </ion-fab>
 
-  <ion-fab bottom left small>
-    <button ion-fab color="XLblue" (click)="getScansCorrespondant('')">
+  <ion-fab bottom left>
+    <button ion-fab mini color="XLblue" (click)="getScansCorrespondant('')">
       <ion-icon name="refresh"></ion-icon>
     </button>
   </ion-fab>

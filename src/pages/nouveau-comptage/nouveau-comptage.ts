@@ -144,10 +144,18 @@ export class NouveauComptagePage {
       invalidMessage_magasin.innerHTML = "";
     }
 
+    //Pour gérer le cas du magasin non spécifié (non, on ne peut pas juste mettre "" comme value)
+    let comptageType: string;
+    if(this.typeComptage == "non_specifie") {
+      comptageType = "";
+    } else {
+      comptageType = this.typeComptage;
+    }
+
     //On ajoute dans la BDD si toute les validations sont passées
     if(nomValide && typeValide && magasinValide) {
       //TODO : gérer l'auteur
-      this.addBDD('comptage', ['idComptage', 'nomMagasin', 'dateDebut', 'nomTypeComptage', 'auteur', 'ouvert', 'nom'], [this.getIdNouveauComptage(), this.magasinComptage, this.getCurrentDate(), this.typeComptage, 'Testeur', true, this.nomComptage]);
+      this.addBDD('comptage', ['idComptage', 'nomMagasin', 'dateDebut', 'nomTypeComptage', 'auteur', 'ouvert', 'nom'], [this.getIdNouveauComptage(), this.magasinComptage, this.getCurrentDate(), comptageType, 'Testeur', true, this.nomComptage]);
       this.goTo('AccueilComptagePage');
       //console.log(this.getIdNouveauComptage());
       //console.log(this.getCurrentDate());
@@ -172,7 +180,7 @@ export class NouveauComptagePage {
   typeComptageValide() {
     if(this.typeComptage == undefined) {
       return false;
-    } else if(this.typeComptage == "") {
+    } else if(this.typeComptage == "non_specifie") {
       return true;
     } else {
       let i = 0;
