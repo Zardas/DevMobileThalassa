@@ -38,7 +38,11 @@
     Ajouter les données scannées dans la base de données
   </button>
 
-  
+  <p id="changeMode">
+    <ion-label>{{getNomMode()}}</ion-label>
+    <ion-toggle (ionChange)="changeMode()"></ion-toggle>
+  </p>
+
   <ion-item *ngFor="let scan of scans_searched" id="item_scanned">
       <ion-badge item-begin id="badge" big>
         {{scan.quantite}}

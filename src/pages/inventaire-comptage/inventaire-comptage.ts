@@ -47,6 +47,9 @@ export class InventaireComptagePage {
   //Indique si la searchbar est ouverte ou fermée
   public isSearchbarOpened = false;
 
+  //True = on affiche tout les scans / False : on regroupe les scans par codeBarre
+  public item_par_item = true;
+
   //Options pour le scanner
   private BarcodeOptions = {
     //Afficher le bouton pour changer l'orientation de la caméra
@@ -159,10 +162,44 @@ export class InventaireComptagePage {
           this.scans_searched.push(scans[i]);
         }
       }
+      //Si on est en mode item_regroupé, il faut encore regouper les items (logique...)
+      if(!this.item_par_item) {
+        this.scans_searched = this.regroupeItem(this.scans_searched);
+      }
     } else {
       this.scans_searched = scans;
     }
   }
+
+  regroupeItem(toRegroupe: Array<any>) {
+    let item_regroupes = new Array<any>();
+    let codeBarreChecked = new Array<any>(); //Indique les codes-barres qui ont déjà été gérés
+
+    for(let i = 0 ; i < toRegroupe.length ; i++) {
+      if(codeBarreChecked.indexOf(toRegroupe[i].codeBarre) == -1) { //Si le code-barre n'a pas encore été check
+        let quantite = 0;
+        for(let j = i ; j < toRegroupe.length ; j++) {
+          if(toRegroupe[j].codeBarre == toRegroupe[i].codeBarre) {
+            console.log('FLAG A : ' + toRegroupe[j].codeBarre + ' = ' + toRegroupe[i].codeBarre);
+            quantite = quantite + toRegroupe[j].quantite;
+          }
+        }
+        item_regroupes.push({dateScan: toRegroupe[i].dateScan,
+                             codeBarre: toRegroupe[i].codeBarre,
+                             designation: toRegroupe[i].designation,
+                             idComptage: toRegroupe[i].idComptage,
+                             quantite: quantite,
+                             auteur: toRegroupe[i].auteur,
+                             prixEtiquette: toRegroupe[i].prixEtiquette,
+                             prixBase: toRegroupe[i].prixBase,
+                             stockBase: toRegroupe[i].stockBase
+                             });
+        codeBarreChecked.push(toRegroupe[i].codeBarre);
+      }
+    }
+    return item_regroupes;
+  }
+
 
   /*------------------------------------------------------------------------------------------------------------------------------
    * Return "close" si la barre de recherche est ouvert et "search" sinon
@@ -195,6 +232,36 @@ export class InventaireComptagePage {
   }
 
 
+  /*---------------------------------------------*/
+  /*---Fonctions relatives au mode d'affichage---*/
+  /*---------------------------------------------*/
+  /*--------------------------------------------*/
+  /*---Indique le nom à afficher pour le scan---*/
+  /*--------------------------------------------*/
+  getNomMode() {
+    if(this.item_par_item) {
+      return "Scans individuels";
+    } else {
+      return "Scans regroupés";
+    }
+  }
+  /*--------------------------------*/
+  /*---Change le mode d'affichage---*/
+  /*--------------------------------*/
+  changeMode() {
+    this.item_par_item = !this.item_par_item;
+
+    if(this.item_par_item) {
+      this.getScansCorrespondant('');
+    } else {
+      this.scans_searched = this.regroupeItem(this.scans_searched);
+    }
+  }
+
+
+
+
+
   /*---------------------------------*/
   /*---Fonctions relatives au scan---*/
   /*---------------------------------*/
@@ -222,8 +289,22 @@ export class InventaireComptagePage {
   /*--------------------------------------------------------------------------------------------------------------------*/
   ajoutScan(scan: string) {
     //if(this.checkFormatArticle(scan)) {
-      this.addBDD("scan", ["dateScan", "codeBarre", "designation", "idComptage", "quantite", "auteur", "prixEtiquette", "prixBase", "stockBase"], [this.getCurrentDate(), "Exemple2", scan, this.comptage.idComptage, 3000, "auteureeee", 200, 100, 33]).then( () => {
-        this.getScansCorrespondant('');
+      let currentDate = this.getCurrentDate();
+      this.addBDD("scan", ["dateScan", "codeBarre", "designation", "idComptage", "quantite", "auteur", "prixEtiquette", "prixBase", "stockBase"], [currentDate, scan, "", this.comptage.idComptage, 3000, "auteureeee", 200, 100, 33]).then( () => {
+        this.scans_searched.push({dateScan: currentDate,
+                                  codeBarre: scan,
+                                  designation: "",
+                                  idComptage: this.comptage.idComptage,
+                                  quantite: 3000,
+                                  auteur: "auteureeee",
+                                  prixEtiquette: 200,
+                                  prixBase: 100,
+                                  stockBase: 33
+                                  });
+        if(!this.item_par_item) {
+          this.scans_searched = this.regroupeItem(this.scans_searched);
+        }
+        //this.getScansCorrespondant('');
       });
     /*} else {
       console.log("Le code-barre scanné est invalide");
