@@ -38,6 +38,11 @@
     Ajouter les données scannées dans la base de données
   </button>
 
+  <p id="refresh">
+    <button ion-fab mini color="XLblue" (click)="getScansCorrespondant('')">
+      <ion-icon name="refresh"></ion-icon>
+    </button>
+  </p>
   <p id="changeMode">
     <ion-label>{{getNomMode()}}</ion-label>
     <ion-toggle (ionChange)="changeMode()"></ion-toggle>
@@ -60,12 +65,6 @@
   <ion-fab bottom center>
     <button ion-fab color="primary" (click)="scanBarcode()">
       <ion-icon name="camera"></ion-icon>
-    </button>
-  </ion-fab>
-
-  <ion-fab bottom left>
-    <button ion-fab mini color="XLblue" (click)="getScansCorrespondant('')">
-      <ion-icon name="refresh"></ion-icon>
     </button>
   </ion-fab>
 

@@ -171,6 +171,9 @@ export class InventaireComptagePage {
     }
   }
 
+  /*-----------------------------------------------------------------------------------------------------------------------*/
+  /*------------Renvoie un tableau comprenant les scan passés en paramètres, mais regroupés selon le code-barre------------*/
+  /*-----------------------------------------------------------------------------------------------------------------------*/
   regroupeItem(toRegroupe: Array<any>) {
     let item_regroupes = new Array<any>();
     let codeBarreChecked = new Array<any>(); //Indique les codes-barres qui ont déjà été gérés
@@ -178,13 +181,12 @@ export class InventaireComptagePage {
     for(let i = 0 ; i < toRegroupe.length ; i++) {
       if(codeBarreChecked.indexOf(toRegroupe[i].codeBarre) == -1) { //Si le code-barre n'a pas encore été check
         let quantite = 0;
-        for(let j = i ; j < toRegroupe.length ; j++) {
-          if(toRegroupe[j].codeBarre == toRegroupe[i].codeBarre) {
-            console.log('FLAG A : ' + toRegroupe[j].codeBarre + ' = ' + toRegroupe[i].codeBarre);
-            quantite = quantite + toRegroupe[j].quantite;
+        for(let j = i ; j < toRegroupe.length ; j++) { //On parcours les autres tuples disponibles
+          if(toRegroupe[j].codeBarre == toRegroupe[i].codeBarre) { //Et si le code-barre correspond
+            quantite = quantite + toRegroupe[j].quantite; //On incrémente la quantite
           }
         }
-        item_regroupes.push({dateScan: toRegroupe[i].dateScan,
+        item_regroupes.push({dateScan: toRegroupe[i].dateScan, //Après avoir parcourues tout les tuples restants, on ajoute un tuple avec la quantite somme dans le nouvel array
                              codeBarre: toRegroupe[i].codeBarre,
                              designation: toRegroupe[i].designation,
                              idComptage: toRegroupe[i].idComptage,
@@ -194,7 +196,7 @@ export class InventaireComptagePage {
                              prixBase: toRegroupe[i].prixBase,
                              stockBase: toRegroupe[i].stockBase
                              });
-        codeBarreChecked.push(toRegroupe[i].codeBarre);
+        codeBarreChecked.push(toRegroupe[i].codeBarre); //Et on fait en sorte de ne plus recheck ce code-barre
       }
     }
     return item_regroupes;

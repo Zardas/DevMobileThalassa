@@ -1,10 +1,13 @@
+$XLBlue: #0cb3e8;
+$XLBlueDarker: #0069a2;
+$IonicBlue: #387ef5;
+
 page-inventaire-comptage {
 
 	.transfererDonnees {
 		padding-top: 1%;
 		padding-bottom: 1%;
 		font-size: 2.5vw;
-		margin-bottom: 8%;
 	}
 	ion-header {
 		ion-title {
@@ -31,6 +34,26 @@ page-inventaire-comptage {
 			text-align: center;
 		}
 
+		#refresh {
+			display: inline-block;
+		}
+
+		#changeMode {
+			float: right;
+			text-align: center;
+			padding-top: 0%;
+
+			ion-label {
+				width: 100%;
+				margin-bottom: 0%;
+				color: $IonicBlue;
+				font-weight: bold;
+			}
+			ion-toggle {
+				margin: auto;
+			}
+		}
+
 		#item_scanned {
 			width: 100%;
 			padding-left: 0;
@@ -43,6 +66,16 @@ page-inventaire-comptage {
 				float: right;
 				font-weight: bold;
 			}
+		}
+
+		#div_bas {
+			border: 1px solid black;
+			position: fixed;
+			bottom: 0%;
+			top: 95%;
+			left: 0%;
+			right: 0%;
+
 		}
 		
 	}
