@@ -30,6 +30,9 @@ export class AccueilComptagePage {
   //Provider possédant à la fois la base de donnée et la hash-map localData
   public bdd: DatabaseUtilisation;
 
+  //La liste des scans correspondants au comptage ET correspondant à la string recherchée
+  public comptage_searched: Array<any>;
+
   //Indique si la searchbar est ouverte ou fermée
   public isSearchbarOpened = false;
 
@@ -47,6 +50,8 @@ export class AccueilComptagePage {
     } else {
       this.bdd = navParams.get('database');
     }
+
+    this.getComptageCorrespondant('');
  	}
 
 
@@ -164,6 +169,31 @@ export class AccueilComptagePage {
       return "search";
     }
   }
+
+
+
+  /*-----------------------------------------------------------------------------------------------------------------------------------------*/
+  /*------------Créer la liste de tout les comptage possédant searched dans leur nom, en parcourant la liste de tout les comptage------------*/
+  /*-----------------------------------------------------------------------------------------------------------------------------------------*/
+  getComptageCorrespondant(searched) {
+    console.log("Search");
+    this.comptage_searched = new Array<any>();
+
+    //on remplit le tableau scans_searched
+    if(searched != '') {
+      let re = new RegExp(searched.target.value, "i");
+      for(let i = 0 ; i < this.bdd.localData['comptage'].length ; i++) {
+        if((this.bdd.localData['comptage'][i].nom).search(re) != -1) {
+          this.comptage_searched.push(this.bdd.localData['comptage'][i]);
+        }
+      }
+    } else {
+      this.comptage_searched = this.bdd.localData['comptage'];
+    }
+  }
+
+
+
 
 
   /*-----------------------------------------------------------------------------------------------------*/

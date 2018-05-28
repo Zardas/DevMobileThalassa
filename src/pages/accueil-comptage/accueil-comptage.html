@@ -11,18 +11,26 @@
 
 
   	<!-- Bouton logo (retourne au menu) -->
-    <img src="assets/imgs/logoXLSoft.png" (click)="goTo('HomePage')" id="img_title_left" />
+    <img src="assets/imgs/logoXLSoft.png" *ngIf="!isSearchbarOpened" (click)="goTo('HomePage')" id="img_title_left" />
 
 
-    <ion-title id="title" icon-right >XLComptage</ion-title>
+    <ion-title id="title" icon-right *ngIf="!isSearchbarOpened">XLComptage</ion-title>
     
+    <ion-searchbar *ngIf="isSearchbarOpened" showCancelButton="true" (search)="getComptageCorrespondant($event)" (ionCancel)="isSearchbarOpened=false" (ionClear)="getComptageCorrespondant('')"></ion-searchbar>
+    <ion-buttons end>
+      <button ion-button (click)="isSearchbarOpened=!isSearchbarOpened"><ion-icon [name]="getNameIcon()" color="White"></ion-icon></button>
+      <button ion-button><ion-icon name="more" color="White"></ion-icon></button>
+    </ion-buttons>
+    <!--
     <ion-title id="icons" icon-right>
+      <ion-searchbar *ngIf="isSearchbarOpened" showCancelButton="true" (search)="getComptageCorrespondant($event)" (ionCancel)="isSearchbarOpened=false" (ionClear)="getComptageCorrespondant('')"></ion-searchbar>
       <button (click)="isSearchbarOpened=!isSearchbarOpened"><ion-icon [name]="getNameIcon()" color="White"></ion-icon></button>
       <ion-icon name="more" color="White"></ion-icon>
     </ion-title>
 
-    <!--Searchbar-->
-    <ion-searchbar *ngIf="isSearchbarOpened" showCancelButton="true" (ionCancel)="isSearchbarOpened=false"></ion-searchbar>
+    
+    <ion-searchbar *ngIf="isSearchbarOpened" showCancelButton="true" (search)="getComptageCorrespondant($event)" (ionCancel)="isSearchbarOpened=false" (ionClear)="getComptageCorrespondant('')"></ion-searchbar>
+  -->
 
   </ion-navbar>
 
@@ -30,7 +38,7 @@
 
 <ion-content padding>
 
-  <ion-item *ngFor="let comptage of bdd.localData['comptage']">
+  <ion-item *ngFor="let comptage of comptage_searched">
     <ion-badge item-begin id="badge" [style.background-color]="setColorBadge(comptage)">
       {{findNBArticles(comptage)}}
       <button ion-button (click)="ajouteScanExemple(comptage)" small><ion-icon name="add"></ion-icon></button>

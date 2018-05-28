@@ -41,9 +41,6 @@ export class InventaireComptagePage {
   //Taille des coes-barres
   public tailleCodeBarre: number;
 
-  //La liste des scans correspondants au comptage
-  public scans: Array<any>;
-
   //La liste des scans correspondants au comptage ET correspondant à la string recherchée
   public scans_searched: Array<any>;
 
@@ -93,7 +90,7 @@ export class InventaireComptagePage {
       this.comptage = navParams.get('comptage');
     }
 
-    this.getScansCorrespondant('null');
+    this.getScansCorrespondant('');
   }
 
   /*---------------------------------------------------------------------*/
@@ -144,27 +141,26 @@ export class InventaireComptagePage {
   /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
   getScansCorrespondant(searched) {
     console.log("Search");
-    this.scans = new Array<any>();
+    //Scans = array contenant tout les scans correspondant au comptage en cours
+    let scans = new Array<any>();
     this.scans_searched = new Array<any>();
 
     //On remplit le tableau scans
     for(let i = 0 ; i < this.bdd.localData['scan'].length ; i++) {
       if(this.bdd.localData['scan'][i].idComptage == this.comptage.idComptage) {
-        this.scans.push(this.bdd.localData['scan'][i]);
+        scans.push(this.bdd.localData['scan'][i]);
       }
     }
-    
     //on remplit le tableau scans_searched
-    if(searched != 'null' && searched != '') {
+    if(searched != '') {
       let re = new RegExp(searched.target.value, "i");
-      for(let i = 0 ; i < this.scans.length ; i++) {
-        if((this.scans[i].designation).search(re) != -1) {
-          console.log('Flag 1 : ' + searched.target.value);
-          this.scans_searched.push(this.scans[i]);
+      for(let i = 0 ; i < scans.length ; i++) {
+        if((scans[i].designation).search(re) != -1) {
+          this.scans_searched.push(scans[i]);
         }
       }
     } else {
-      this.scans_searched = this.scans;
+      this.scans_searched = scans;
     }
   }
 
