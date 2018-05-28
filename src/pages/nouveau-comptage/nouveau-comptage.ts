@@ -113,8 +113,8 @@ export class NouveauComptagePage {
     console.log('Magasin Comptage : ' + this.magasinComptage);
 
     let nomValide = this.nomComptageValide();
-    let typeValide = this.idTypeComptageValide();
-    let magasinValide = this.idMagasinValide();
+    let typeValide = this.typeComptageValide();
+    let magasinValide = this.magasinValide();
 
     console.log("Nom : " + nomValide);
     console.log("Type : " + typeValide);
@@ -147,7 +147,7 @@ export class NouveauComptagePage {
     //On ajoute dans la BDD si toute les validations sont passées
     if(nomValide && typeValide && magasinValide) {
       //TODO : gérer l'auteur
-      this.addBDD('comptage', ['idComptage', 'idMagasin', 'dateDebut', 'idTypeComptage', 'auteur', 'ouvert', 'nom'], [this.getIdNouveauComptage(), this.magasinComptage, this.getCurrentDate(), this.typeComptage, 'Testeur', true, this.nomComptage]);
+      this.addBDD('comptage', ['idComptage', 'nomMagasin', 'dateDebut', 'nomTypeComptage', 'auteur', 'ouvert', 'nom'], [this.getIdNouveauComptage(), this.magasinComptage, this.getCurrentDate(), this.typeComptage, 'Testeur', true, this.nomComptage]);
       this.goTo('AccueilComptagePage');
       //console.log(this.getIdNouveauComptage());
       //console.log(this.getCurrentDate());
@@ -162,19 +162,21 @@ export class NouveauComptagePage {
     if(this.nomComptage == undefined) {
       return false;
     } else {
-      return (this.nomComptage.length <= this.tailleMaxNom);
+      return (this.nomComptage.length > 0 && this.nomComptage.length <= this.tailleMaxNom);
     }
   }
 
   /*---------------------------------------------------------------------------------------------------------------------------------------*/
   /*------------Renvoie true si l'id rentrée pour le type de comptage du nouveau comptage est valide (est présente dans la bdd)------------*/
   /*---------------------------------------------------------------------------------------------------------------------------------------*/
-  idTypeComptageValide() {
+  typeComptageValide() {
     if(this.typeComptage == undefined) {
       return false;
+    } else if(this.typeComptage == "") {
+      return true;
     } else {
       let i = 0;
-      while(i < this.bdd.localData['typeComptage'].length && this.bdd.localData['typeComptage'][i].idTypeComptage != this.typeComptage) {
+      while(i < this.bdd.localData['typeComptage'].length && this.bdd.localData['typeComptage'][i].nom != this.typeComptage) {
         i++
       }
       return (i < this.bdd.localData['typeComptage'].length);
@@ -184,12 +186,14 @@ export class NouveauComptagePage {
   /*------------------------------------------------------------------------------------------------------------------------------*/
   /*------------Renvoie true si l'id rentrée pour le magasin du nouveau comptage est valide (est présente dans la bdd)------------*/
   /*------------------------------------------------------------------------------------------------------------------------------*/
-  idMagasinValide() {
+  magasinValide() {
     if(this.magasinComptage == undefined) {
       return false;
+    } else if(this.magasinComptage == '') {
+      return true;
     } else {
       let i = 0;
-      while(i < this.bdd.localData['magasin'].length && this.bdd.localData['magasin'][i].idMagasin != this.magasinComptage) {
+      while(i < this.bdd.localData['magasin'].length && this.bdd.localData['magasin'][i].nom != this.magasinComptage) {
         i++
       }
       return (i < this.bdd.localData['magasin'].length);

@@ -67,8 +67,8 @@ export class AccueilComptagePage {
  	}
 
   //Un goTo spéciale pour aller à un comptage en particulier car il faut aussi fournir l'id du comptage
-  goToComptage(idComptage: number) {
-    this.nav.setRoot(InventaireComptagePage, {database: this.bdd, idComptage: idComptage});
+  goToComptage(comptage) {
+    this.nav.setRoot(InventaireComptagePage, {database: this.bdd, comptage: comptage});
   }
 
 
@@ -123,10 +123,10 @@ export class AccueilComptagePage {
   /*---------------------------------------------------------------------------------*/
   /*------------Retourne le nom du type de comptage associé à un comptage------------*/
   /*---------------------------------------------------------------------------------*/
-  findNomTypeComptage(idTypeComptage: number) {
+  findNomTypeComptage(nomTypeComptage: string) {
     //On trouve l'indice de l'élément
     let i = 0;
-    while(i < this.bdd.localData['typeComptage'].length && this.bdd.localData['typeComptage'][i].idTypeComptage != idTypeComptage) {
+    while(i < this.bdd.localData['typeComptage'].length && this.bdd.localData['typeComptage'][i].nom != nomTypeComptage) {
       i++;
     }
 
@@ -153,6 +153,10 @@ export class AccueilComptagePage {
     return nb;
   }
 
+  /*------------------------------------------------------------------------------------------------------------------------------
+   * Return "close" si la barre de recherche est ouvert et "search" sinon
+   * Utilisé pour trouver quelle icône afficher à droite (loupe ou croix) en fonction de l'état de la searchbar (fermée ou ouverte)
+   *-----------------------------------------------------------------------------------------------------------------------------*/
   getNameIcon() {
     if(this.isSearchbarOpened) {
       return "close";

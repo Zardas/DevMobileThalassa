@@ -35,9 +35,10 @@
       {{findNBArticles(comptage)}}
       <button ion-button (click)="ajouteScanExemple(comptage)" small><ion-icon name="add"></ion-icon></button>
     </ion-badge>
-    <div id="item_comptage_sans_badge" (click)="goToComptage(comptage.idComptage)">
+    <div id="item_comptage_sans_badge" (click)="goToComptage(comptage)">
       <h1>{{comptage.idComptage}} - {{comptage.nom}}</h1>
-      <p>{{findNomTypeComptage(comptage.idTypeComptage)}}</p>
+      <!--<p>{{findNomTypeComptage(comptage.nomTypeComptage)}}</p>-->
+      <p>{{comptage.nomTypeComptage}}</p>
       <p id="dateComptage">{{comptage.dateDebut}}</p>
     </div>
   </ion-item>

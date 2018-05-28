@@ -10,15 +10,27 @@
 
   <ion-navbar color="XLblue">
 
+    <!--
   	<button ion-button menuToggle>
   		<ion-icon name="menu"></ion-icon>
-  	</button>
-
-    <ion-title>Inventaire</ion-title>
-
-    <!-- Bouton logo (retourne au menu) -->
-      <img src="assets/imgs/logoXLSoft.png" (click)="goTo('HomePage')" />
+  	</button>-->
+        
+    <ion-title>
+      <ion-icon name="arrow-back" (click)="goTo('AccueilComptagePage')"></ion-icon>
+      {{comptage.nom}}
+      <ion-buttons>
+        <button ion-button id="search" (click)="isSearchbarOpened=!isSearchbarOpened">
+          <ion-icon [name]="getNameIcon()"></ion-icon>
+        </button>
+        <button ion-button (click)="goTo('ParametresComptagePage')" id="more">
+          <ion-icon name="more"></ion-icon>
+        </button>
+      </ion-buttons>
+    </ion-title>
     
+    <!--Searchbar-->
+    <ion-searchbar *ngIf="isSearchbarOpened" showCancelButton="true" (search)="getScansCorrespondant($event)" (ionCancel)="isSearchbarOpened=false" (ionClear)="getScansCorrespondant('null')"></ion-searchbar>
+
   </ion-navbar>
 
 </ion-header>
@@ -29,7 +41,21 @@
     Ajouter les données scannées dans la base de données
   </button>
 
-  <ion-title>Comptage n°{{idComptage}}</ion-title>
+  <ion-title>Comptage n°{{comptage.idComptage}}</ion-title>
+  
+  
+  <ion-item *ngFor="let scan of scans_searched">
+    <div *ngIf="scan.idComptage==comptage.idComptage">
+      <ion-badge item-begin id="badge" big>
+        {{scan.quantite}}
+      </ion-badge>
+      <div id="item_comptage_sans_badge">
+        <h1>{{scan.designation}}</h1>
+        <p>{{scan.codeBarre}}</p>
+        <span>{{scan.prixEtiquette}}</span>
+      </div>
+    </div>
+  </ion-item>
   
 
 </ion-content>

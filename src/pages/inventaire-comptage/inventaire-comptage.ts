@@ -6,6 +6,7 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { DatabaseUtilisation } from '../../providers/databaseProvider/databaseProviderUtilisation';
 
 import { AccueilComptagePage } from '../accueil-comptage/accueil-comptage';
+import { ParametresComptagePage } from '../parametres-comptage/parametres-comptage';
 /**
  * Generated class for the InventaireComptagePage page.
  *
@@ -34,11 +35,20 @@ export class InventaireComptagePage {
   //Provider possédant à la fois la base de donnée et la hash-map localData
   public bdd: DatabaseUtilisation;
 
-  //id du comptage
-  public idComptage: number;  
+  //Le comptage
+  public comptage;  
 
   //Taille des coes-barres
   public tailleCodeBarre: number;
+
+  //La liste des scans correspondants au comptage
+  public scans: Array<any>;
+
+  //La liste des scans correspondants au comptage ET correspondant à la string recherchée
+  public scans_searched: Array<any>;
+
+  //Indique si la searchbar est ouverte ou fermée
+  public isSearchbarOpened = false;
 
   //Options pour le scanner
   private BarcodeOptions = {
@@ -68,18 +78,22 @@ export class InventaireComptagePage {
 
     this.parametragePagesAccessibles();
 
+    //On récupère la base de données
     if(navParams.get('database') == undefined) {
       this.refreshBDD();
     } else {
       this.bdd = navParams.get('database');
     }
 
-    if(navParams.get('idComptage') == undefined) {
-      this.idComptage = -1;
+    //On récupère le comptage
+    if(navParams.get('comptage') == undefined) {
+      this.comptage = new Array<any>();
+      this.comptage.idComptage = -1;
     } else {
-      this.idComptage = navParams.get('idComptage');
+      this.comptage = navParams.get('comptage');
     }
 
+    this.getScansCorrespondant('null');
   }
 
   /*---------------------------------------------------------------------*/
@@ -88,6 +102,7 @@ export class InventaireComptagePage {
   parametragePagesAccessibles() {
     this.pagesAccessibles = new Map<String, any>();
     this.pagesAccessibles['AccueilComptagePage'] = AccueilComptagePage;
+    this.pagesAccessibles['ParametresComptagePage'] = ParametresComptagePage;
   }
 
 
@@ -108,11 +123,10 @@ export class InventaireComptagePage {
   /*goTo = mettre en racine la page désirée -> différent de open
   */
   goTo(page) {
-    this.nav.setRoot(this.pagesAccessibles[page]);
+    this.nav.setRoot(this.pagesAccessibles[page], {database: this.bdd});
   }
 
-
-   /*----------------------------------------------------------------------------------*/
+  /*----------------------------------------------------------------------------------*/
   /*------------Créer une nouvelle base de données (avec les bonnes tables------------*/
   /*----------------------------------------------------------------------------------*/
   refreshBDD() {
@@ -125,9 +139,46 @@ export class InventaireComptagePage {
   }
 
 
+  /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+  /*------------Créer la liste de tout les scans correspondant au comptage this et possédant searched dans leur nom, en parcourant la liste de tout les scans------------*/
+  /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+  getScansCorrespondant(searched) {
+    console.log("Search");
+    this.scans = new Array<any>();
+    this.scans_searched = new Array<any>();
 
+    //On remplit le tableau scans
+    for(let i = 0 ; i < this.bdd.localData['scan'].length ; i++) {
+      if(this.bdd.localData['scan'][i].idComptage == this.comptage.idComptage) {
+        this.scans.push(this.bdd.localData['scan'][i]);
+      }
+    }
+    
+    //on remplit le tableau scans_searched
+    if(searched != 'null' && searched != '') {
+      let re = new RegExp(searched.target.value, "i");
+      for(let i = 0 ; i < this.scans.length ; i++) {
+        if((this.scans[i].designation).search(re) != -1) {
+          console.log('Flag 1 : ' + searched.target.value);
+          this.scans_searched.push(this.scans[i]);
+        }
+      }
+    } else {
+      this.scans_searched = this.scans;
+    }
+  }
 
-
+  /*------------------------------------------------------------------------------------------------------------------------------
+   * Return "close" si la barre de recherche est ouvert et "search" sinon
+   * Utilisé pour trouver quelle icône afficher à droite (loupe ou croix) en fonction de l'état de la searchbar (fermée ou ouverte)
+   *-----------------------------------------------------------------------------------------------------------------------------*/
+  getNameIcon() {
+    if(this.isSearchbarOpened) {
+      return "close";
+    } else {
+      return "search";
+    }
+  }
 
 
   /*---------------------------------*/
@@ -164,7 +215,7 @@ export class InventaireComptagePage {
     if(this.checkFormatArticle(article)) {
 
       //On vérifie si article est présent dans la liste des articles
-      let i = 0;
+      /*let i = 0;
       console.log("Taille locale : " + this.localData['article'].length);
       while(i < this.localData['article'].length && String(this.localData['article'][i].id) != article) {
         i++;
@@ -178,7 +229,7 @@ export class InventaireComptagePage {
         //Cas ADD : l'article n'est pas présent, on l'add avec une quantité de 1
         console.log('Pas déjà présent');
         this.addBDD('article', ['id', 'prix', 'nb'], [parseInt(article), 5, 1]);
-      }
+      }*/
 
     } else {
       console.log("Aucun article scanné");

@@ -57,9 +57,9 @@ export class DatabaseUtilisation {
 
     let champsTableComptage: Array<champ> = [];
     champsTableComptage.push({nom: 'idComptage', type: 'INTEGER', foreignKey: '', primaryKey: true});
-    champsTableComptage.push({nom: 'idMagasin', type: 'INTEGER', foreignKey: 'magasin(idMagasin)', primaryKey: false});
+    champsTableComptage.push({nom: 'nomMagasin', type: 'TEXT', foreignKey: '', primaryKey: false});
     champsTableComptage.push({nom: 'dateDebut', type: 'TEXT', foreignKey: '', primaryKey: false});
-    champsTableComptage.push({nom: 'idTypeComptage', type: 'INTEGER', foreignKey: 'typeComptage(idTypeComptage)', primaryKey: false});
+    champsTableComptage.push({nom: 'nomTypeComptage', type: 'TEXT', foreignKey: '', primaryKey: false});
     champsTableComptage.push({nom: 'auteur', type: 'TEXT', foreignKey: '', primaryKey: false});
     champsTableComptage.push({nom: 'ouvert', type: 'NUMERIC', foreignKey: '', primaryKey: false});
     champsTableComptage.push({nom: 'nom', type: 'TEXT', foreignKey: '', primaryKey: false});
@@ -69,10 +69,11 @@ export class DatabaseUtilisation {
     champsTableScan.push({nom: 'codeBarre', type: 'TEXT', foreignKey: '', primaryKey: false});
     champsTableScan.push({nom: 'designation', type: 'TEXT', foreignKey: '', primaryKey: false});
     champsTableScan.push({nom: 'idComptage', type: 'INTEGER', foreignKey: 'comptage(idComptage)', primaryKey: false});
-    champsTableScan.push({nom: 'quantite', type: 'INTEGER', foreignKey: '', primaryKey: false});
+    champsTableScan.push({nom: 'quantite', type: 'DOUBLE', foreignKey: '', primaryKey: false});
     champsTableScan.push({nom: 'auteur', type: 'TEXT', foreignKey: '', primaryKey: true});
     champsTableScan.push({nom: 'prixEtiquette', type: 'REAL', foreignKey: '', primaryKey: false});
     champsTableScan.push({nom: 'prixBase', type: 'REAL', foreignKey: '', primaryKey: false});
+    champsTableScan.push({nom: 'stockBase', type: 'REAL', foreignKey: '', primaryKey: false});
 
     /* On met tout ça dans les tables qui seront créées plus tard */
     this.tables.push({nom: 'article', champs: champsTableArticle});

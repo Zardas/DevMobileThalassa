@@ -28,7 +28,6 @@
   <ion-title>Nouveau Comptage</ion-title>
 
   <!--Nom-->
-
   <ion-item id="item_nouveauNom">
     <ion-label stacked id="label_nom">
       <span [innerHTML]="getNameLength()"></span>
@@ -43,11 +42,15 @@
   <ion-list radio-group [(ngModel)]="typeComptage">
     <ion-item *ngFor="let typeComptage of bdd.localData['typeComptage']">
       <ion-label>{{typeComptage.nom}}</ion-label>
-      <ion-radio checked="false" [value]="typeComptage.idTypeComptage"></ion-radio>
+      <ion-radio checked="false" [value]="typeComptage.nom"></ion-radio>
+    </ion-item>
+    <ion-item>
+      <ion-label>Non spécifié</ion-label>
+      <ion-radio checked="false" value=""></ion-radio>
     </ion-item>
     <ion-item>
       <ion-label>Erreur</ion-label>
-      <ion-radio checked="false" value=30></ion-radio>
+      <ion-radio checked="false" value="erreur"></ion-radio>
     </ion-item>
   </ion-list>
   <p id="invalidMessage_type"></p>
@@ -56,8 +59,9 @@
   <ion-item>
     <ion-label>Magasin</ion-label>
     <ion-select [(ngModel)]="magasinComptage" id="magasinSelect">
-      <ion-option *ngFor="let magasin of bdd.localData['magasin']" [value]="magasin.idMagasin">{{magasin.nom}}</ion-option>
-      <ion-option value=11>Erreur</ion-option>
+      <ion-option *ngFor="let magasin of bdd.localData['magasin']" [value]="magasin.nom">{{magasin.nom}}</ion-option>
+      <ion-option value="">Non spécifié</ion-option>
+      <ion-option value="Erreur">Erreur</ion-option>
     </ion-select>
   </ion-item>
   <p id="invalidMessage_magasin"></p>
