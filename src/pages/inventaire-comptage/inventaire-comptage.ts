@@ -132,7 +132,7 @@ export class InventaireComptagePage {
 
 
   addBDD(table: string, champs: Array<any>, values: Array<any>) {
-    this.bdd.addBDD(table, champs, values);
+    return this.bdd.addBDD(table, champs, values);
   }
 
 
@@ -206,10 +206,7 @@ export class InventaireComptagePage {
     this.barcodeScanner.scan(this.BarcodeOptions)
       .then( barcodeData => {
         //On affiche un message de succès (optionnel)
-        this.presentToast("We got a barcode\n" +
-                          "Result : " + barcodeData.text + "\n" +
-                          "Format : " + barcodeData.format + "\n" +
-                          "Cancelled : " + barcodeData.cancelled);
+        this.presentToast("Article n°" + barcodeData.text + " scanné");
         //On ajoute le code-barre scanné en local et dans la BDD
         this.ajoutScan(barcodeData.text);
       })
@@ -220,16 +217,19 @@ export class InventaireComptagePage {
   }
 
 
-  /* Active le scannage d'un article et l'ajoute dans la BDD */
+  /*--------------------------------------------------------------------------------------------------------------------*/
+  /*---Ajoute le scan dans la BDD et recharge la liste des scans avec une recherche vide (tout les scans du comptage)---*/
+  /*--------------------------------------------------------------------------------------------------------------------*/
   ajoutScan(scan: string) {
-    if(this.checkFormatArticle(scan)) {
-      this.addBDD("scan", ["dateScan", "codeBarre", "designation", "idComptage", "quantite", "auteur", "prixEtiquette", "prixBase", "stockBase"], [this.getCurrentDate(), "Exemple2", scan, this.comptage.idComptage, 3000, "auteureeee", 200, 100, 33]);
-
-      this.getScansCorrespondant('');
-    } else {
+    //if(this.checkFormatArticle(scan)) {
+      this.addBDD("scan", ["dateScan", "codeBarre", "designation", "idComptage", "quantite", "auteur", "prixEtiquette", "prixBase", "stockBase"], [this.getCurrentDate(), "Exemple2", scan, this.comptage.idComptage, 3000, "auteureeee", 200, 100, 33]).then( () => {
+        this.getScansCorrespondant('');
+      });
+    /*} else {
       console.log("Le code-barre scanné est invalide");
-    }
+    }*/
   }
+
 
   /*-----------------------------------------------------------------*/
   /*---Vérifie si l'article scanné est au bon format (13 chiffres)---*/
@@ -253,7 +253,7 @@ export class InventaireComptagePage {
 
     var new_msmsms;
     if(msmsms < 100) { //Pour l'affichage
-      new_dd = '0' + msmsms.toString();
+      new_msmsms = '0' + msmsms.toString();
       if(msmsms < 10) {
         new_msmsms = '0' + new_msmsms;
       }
@@ -338,8 +338,8 @@ export class InventaireComptagePage {
   presentToast(textToDisplay) {
     let toast = this.toastCtrl.create({
       message: textToDisplay,
-      duration: 4000,
-      position: 'bottom',
+      duration: 2000,
+      position: 'top',
       showCloseButton: true
     });
 

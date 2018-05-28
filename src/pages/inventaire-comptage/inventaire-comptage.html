@@ -37,8 +37,6 @@
   <button ion-button block class="envoyerDansLaBase" color="XLblueDarker" class="transfererDonnees" (click)="presentToast('Les données ont été transférées')">
     Ajouter les données scannées dans la base de données
   </button>
-
-  <ion-title>Comptage n°{{comptage.idComptage}}</ion-title>
   
   
   <ion-item *ngFor="let scan of scans_searched">
@@ -58,6 +56,12 @@
   <ion-fab bottom center>
     <button ion-fab color="primary" (click)="scanBarcode()">
       <ion-icon name="camera"></ion-icon>
+    </button>
+  </ion-fab>
+
+  <ion-fab bottom left small>
+    <button ion-fab color="XLblue" (click)="getScansCorrespondant('')">
+      <ion-icon name="refresh"></ion-icon>
     </button>
   </ion-fab>
 

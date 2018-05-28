@@ -125,7 +125,7 @@ export class DatabaseUtilisation {
   /*--------------------------------------------*/
   addBDD(table: string, champs: Array<string>, values: Array<any>) {
 
-    this.database.add(table, champs, values)
+    return this.database.add(table, champs, values)
       .then( data => {
         //this.synchronise(table);
 
@@ -133,16 +133,14 @@ export class DatabaseUtilisation {
         //On cherche donc le tuple ajouté dans la base pour pouvoir l'ajouter en local
         let where = this.createWhere(champs, values);
 
-        this.database.getData(table, where)
+        return this.database.getData(table, where)
           .then( data => {
-            this.ajouteDataLocal(table, data);
+            return this.ajouteDataLocal(table, data);
           })
           .catch( err => {
             console.warn("Problème pour trouver le tuple ajouté dans la BDD : " + err);
           })
         ;
-       
-
         })
       .catch( err => {
         console.warn("Problème avec l'ajout sur la table " + table + " : " + err);
@@ -159,6 +157,30 @@ export class DatabaseUtilisation {
     }
   }
 
+
+  /*-------------------*/
+  /*---Get d'un data---*/
+  /*-------------------*/
+  getBDD(table: string, champs: Array<string>, values: Array<any>) {
+    let where = "";
+
+    if(champs.length == 0 || values.length == 0) {
+      where = "WHERE " + champs[0] + " = " + values[0];
+      for(let i = 1 ; i < Math.min(champs.length, values.length) ; i++) {
+        where = where + " AND " + champs[i] + " = " + values[i];
+      }
+    }
+
+    return this.database.getData(table, where)
+      .then( data => {       
+        return data;
+      })
+      .catch( err => {
+        console.warn("Problème avec le get sur la table " + table + " : " + err);
+        return err;
+      })
+    ;
+  }
 
 
   /*---------------------------------------------*/
