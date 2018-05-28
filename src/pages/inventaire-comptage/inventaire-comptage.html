@@ -15,8 +15,8 @@
   		<ion-icon name="menu"></ion-icon>
   	</button>-->
         
-    <ion-title *ngIf="!isSearchbarOpened">
-      <ion-icon name="arrow-back" (click)="goTo('AccueilComptagePage')"></ion-icon>
+    <ion-title *ngIf="!isSearchbarOpened" (click)="goTo('AccueilComptagePage')">
+      <ion-icon name="arrow-back"></ion-icon>
       {{comptage.nom}}
     </ion-title>
 
@@ -47,12 +47,18 @@
         {{scan.quantite}}
       </ion-badge>
       <div id="item_comptage_sans_badge">
-        <h1>{{scan.designation}}</h1>
-        <p>{{scan.codeBarre}}</p>
+        <h1>{{getPrimaryText(scan)}}</h1>
+        <p>{{getSecondaryText(scan)}}</p>
         <span>{{scan.prixEtiquette}}</span>
       </div>
     </div>
   </ion-item>
   
+
+  <ion-fab bottom center>
+    <button ion-fab color="primary" (click)="scanBarcode()">
+      <ion-icon name="camera"></ion-icon>
+    </button>
+  </ion-fab>
 
 </ion-content>

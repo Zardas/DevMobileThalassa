@@ -176,6 +176,24 @@ export class InventaireComptagePage {
     }
   }
 
+  /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+  /*------------Indique si c'est le codeBarre ou la désignation qui doit être affiché en texte principal (si la designation est '', c'est le codeBarre qui est principal, sinon, c'est la désignation)------------*/
+  /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+  getPrimaryText(scan) {
+    if(scan.designation == "") {
+      return scan.codeBarre;
+    } else {
+      return scan.designation;
+    }
+  }
+  getSecondaryText(scan) {
+    if(scan.designation == "") {
+      return scan.designation;
+    } else {
+      return scan.codeBarre;
+    }
+  }
+
 
   /*---------------------------------*/
   /*---Fonctions relatives au scan---*/
@@ -193,7 +211,7 @@ export class InventaireComptagePage {
                           "Format : " + barcodeData.format + "\n" +
                           "Cancelled : " + barcodeData.cancelled);
         //On ajoute le code-barre scanné en local et dans la BDD
-        this.scanArticle(barcodeData.text);
+        this.ajoutScan(barcodeData.text);
       })
       .catch( err => {
         this.presentToast('Erreur avec le scan : ' + err);
@@ -201,34 +219,15 @@ export class InventaireComptagePage {
     ;
   }
 
-  /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-  /*---Ajoute l'article avec l'id inscrit dans l'input associé à code-barre dans le tableau (s'il n'existe pas déjà), ou incrément sa valeur nb de 1 s'il existe déjà---*/
-  /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-  scanArticle(article: string) {
 
-    //let article = (document.getElementById("inputScan") as HTMLInputElement).value;
-    
-    if(this.checkFormatArticle(article)) {
+  /* Active le scannage d'un article et l'ajoute dans la BDD */
+  ajoutScan(scan: string) {
+    if(this.checkFormatArticle(scan)) {
+      this.addBDD("scan", ["dateScan", "codeBarre", "designation", "idComptage", "quantite", "auteur", "prixEtiquette", "prixBase", "stockBase"], [this.getCurrentDate(), "Exemple2", scan, this.comptage.idComptage, 3000, "auteureeee", 200, 100, 33]);
 
-      //On vérifie si article est présent dans la liste des articles
-      /*let i = 0;
-      console.log("Taille locale : " + this.localData['article'].length);
-      while(i < this.localData['article'].length && String(this.localData['article'][i].id) != article) {
-        i++;
-      }
-
-      if(i < this.localData['article'].length) {
-        //Cas UPDATE : l'article est déjà présent : on incrémente sa quantité 1
-        console.log('Déjà présent');
-        this.update('article', ['nb'], [parseInt(this.localData['article'][i].nb) + 1], "id = " + article);
-      } else {
-        //Cas ADD : l'article n'est pas présent, on l'add avec une quantité de 1
-        console.log('Pas déjà présent');
-        this.addBDD('article', ['id', 'prix', 'nb'], [parseInt(article), 5, 1]);
-      }*/
-
+      this.getScansCorrespondant('');
     } else {
-      console.log("Aucun article scanné");
+      console.log("Le code-barre scanné est invalide");
     }
   }
 
@@ -238,6 +237,72 @@ export class InventaireComptagePage {
   checkFormatArticle(toCheck: any) {
     return (toCheck.length == this.tailleCodeBarre);
   }
+
+  /*----------------------------------------------------------------------------------------*/
+  /*------------Renvoie a date actuelle sous la forme YYYY-MM-DD-HHhMMmSSsMSMSMSms------------*/
+  /*----------------------------------------------------------------------------------------*/
+  getCurrentDate() {
+    var today = new Date();
+    var msmsms = today.getMilliseconds();
+    var ss = today.getSeconds();
+    var mimi = today.getMinutes();
+    var hh = today.getHours();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1;
+    var yyyy = (today.getFullYear()).toString();
+
+    var new_msmsms;
+    if(msmsms < 100) { //Pour l'affichage
+      new_dd = '0' + msmsms.toString();
+      if(msmsms < 10) {
+        new_msmsms = '0' + new_msmsms;
+      }
+    } else {
+      new_msmsms = msmsms.toString();
+    }
+
+    var new_ss;
+    if(ss < 10) { //Pour l'affichage
+      new_ss = '0' + ss.toString();
+    } else {
+      new_ss = ss.toString();
+    }
+
+    var new_mimi;
+    if(mimi < 10) { //Pour l'affichage
+      new_mimi = '0' + mimi.toString();
+    } else {
+      new_mimi = mimi.toString();
+    }
+
+    var new_hh;
+    if(hh < 10) { //Pour l'affichage
+      new_hh = '0' + hh.toString();
+    } else {
+      new_hh = hh.toString();
+    }
+
+    var new_dd;
+    if(dd < 10) { //Pour l'affichage
+      new_dd = '0' + dd.toString();
+    } else {
+      new_dd = dd.toString();
+    }
+
+    var new_mm;
+    if(mm < 10) { //Pour l'affichage
+      new_mm = '0' + mm.toString();
+    } else {
+      new_mm = mm.toString();
+    }
+
+    return (yyyy + '-' + new_mm + '-' + new_dd + '-' + new_hh + "h" + new_mimi + "m" + new_ss + "s" + new_msmsms + "ms");
+  }
+
+
+
+
+
 
   /*-----------------------------------------------------------------------*/
   /*---Fonction perso pour vérifier si "elem" est présent dans "tableau"---*/
