@@ -309,7 +309,6 @@ export class InventaireComptagePage {
         let indice = this.findIndiceCorrespondant(barcodeData.text);
 
         let nomDefaut = "";
-        let prixEtiquette = undefined;
         let prixEuro = undefined;
         let prixCentime = undefined;
         let prixBase = undefined;
@@ -317,7 +316,6 @@ export class InventaireComptagePage {
 
         if(indice != -1) { //Si l'article scanné est déjà repertorié dans la bdd
           nomDefaut = this.bdd.localData['article'][indice].designation;
-          prixEtiquette = this.bdd.localData['article'][indice].prix;
           stockBase = this.bdd.localData['article'][indice].stock;
           let prix = this.getPrix(this.bdd.localData['article'][indice].prix);
           prixEuro = prix.euros;
@@ -325,7 +323,7 @@ export class InventaireComptagePage {
           prixBase = prixEuro + (prixCentime/100);
         }
 
-        this.presentAlertNewScan(barcodeData.text, nomDefaut, prixEuro, prixCentime, prixBase);
+        this.presentAlertNewScan(barcodeData.text, nomDefaut, prixEuro, prixCentime, prixBase, stockBase);
       })
       .catch( err => {
         this.presentToast('Erreur avec le scan : ' + err);
@@ -336,7 +334,7 @@ export class InventaireComptagePage {
   /*---------------------------------------------------------------------------------------------------------*/
   /*---Affiche une alerte pour que l'utilisateur puisse rentrer la quantité correspondant au scan effectué---*/
   /*---------------------------------------------------------------------------------------------------------*/
-  presentAlertNewScan(codeBarre: string, nomDefaut: string, prixEuroDefaut, prixCentimeDefaut, prixBase) {
+  presentAlertNewScan(codeBarre: string, nomDefaut: string, prixEuroDefaut, prixCentimeDefaut, prixBase, stockBase) {
 
     let placeholderNom: string;
     if(nomDefaut == "") {
@@ -399,7 +397,7 @@ export class InventaireComptagePage {
         {
           text: 'Ajouter',
           handler: data => {
-            this.gestionParametresScan(codeBarre, data, nomDefaut, prixEuroDefaut, prixCentimeDefaut, prixBase);
+            this.gestionParametresScan(codeBarre, data, nomDefaut, prixEuroDefaut, prixCentimeDefaut, prixBase, stockBase);
           }
         }
       ]
@@ -408,8 +406,10 @@ export class InventaireComptagePage {
   }
 
 
-
-  gestionParametresScan(codeBarre: string, data, nomDefaut, prixEuroDefaut, prixCentimeDefaut, prixBase) {
+  /*--------------------------------------------------------------------------------------------------------------------------*/
+  /*---Calcul les paramètres à envoyé à la fonction d'ajout du scan dans la base à partir des données rentrée dans l'alerte---*/
+  /*--------------------------------------------------------------------------------------------------------------------------*/
+  gestionParametresScan(codeBarre: string, data, nomDefaut, prixEuroDefaut, prixCentimeDefaut, prixBase, stockBase) {
     let quantite_number = new Number(data.quantite);
     let prixEuro_number;
     let prixCentime_number;
@@ -445,18 +445,17 @@ export class InventaireComptagePage {
     }
     
     let prix_number = prixEuro_number + (prixCentime_number/100);
-    this.ajoutScan(codeBarre, (quantite_number as number), data.name, prix_number, prixBase);
+    this.ajoutScan(codeBarre, (quantite_number as number), data.name, prix_number, prixBase, stockBase);
   }
 
 
   /*--------------------------------------------------------------------------------------------------------------------*/
   /*---Ajoute le scan dans la BDD et recharge la liste des scans avec une recherche vide (tout les scans du comptage)---*/
   /*--------------------------------------------------------------------------------------------------------------------*/
-  ajoutScan(codeBarre: string, quantite: number, name: string, prix: number, prixBase) {
-    console.log('PRIXBASE : ' + prixBase);
+  ajoutScan(codeBarre: string, quantite: number, name: string, prix: number, prixBase, stockBase) {
     //if(this.checkFormatArticle(scan)) {
       let currentDate = this.getCurrentDate();
-      this.addBDD("scan", ["dateScan", "codeBarre", "designation", "idComptage", "quantite", "auteur", "prixEtiquette", "prixBase", "stockBase"], [currentDate, codeBarre, name, this.comptage.idComptage, quantite, "auteureeee", prix, prixBase, 33]).then( () => {
+      this.addBDD("scan", ["dateScan", "codeBarre", "designation", "idComptage", "quantite", "auteur", "prixEtiquette", "prixBase", "stockBase"], [currentDate, codeBarre, name, this.comptage.idComptage, quantite, "auteureeee", prix, prixBase, stockBase]).then( () => {
         this.scans_searched.push({dateScan: currentDate,
                                   codeBarre: codeBarre,
                                   designation: name,
@@ -465,7 +464,7 @@ export class InventaireComptagePage {
                                   auteur: "auteureeee",
                                   prixEtiquette: prix,
                                   prixBase: prixBase,
-                                  stockBase: 33
+                                  stockBase: stockBase
                                   });
         if(!this.item_par_item) {
           this.scans_searched = this.regroupeItem(this.scans_searched);
