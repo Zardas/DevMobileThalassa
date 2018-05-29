@@ -339,7 +339,8 @@ export class InventaireComptagePage {
         {
           name: 'name',
           placeholder: placeholderNom,
-          type: "text"
+          type: "text",
+          label: "Nom"
         },
         {
           name: 'quantite',
@@ -368,30 +369,45 @@ export class InventaireComptagePage {
         {
           text: 'Ajouter',
           handler: data => {
-            let quantite_number = new Number(data.quantite);
-            let prixEuro_number = new Number(data.prixEuro);
-            let prixCentime_number = new Number(data.prixCentime);
-            //Valeurs par défault
-            if(quantite_number == 0) {
-              quantite_number = 1;
-            }
-            if(data.name == "") {
-              data.name = nomDefaut; //Si il y a un nom par défaut, il ne faut pas que l'utilisatur ait à le réindiquer
-            }
-            if(prixEuro_number == 0 && prixEuroDefaut != undefined) {
-              prixEuro_number = prixEuroDefaut;
-            }
-            if(prixCentime_number == 0 && prixCentimeDefaut != undefined) {
-              prixCentime_number = prixCentimeDefaut;
-            }
-
-            let prix_number = prixEuro_number + (prixCentime_number/100);
-            this.ajoutScan(codeBarre, (quantite_number as number), data.name, prix_number);
+            this.gestionParametresScan(codeBarre, data, nomDefaut, prixEuroDefaut, prixCentimeDefaut);
           }
         }
       ]
     });
     alert.present();
+  }
+
+
+
+  gestionParametresScan(codeBarre: string, data, nomDefaut, prixEuroDefaut, prixCentimeDefaut) {
+    let quantite_number = new Number(data.quantite);
+    let prixEuro_number = parseInt(data.prixEuro);
+    let prixCentime_number = parseInt(data.prixCentime);
+    
+    //Valeurs par défaut
+    if(quantite_number == 0) {
+      quantite_number = 1;
+    }
+    if(data.name == "") {
+      data.name = nomDefaut; //Si il y a un nom par défaut, il ne faut pas que l'utilisatur ait à le réindiquer
+    }
+    if(data.prixEuro == "") {
+      if(prixEuroDefaut != undefined) {
+        prixEuro_number = prixEuroDefaut;
+      } else {
+        prixEuro_number = 0;
+      }
+    }
+    if(data.prixCentime == "") {
+      if(prixCentimeDefaut != undefined) {
+        prixCentime_number = prixCentimeDefaut;
+      } else {
+        prixCentime_number = 0;
+      }
+    }
+    
+    let prix_number = prixEuro_number + (prixCentime_number/100);
+    this.ajoutScan(codeBarre, (quantite_number as number), data.name, prix_number);
   }
 
 
