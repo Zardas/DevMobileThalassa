@@ -21,16 +21,7 @@
       <button ion-button (click)="isSearchbarOpened=!isSearchbarOpened"><ion-icon [name]="getNameIcon()" color="White"></ion-icon></button>
       <button ion-button><ion-icon name="more" color="White"></ion-icon></button>
     </ion-buttons>
-    <!--
-    <ion-title id="icons" icon-right>
-      <ion-searchbar *ngIf="isSearchbarOpened" showCancelButton="true" (search)="getComptageCorrespondant($event)" (ionCancel)="isSearchbarOpened=false" (ionClear)="getComptageCorrespondant('')"></ion-searchbar>
-      <button (click)="isSearchbarOpened=!isSearchbarOpened"><ion-icon [name]="getNameIcon()" color="White"></ion-icon></button>
-      <ion-icon name="more" color="White"></ion-icon>
-    </ion-title>
 
-    
-    <ion-searchbar *ngIf="isSearchbarOpened" showCancelButton="true" (search)="getComptageCorrespondant($event)" (ionCancel)="isSearchbarOpened=false" (ionClear)="getComptageCorrespondant('')"></ion-searchbar>
-  -->
 
   </ion-navbar>
 
@@ -41,7 +32,7 @@
   <ion-item *ngFor="let comptage of comptage_searched">
     <ion-badge item-begin id="badge" [style.background-color]="setColorBadge(comptage)">
       {{findNBArticles(comptage)}}
-      <button ion-button (click)="ajouteScanExemple(comptage)" small><ion-icon name="add"></ion-icon></button>
+      <!--<button ion-button (click)="ajouteScanExemple(comptage)" small><ion-icon name="add"></ion-icon></button>-->
     </ion-badge>
     <div id="item_comptage_sans_badge" (click)="goToComptage(comptage)">
       <h1>{{comptage.idComptage}} - {{comptage.nom}}</h1>

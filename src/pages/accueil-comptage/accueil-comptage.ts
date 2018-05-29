@@ -112,10 +112,10 @@ export class AccueilComptagePage {
   /*-------------------------------------------------------------------------------------------------------------*/
   setColorBadge(comptage: any) {
     //Explication : https://angular.io/api/platform-browser/DomSanitizer
-    if(comptage.ouvert == 'true') {
+    if(comptage.ouvert == 1) {
       //Cas ouvert, on est en XLBlue
       return this.sanitizer.bypassSecurityTrustStyle('#0cb3e8');
-    } else if(comptage.ouvert == 'false') {
+    } else if(comptage.ouvert == 0) {
       //Cas fermé, on est en rouge
       return this.sanitizer.bypassSecurityTrustStyle('#f44336');
     } else {

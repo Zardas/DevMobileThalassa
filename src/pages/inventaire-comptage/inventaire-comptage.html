@@ -25,8 +25,8 @@
 
     <ion-buttons end>
       <button ion-button id="search" (click)="isSearchbarOpened=!isSearchbarOpened"><ion-icon [name]="getNameIcon()"></ion-icon></button>
-      <button ion-button (click)="goTo('ParametresComptagePage')" id="more"><ion-icon name="more"></ion-icon></button>
-    </ion-buttons>    
+      <button ion-button (click)="goToParam()" id="more"><ion-icon name="more"></ion-icon></button>
+    </ion-buttons>
 
   </ion-navbar>
 
@@ -62,7 +62,7 @@
   </ion-item>
   
 
-  <ion-fab bottom center>
+  <ion-fab bottom center *ngIf="comptage.ouvert == 1">
     <button ion-fab color="primary" (click)="scanBarcode()">
       <ion-icon name="camera"></ion-icon>
     </button>

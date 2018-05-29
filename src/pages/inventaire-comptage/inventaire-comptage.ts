@@ -126,7 +126,10 @@ export class InventaireComptagePage {
   goTo(page) {
     this.nav.setRoot(this.pagesAccessibles[page], {database: this.bdd});
   }
-
+  goToParam() {
+    this.nav.setRoot(ParametresComptagePage, {database: this.bdd, comptage: this.comptage});
+  }
+  
   /*----------------------------------------------------------------------------------*/
   /*------------Créer une nouvelle base de données (avec les bonnes tables------------*/
   /*----------------------------------------------------------------------------------*/
