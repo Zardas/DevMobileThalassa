@@ -279,12 +279,23 @@ export class InventaireComptagePage {
         //this.presentToast("Article n°" + barcodeData.text + " scanné");
         //On ajoute le code-barre scanné en local et dans la BDD
         //this.ajoutScan(barcodeData.text);
-        let nomDefaut = "";
+        
         let indice = this.findIndiceCorrespondant(barcodeData.text);
-        if(indice != -1) {
+        let nomDefaut = "";
+        let prixEtiquette = undefined;
+        let prixEuro = undefined;
+        let prixCentime = undefined;
+        let stockBase = undefined;
+        if(indice != -1) { //Si l'article scanné est déjà repertorié dans la bdd
           nomDefaut = this.bdd.localData['article'][indice].designation;
+          prixEtiquette = this.bdd.localData['article'][indice].prix;
+          stockBase = this.bdd.localData['article'][indice].stock;
+          let prix = this.getPrix(this.bdd.localData['article'][indice].prix);
+          prixEuro = prix.euros;
+          prixCentime = prix.centimes;
         }
-        this.presentAlertNewScan(barcodeData.text, nomDefaut);
+
+        this.presentAlertNewScan(barcodeData.text, nomDefaut, prixEuro, prixCentime);
       })
       .catch( err => {
         this.presentToast('Erreur avec le scan : ' + err);
@@ -295,20 +306,55 @@ export class InventaireComptagePage {
   /*---------------------------------------------------------------------------------------------------------*/
   /*---Affiche une alerte pour que l'utilisateur puisse rentrer la quantité correspondant au scan effectué---*/
   /*---------------------------------------------------------------------------------------------------------*/
-  presentAlertNewScan(codeBarre: string, nomDefaut: string) {
+  presentAlertNewScan(codeBarre: string, nomDefaut: string, prixEuroDefaut, prixCentimeDefaut) {
+
+    let placeholderNom: string;
+    if(nomDefaut == "") {
+      placeholderNom = "Nom";
+    } else {
+      placeholderNom = nomDefaut;
+    }
+
+    let placeholderQuantite: string;
+    placeholderQuantite = "Quantite";
+
+    let placeholderPrixEuro: string;
+    if(prixEuroDefaut == undefined) {
+      placeholderPrixEuro = "00 euros";
+    } else {
+      placeholderPrixEuro = prixEuroDefaut + " euros";
+    }
+
+    let placeholderPrixCentime: string;
+    if(prixCentimeDefaut == undefined) {
+      placeholderPrixCentime = "00 centimes";
+    } else {
+      placeholderPrixCentime = prixCentimeDefaut + " centimes";
+    }
+    
     let alert = this.alertCtrl.create({
       title: 'Ajout d\'un scan',
       subTitle: 'Ne rien mettre dans les champs pour les valeurs par défaut',
       inputs: [
         {
+          name: 'name',
+          placeholder: placeholderNom,
+          type: "text"
+        },
+        {
           name: 'quantite',
-          placeholder: 'Quantite',
+          placeholder: placeholderQuantite,
           type: "number"
         },
         {
-          name: 'name',
-          placeholder: nomDefaut,
-          type: "text"
+          name: 'prixEuro',
+          placeholder: placeholderPrixEuro,
+          type: "number"
+        },
+        {
+          name: "prixCentime",
+          placeholder: placeholderPrixCentime,
+          type: "number"
         }
       ],
       buttons: [
@@ -323,7 +369,8 @@ export class InventaireComptagePage {
           text: 'Ajouter',
           handler: data => {
             let quantite_number = new Number(data.quantite);
-
+            let prixEuro_number = new Number(data.prixEuro);
+            let prixCentime_number = new Number(data.prixCentime);
             //Valeurs par défault
             if(quantite_number == 0) {
               quantite_number = 1;
@@ -331,8 +378,15 @@ export class InventaireComptagePage {
             if(data.name == "") {
               data.name = nomDefaut; //Si il y a un nom par défaut, il ne faut pas que l'utilisatur ait à le réindiquer
             }
+            if(prixEuro_number == 0 && prixEuroDefaut != undefined) {
+              prixEuro_number = prixEuroDefaut;
+            }
+            if(prixCentime_number == 0 && prixCentimeDefaut != undefined) {
+              prixCentime_number = prixCentimeDefaut;
+            }
 
-            this.ajoutScan(codeBarre, (quantite_number as number), data.name);
+            let prix_number = prixEuro_number + (prixCentime_number/100);
+            this.ajoutScan(codeBarre, (quantite_number as number), data.name, prix_number);
           }
         }
       ]
@@ -344,17 +398,17 @@ export class InventaireComptagePage {
   /*--------------------------------------------------------------------------------------------------------------------*/
   /*---Ajoute le scan dans la BDD et recharge la liste des scans avec une recherche vide (tout les scans du comptage)---*/
   /*--------------------------------------------------------------------------------------------------------------------*/
-  ajoutScan(codeBarre: string, quantite: number, name: string) {
+  ajoutScan(codeBarre: string, quantite: number, name: string, prix: number) {
     //if(this.checkFormatArticle(scan)) {
       let currentDate = this.getCurrentDate();
-      this.addBDD("scan", ["dateScan", "codeBarre", "designation", "idComptage", "quantite", "auteur", "prixEtiquette", "prixBase", "stockBase"], [currentDate, codeBarre, name, this.comptage.idComptage, quantite, "auteureeee", 200, 100, 33]).then( () => {
+      this.addBDD("scan", ["dateScan", "codeBarre", "designation", "idComptage", "quantite", "auteur", "prixEtiquette", "prixBase", "stockBase"], [currentDate, codeBarre, name, this.comptage.idComptage, quantite, "auteureeee", prix, 100, 33]).then( () => {
         this.scans_searched.push({dateScan: currentDate,
                                   codeBarre: codeBarre,
                                   designation: name,
                                   idComptage: this.comptage.idComptage,
                                   quantite: quantite,
                                   auteur: "auteureeee",
-                                  prixEtiquette: 200,
+                                  prixEtiquette: prix,
                                   prixBase: 100,
                                   stockBase: 33
                                   });
@@ -371,7 +425,7 @@ export class InventaireComptagePage {
   /*------------------------------------------------------------------------------------------------------------------------------------------*/
   /*---Retourne l'indice correpsondant au codeBarre "codeBarre" dans la table Article de la hash-map (-1 si le codeBarre n'est pas présent)---*/
   /*------------------------------------------------------------------------------------------------------------------------------------------*/
-  findIndiceCorrespondant(codeBarre: number) {
+  findIndiceCorrespondant(codeBarre: string) {
     let i = 0;
     while(i < this.bdd.localData['article'].length && this.bdd.localData['article'][i].codeBarre != codeBarre) {
       i++;
@@ -391,6 +445,20 @@ export class InventaireComptagePage {
   }
 
   
+  /*----------------------------------------------------------------------------------------------------------------------*/
+  /*---Renvoie le prix correspondant à prix. On peut aisément y récupéré la quantité d'euros et la quantité de centimes---*/
+  /*----------------------------------------------------------------------------------------------------------------------*/
+  getPrix(prix: number) {
+    let centime = this.getCentime(prix);
+    return {euros: prix-(centime/100), centimes: centime};
+  }
+
+  /*-------------------------------------------------------------*/
+  /*---Renvoie le nombre de centime du prix passé en paramètre---*/
+  /*-------------------------------------------------------------*/
+  getCentime(prix: number) {
+    return ((prix%1)*100);
+  }
 
 
   /*----------------------------------------------------------------------------------------*/
