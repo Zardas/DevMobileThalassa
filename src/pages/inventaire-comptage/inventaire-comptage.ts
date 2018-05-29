@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Nav, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Nav, ToastController, AlertController } from 'ionic-angular';
 
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 
@@ -71,7 +71,8 @@ export class InventaireComptagePage {
     public navParams: NavParams,           //Paramètres de navigation
     public nav: Nav,                       //Gestionnaire de navigation
     private toastCtrl: ToastController,    //Contrôleur des toast (les petits popup)
-    private barcodeScanner: BarcodeScanner //Scanner des code-barrres
+    private barcodeScanner: BarcodeScanner, //Scanner des code-barrres
+    private alertCtrl: AlertController //Permet d'afficher des alertes (pour le nom et la quantité des articles scanné)
   ) {
 
     this.tailleCodeBarre = 13;
@@ -264,9 +265,9 @@ export class InventaireComptagePage {
 
 
 
-  /*---------------------------------*/
-  /*---Fonctions relatives au scan---*/
-  /*---------------------------------*/
+  /*-------------------------------------------------------------------------------------------------------------------------------*/
+  /*---Fonctions relatives au scan (Appel de scanBarcode qui appel presentAlertNewScan qui appel ajoutScan qui ajoute l'élément)---*/
+  /*-------------------------------------------------------------------------------------------------------------------------------*/
   /*-----------------------*/
   /*---Fonctions de scan---*/
   /*-----------------------*/
@@ -275,9 +276,10 @@ export class InventaireComptagePage {
     this.barcodeScanner.scan(this.BarcodeOptions)
       .then( barcodeData => {
         //On affiche un message de succès (optionnel)
-        this.presentToast("Article n°" + barcodeData.text + " scanné");
+        //this.presentToast("Article n°" + barcodeData.text + " scanné");
         //On ajoute le code-barre scanné en local et dans la BDD
-        this.ajoutScan(barcodeData.text);
+        //this.ajoutScan(barcodeData.text);
+        this.presentAlertNewScan(barcodeData.text);
       })
       .catch( err => {
         this.presentToast('Erreur avec le scan : ' + err);
@@ -285,19 +287,56 @@ export class InventaireComptagePage {
     ;
   }
 
+  /*---------------------------------------------------------------------------------------------------------*/
+  /*---Affiche une alerte pour que l'utilisateur puisse rentrer la quantité correspondant au scan effectué---*/
+  /*---------------------------------------------------------------------------------------------------------*/
+  presentAlertNewScan(codeBarre: string) {
+    let alert = this.alertCtrl.create({
+      title: 'Ajout d\'un scan',
+      subTitle: 'Ne placer rien en quantite pour ajouter une quantite de 1',
+      inputs: [
+        {
+          name: 'quantite',
+          placeholder: 'Quantite',
+          type: "number"
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: data => {
+            this.presentToast('Scan annulé');
+          }
+        },
+        {
+          text: 'Ajoute',
+          handler: data => {
+            let quantite_number = new Number(data.quantite);
+            if(quantite_number == 0) {
+              quantite_number = 1;
+            }
+            this.ajoutScan(codeBarre, quantite_number);
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
 
   /*--------------------------------------------------------------------------------------------------------------------*/
   /*---Ajoute le scan dans la BDD et recharge la liste des scans avec une recherche vide (tout les scans du comptage)---*/
   /*--------------------------------------------------------------------------------------------------------------------*/
-  ajoutScan(scan: string) {
+  ajoutScan(codeBarre: string, quantite: number) {
     //if(this.checkFormatArticle(scan)) {
       let currentDate = this.getCurrentDate();
-      this.addBDD("scan", ["dateScan", "codeBarre", "designation", "idComptage", "quantite", "auteur", "prixEtiquette", "prixBase", "stockBase"], [currentDate, scan, "", this.comptage.idComptage, 3000, "auteureeee", 200, 100, 33]).then( () => {
+      this.addBDD("scan", ["dateScan", "codeBarre", "designation", "idComptage", "quantite", "auteur", "prixEtiquette", "prixBase", "stockBase"], [currentDate, codeBarre, "", this.comptage.idComptage, quantite, "auteureeee", 200, 100, 33]).then( () => {
         this.scans_searched.push({dateScan: currentDate,
-                                  codeBarre: scan,
+                                  codeBarre: codeBarre,
                                   designation: "",
                                   idComptage: this.comptage.idComptage,
-                                  quantite: 3000,
+                                  quantite: quantite,
                                   auteur: "auteureeee",
                                   prixEtiquette: 200,
                                   prixBase: 100,
@@ -320,6 +359,9 @@ export class InventaireComptagePage {
   checkFormatArticle(toCheck: any) {
     return (toCheck.length == this.tailleCodeBarre);
   }
+
+  
+
 
   /*----------------------------------------------------------------------------------------*/
   /*------------Renvoie a date actuelle sous la forme YYYY-MM-DD-HHhMMmSSsMSMSMSms------------*/
@@ -421,7 +463,7 @@ export class InventaireComptagePage {
   presentToast(textToDisplay) {
     let toast = this.toastCtrl.create({
       message: textToDisplay,
-      duration: 2000,
+      duration: 8000,
       position: 'top',
       showCloseButton: true
     });
