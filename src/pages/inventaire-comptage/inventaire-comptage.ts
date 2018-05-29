@@ -279,7 +279,12 @@ export class InventaireComptagePage {
         //this.presentToast("Article n°" + barcodeData.text + " scanné");
         //On ajoute le code-barre scanné en local et dans la BDD
         //this.ajoutScan(barcodeData.text);
-        this.presentAlertNewScan(barcodeData.text);
+        let nomDefaut = "";
+        let indice = this.findIndiceCorrespondant(barcodeData.text);
+        if(indice != -1) {
+          nomDefaut = this.bdd.localData['article'][indice].designation;
+        }
+        this.presentAlertNewScan(barcodeData.text, nomDefaut);
       })
       .catch( err => {
         this.presentToast('Erreur avec le scan : ' + err);
@@ -290,33 +295,44 @@ export class InventaireComptagePage {
   /*---------------------------------------------------------------------------------------------------------*/
   /*---Affiche une alerte pour que l'utilisateur puisse rentrer la quantité correspondant au scan effectué---*/
   /*---------------------------------------------------------------------------------------------------------*/
-  presentAlertNewScan(codeBarre: string) {
+  presentAlertNewScan(codeBarre: string, nomDefaut: string) {
     let alert = this.alertCtrl.create({
       title: 'Ajout d\'un scan',
-      subTitle: 'Ne placer rien en quantite pour ajouter une quantite de 1',
+      subTitle: 'Ne rien mettre dans les champs pour les valeurs par défaut',
       inputs: [
         {
           name: 'quantite',
           placeholder: 'Quantite',
           type: "number"
         },
+        {
+          name: 'name',
+          placeholder: nomDefaut,
+          type: "text"
+        }
       ],
       buttons: [
         {
-          text: 'Cancel',
+          text: 'Annuler',
           role: 'cancel',
           handler: data => {
             this.presentToast('Scan annulé');
           }
         },
         {
-          text: 'Ajoute',
+          text: 'Ajouter',
           handler: data => {
             let quantite_number = new Number(data.quantite);
+
+            //Valeurs par défault
             if(quantite_number == 0) {
               quantite_number = 1;
             }
-            this.ajoutScan(codeBarre, quantite_number);
+            if(data.name == "") {
+              data.name = nomDefaut; //Si il y a un nom par défaut, il ne faut pas que l'utilisatur ait à le réindiquer
+            }
+
+            this.ajoutScan(codeBarre, (quantite_number as number), data.name);
           }
         }
       ]
@@ -328,13 +344,13 @@ export class InventaireComptagePage {
   /*--------------------------------------------------------------------------------------------------------------------*/
   /*---Ajoute le scan dans la BDD et recharge la liste des scans avec une recherche vide (tout les scans du comptage)---*/
   /*--------------------------------------------------------------------------------------------------------------------*/
-  ajoutScan(codeBarre: string, quantite: number) {
+  ajoutScan(codeBarre: string, quantite: number, name: string) {
     //if(this.checkFormatArticle(scan)) {
       let currentDate = this.getCurrentDate();
-      this.addBDD("scan", ["dateScan", "codeBarre", "designation", "idComptage", "quantite", "auteur", "prixEtiquette", "prixBase", "stockBase"], [currentDate, codeBarre, "", this.comptage.idComptage, quantite, "auteureeee", 200, 100, 33]).then( () => {
+      this.addBDD("scan", ["dateScan", "codeBarre", "designation", "idComptage", "quantite", "auteur", "prixEtiquette", "prixBase", "stockBase"], [currentDate, codeBarre, name, this.comptage.idComptage, quantite, "auteureeee", 200, 100, 33]).then( () => {
         this.scans_searched.push({dateScan: currentDate,
                                   codeBarre: codeBarre,
-                                  designation: "",
+                                  designation: name,
                                   idComptage: this.comptage.idComptage,
                                   quantite: quantite,
                                   auteur: "auteureeee",
@@ -352,6 +368,20 @@ export class InventaireComptagePage {
     }*/
   }
 
+  /*------------------------------------------------------------------------------------------------------------------------------------------*/
+  /*---Retourne l'indice correpsondant au codeBarre "codeBarre" dans la table Article de la hash-map (-1 si le codeBarre n'est pas présent)---*/
+  /*------------------------------------------------------------------------------------------------------------------------------------------*/
+  findIndiceCorrespondant(codeBarre: number) {
+    let i = 0;
+    while(i < this.bdd.localData['article'].length && this.bdd.localData['article'][i].codeBarre != codeBarre) {
+      i++;
+    }
+    if(i < this.bdd.localData['article'].length) {
+      return i;
+    } else {
+      return -1;
+    }
+  }
 
   /*-----------------------------------------------------------------*/
   /*---Vérifie si l'article scanné est au bon format (13 chiffres)---*/
