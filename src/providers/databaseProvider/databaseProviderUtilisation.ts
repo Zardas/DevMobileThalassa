@@ -269,7 +269,7 @@ export class DatabaseUtilisation {
   /*-----------------------------------------------------------------------------------------------------------------------------------------------------------*/
   synchronise(table: string) {
     //on prend tout les tuples de la table désirée
-    this.database.getData(table, "")
+    return this.database.getData(table, "")
       .then( data => {
         //On remet les données associées à la table en local à 0
         this.localData[table] = [];
@@ -288,10 +288,11 @@ export class DatabaseUtilisation {
   /*-------------------------------------------------------------------------------*/
   /*---Supprime le contenu de la table "table" et de la variable globle associée---*/
   /*-------------------------------------------------------------------------------*/
-  viderTable(table: string) {
-    this.database.viderTable(table)
+  viderTable(table: string, where: string) {
+    console.log('Where au niveau du provider : ' + where);
+    return this.database.viderTable(table, where)
       .then( data => {
-        this.synchronise(table);
+        return this.synchronise(table);
       })
       .catch( err => {
         console.log("Problème avec le vidage de la table " + table + " : " + err);
@@ -304,11 +305,11 @@ export class DatabaseUtilisation {
   /*----------------------------*/
   dropAllTables() {
     /* ATTENTION : L'ORDRE DE DROP ET DE VIDAGE EST IMPORTANT (RAPPORT AUX CLES ETRANGERES) */
-    this.viderTable('article');
-    this.viderTable('scan');
-    this.viderTable('comptage');
-    this.viderTable('typeComptage');
-    this.viderTable('magasin');
+    this.viderTable('article', '');
+    this.viderTable('scan', '');
+    this.viderTable('comptage', '');
+    this.viderTable('typeComptage', '');
+    this.viderTable('magasin', '');
 
     this.database.dropTable('article');
     this.database.dropTable('scan');

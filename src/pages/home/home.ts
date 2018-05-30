@@ -76,7 +76,7 @@ export class HomePage {
   }
 
   viderTable(table: string) {
-    this.bdd.viderTable(table);
+    this.bdd.viderTable(table, '');
   }
 
   dropAllTables() {

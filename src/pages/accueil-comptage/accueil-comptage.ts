@@ -172,6 +172,19 @@ export class AccueilComptagePage {
 
 
 
+  /*------------------------------------------------------------------------------------------------------------------------------
+   * Return "Il n'y a actuellement aucun comptage, appuyez sur le + en bas pour en créer un" s'il n'y a aucune comtage et "" sinon
+   * Utilisé pour indiquer à l'utilisateur ce qu'il doit faire si il n'y a aucun comptage
+   *----------------------------------------------------------------------------------------------------------------------------*/
+  aucuneComptage() {
+    if(this.bdd.localData['comptage'].length == 0) {
+      return "Il n'y a actuellement aucun comptage, appuyez sur le + en bas pour en créer un";
+    } else {
+      return "";
+    }
+  }
+
+
   /*-----------------------------------------------------------------------------------------------------------------------------------------*/
   /*------------Créer la liste de tout les comptage possédant searched dans leur nom, en parcourant la liste de tout les comptage------------*/
   /*-----------------------------------------------------------------------------------------------------------------------------------------*/

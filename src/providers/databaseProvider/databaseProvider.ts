@@ -190,21 +190,28 @@ export class Database {
 	}
 
 
-	
+
 
 
 	/*--------------------------------------------------*/
   	/*---Supprime tout les tuples de la table "table"---*/
   	/*--------------------------------------------------*/
-	viderTable(table: string) {
+	viderTable(table: string, where: string) {
 		var sql = "DELETE FROM " + table;
 
+		if(where != '') {
+			sql = sql + " WHERE " + where;
+		}
+
+		console.log('SQL de suppression : ' + sql);
 		return this.db.executeSql(sql, {})
 			.then( () => {
-				console.log("La table " + table + " a été vidée");
+				console.log("Les tuples de la table " + table + " ont été supprimés");
+				return 'success';
 			})
 			.catch( e => {
-				console.warn("La table " + table + " n'a pas pu être vidée : " + e)
+				console.warn("Les tuples de la table " + table + " n'ont pas pu être supprimés : " + e)
+				return 'failure';
 			})
 		;
 	}

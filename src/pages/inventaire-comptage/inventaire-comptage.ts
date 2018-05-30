@@ -293,7 +293,6 @@ export class InventaireComptagePage {
 
 
 
-
   /*---------------------------------------------------------------------------------------------------------------------------------------------------------------*/
   /*---Fonctions relatives au scan (Appel de scanBarcode qui appel presentAlertNewScan qui appel gestionParametresScan qui appel ajoutScan qui ajoute l'élément)---*/
   /*---------------------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -472,7 +471,7 @@ export class InventaireComptagePage {
         if(!this.item_par_item) {
           this.scans_searched = this.regroupeItem(this.scans_searched);
         }
-        //this.getScansCorrespondant('');
+
       });
     /*} else {
       console.log("Le code-barre scanné est invalide");
@@ -605,7 +604,9 @@ export class InventaireComptagePage {
 
 
 
-
+  /*------------------------------------------*/
+  /*------------Fonctions diverses------------*/
+  /*------------------------------------------*/
   /*-----------------------------------------------------------------------*/
   /*---Fonction perso pour vérifier si "elem" est présent dans "tableau"---*/
   /*-----------------------------------------------------------------------*/
@@ -616,6 +617,7 @@ export class InventaireComptagePage {
     }
     return (j < tableau.length);
   }
+
 
   /*-----------------------------------------------------------------------------------------*/
   /*---Fonction de push perso ne pushant pas si l'élément est déjà présent dans le tableau---*/
@@ -628,12 +630,7 @@ export class InventaireComptagePage {
     }
   }
 
-
-
-
-  /*------------------------------------------*/
-  /*------------Fonctions diverses------------*/
-  /*------------------------------------------*/
+  
   /*--------------------------------------------------------------*/
   /*------------Affichage d'un toast en bas de l'écran------------*/
   /*--------------------------------------------------------------*/

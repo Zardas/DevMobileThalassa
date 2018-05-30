@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Nav } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Nav, AlertController } from 'ionic-angular';
 
 import { DatabaseUtilisation } from '../../providers/databaseProvider/databaseProviderUtilisation';
 
@@ -38,7 +38,8 @@ export class ParametresComptagePage {
   	constructor(
   		public navCtrl: NavController,
   		public navParams: NavParams,
-  		public nav: Nav
+  		public nav: Nav,
+      private alertCtrl: AlertController //Permet d'afficher des alertes (pour le nom et la quantité des articles scanné)
   	) {
   		this.parametragePagesAccessibles();
 
@@ -177,10 +178,47 @@ export class ParametresComptagePage {
 
 
 
+
+
     /*--------------------------------------------------------------------*/
     /*------------Fonctions liées à la suppression du comptage------------*/
     /*--------------------------------------------------------------------*/
-    deleteComptage() {
-      this.goTo('AccueilComptagePage');
+    deleteBDD(table: string, where: string) {
+      return this.bdd.viderTable(table, where)
     }
+
+
+    deleteComptage() {
+      let alert = this.alertCtrl.create({
+        title: 'Suppression de ' + this.comptage.nom,
+        message: 'Êtes-vous sûr de vouloir supprimer ' + this.comptage.nom + ' ?',
+        buttons: [
+          {
+            text: 'Non',
+            role: 'cancel',
+            handler: () => {
+              console.log('Suppression annulée');
+            }
+          },
+          {
+            text: 'Oui',
+            handler: () => {
+              this.deleteComptageConfirmed();
+            }
+          }
+        ]
+      });
+      alert.present();
+    }
+
+
+    deleteComptageConfirmed() {
+      //Avant de supprimer le comptage, il faut supprimer tout les scans qui lui sont associés
+      this.deleteBDD('scan', 'idComptage = ' + this.comptage.idComptage).then( () => {
+        this.deleteBDD('comptage', 'idComptage = ' + this.comptage.idComptage).then( () => {
+          this.goTo('AccueilComptagePage');
+        });
+      });
+    }
+    
 }

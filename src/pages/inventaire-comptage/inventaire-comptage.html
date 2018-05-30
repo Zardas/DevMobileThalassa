@@ -47,6 +47,8 @@
     <ion-toggle (ionChange)="changeMode()"></ion-toggle>
   </p>
 
+  <!--<h2 [innerHTML]="aucuneScan()"></h2>-->
+
   <ion-item *ngFor="let scan of scans_searched" id="item_scanned">
       <ion-badge item-begin id="badge" big>
         {{scan.quantite}}
