@@ -20,21 +20,13 @@ ion-header {
 		margin-top: 1px;
 		margin-bottom: 1px;
 	}
-	#icons {
-		float: right;
-		text-align: right;
-		width: 30%;
-		ion-icon {
-			vertical-align: middle;
-		}
+	
+	ion-buttons {
 		button {
-			background-color: rgba(12,179,232,0);
-			vertical-align: middle;
-		}
-
-		ion-searchbar {
-			border: 1px solid black;
-			width: 300px;
+			ion-icon {
+				font-size: 5vw;
+				margin-left: 2vw;
+			}
 		}
 	}
 

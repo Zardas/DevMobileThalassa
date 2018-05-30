@@ -172,9 +172,9 @@ export class Database {
 	update(table: string, champs: Array<string>, valeurs: Array<any>, where: string) {
 		var sql = "UPDATE " + table + " SET ";
 
-		sql = sql + champs[0] + " = " + valeurs[0] ;
+		sql = sql + champs[0] + " = '" + valeurs[0] + "'";
 		for(let i = 1 ; i < champs.length ; i++) {
-			sql = sql + ", " + champs[i] + " = " + valeurs[i];
+			sql = sql + ", " + champs[i] + " = '" + valeurs[i] + "'";
 		}
 		sql = sql + " WHERE " + where;
 
@@ -190,7 +190,7 @@ export class Database {
 	}
 
 
-
+	
 
 
 	/*--------------------------------------------------*/

@@ -15,18 +15,17 @@ page-inventaire-comptage {
 			text-align: left;
 			width: 100%;
 
-			ion-icon {
-				vertical-align: middle;
-			}
-
-			ion-buttons {
-				float: right;
-
-				#more, #search {
-					vertical-align: middle;
+		}
+		
+		ion-buttons {
+			button {
+				ion-icon {
+					font-size: 5vw;
+					margin-left: 2vw;
 				}
 			}
 		}
+		
 	}
 
 	ion-content {

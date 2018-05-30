@@ -10,7 +10,6 @@
     <ion-title (click)="goToInventaire()">
       <ion-icon name="arrow-back"></ion-icon>
       {{comptage.nom}}
-      <ion-icon name="settings"></ion-icon>
     </ion-title>
   </ion-navbar>
 
@@ -19,14 +18,14 @@
 
 <ion-content padding>
 
-	<ion-title>Paramètres du comptage {{comptage.nom}}</ion-title>
+	<ion-title><ion-icon name="settings"></ion-icon> Paramètres du comptage {{comptage.nom}} <ion-icon name="settings"></ion-icon></ion-title>
 
 	<ion-item id="changeMode">
     	<ion-label>
     		<ion-icon [name]="getOuverture().icon"></ion-icon>
     		{{getOuverture().text}}
     	</ion-label>
-    	<ion-toggle (ionChange)="changerOuvertureComptage()"></ion-toggle>
+    	<ion-toggle (ionChange)="changerOuvertureComptage()" [checked]="!comptage.ouvert"></ion-toggle>
   	</ion-item>
 
   	
@@ -35,10 +34,16 @@
       		<span [innerHTML]="getNameLength()"></span>
       		/{{tailleMaxNom}}
     	</ion-label>
-    	<ion-input type="text" [(ngModel)]="nomComptage" id="newName" placeholder="Saisir un nom" [maxlength]="tailleMaxNom"></ion-input>
+    	<ion-input type="text" [(ngModel)]="newName" id="newName" placeholder="Saisir un nom" [maxlength]="tailleMaxNom"></ion-input>
     	<span>Vous devez rentrer un nom valide</span>
-    	<button ion-button (click)="changeName()">Changer le nom</button>
-  </ion-item>
-  <p id="invalidMessage_nom"></p>
+    </ion-item>
+    <p id="invalidMessage_nom"></p>
+    <p id="button_changeNom">
+      <button ion-button color="XLblueDarker" (click)="changeName()">Changer le nom</button>
+    </p>
+
+    <p id="deleteComptage">
+      <button ion-button color="danger" icon-right (click)="deleteComptage()">Supprimer ce comptage<ion-icon name="trash"></ion-icon></button>
+    </p>
 
 </ion-content>

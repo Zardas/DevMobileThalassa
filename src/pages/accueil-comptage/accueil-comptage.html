@@ -17,9 +17,10 @@
     <ion-title id="title" icon-right *ngIf="!isSearchbarOpened">XLComptage</ion-title>
     
     <ion-searchbar *ngIf="isSearchbarOpened" showCancelButton="true" (search)="getComptageCorrespondant($event)" (ionCancel)="isSearchbarOpened=false" (ionClear)="getComptageCorrespondant('')"></ion-searchbar>
+    
     <ion-buttons end>
-      <button ion-button (click)="isSearchbarOpened=!isSearchbarOpened"><ion-icon [name]="getNameIcon()" color="White"></ion-icon></button>
-      <button ion-button><ion-icon name="more" color="White"></ion-icon></button>
+      <button ion-button id="search" (click)="isSearchbarOpened=!isSearchbarOpened"><ion-icon [name]="getNameIcon()"></ion-icon></button>
+      <button ion-button id="more"><ion-icon name="more"></ion-icon></button>
     </ion-buttons>
 
 

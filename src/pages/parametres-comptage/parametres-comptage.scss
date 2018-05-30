@@ -35,12 +35,28 @@ page-parametres-comptage {
 			ion-icon {
 				margin-right: 2.5%;
 			}
+
+			margin-bottom: 5%;
 		}
 
 		#item_nouveauNom {
 			ion-label {
 				text-align: right;
 			}
+		}
+		#button_changeNom {
+			text-align: center;
+		}
+		#invalidMessage_nom {
+			margin-bottom: 20px;
+			text-align: center;
+			color: $redSoft;
+		}
+
+		#deleteComptage {
+			margin-top: 8%;
+			text-align: center;
+
 		}
 	}
 }

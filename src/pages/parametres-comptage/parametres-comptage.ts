@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, Nav } from 'ionic-angular';
 
 import { DatabaseUtilisation } from '../../providers/databaseProvider/databaseProviderUtilisation';
 
+import { AccueilComptagePage } from '../accueil-comptage/accueil-comptage';
 import { InventaireComptagePage } from '../inventaire-comptage/inventaire-comptage';
 
 /**
@@ -29,7 +30,7 @@ export class ParametresComptagePage {
   	public comptage;  
 
     //Nom du nouveau comptage (https://stackoverflow.com/questions/46494041/cant-get-value-of-input-ionic-3)
-    public nomComptage;
+    public newName: string;
 
     //Taille maximale du nom
     public tailleMaxNom: number;
@@ -65,11 +66,13 @@ export class ParametresComptagePage {
 	  parametragePagesAccessibles() {
     	this.pagesAccessibles = new Map<String, any>();
     	this.pagesAccessibles['InventaireComptagePage'] = InventaireComptagePage;
+      this.pagesAccessibles['AccueilComptagePage'] = AccueilComptagePage;
   	}
 
   	ionViewDidLoad() {
     	console.log('ionViewDidLoad ParametresComptagePage');
   	}
+
 
 
   	/*-----------------------------------------------*/
@@ -91,16 +94,25 @@ export class ParametresComptagePage {
   	}
 
   	/*----------------------------------------------------------------------------------*/
- 	/*------------Créer une nouvelle base de données (avec les bonnes tables------------*/
+ 	  /*------------Créer une nouvelle base de données (avec les bonnes tables------------*/
   	/*----------------------------------------------------------------------------------*/
   	refreshBDD() {
     	this.bdd = new DatabaseUtilisation();
   	}
 
+
+
     updateBDD(table, champs: Array<any>, values: Array<any>) {
       this.bdd.update(table, champs, values, "idComptage = " + this.comptage.idComptage);
     }
 
+
+
+
+
+    /*----------------------------------------------------------------------*/
+    /*------------Fonctions liées au changement de l'état ouvert------------*/
+    /*----------------------------------------------------------------------*/
   	changerOuvertureComptage() {
       this.updateBDD('comptage', ['ouvert'], [1-this.comptage.ouvert]);
       this.comptage.ouvert = !this.comptage.ouvert; //Nécéssaire puisque les affichages se font en fonction de la variable locale comptage
@@ -122,21 +134,53 @@ export class ParametresComptagePage {
 
 
 
-
+    /*------------------------------------------------------------*/
+    /*------------Fonctions liées au changement de nom------------*/
+    /*------------------------------------------------------------*/
     /*------------------------------------------------------------------------------------
     * Retourne la taille du nom de comptage actuellement rentré
     * Utilisé pour afficher en direct la taille du nom
     *----------------------------------------------------------------------------------*/
     getNameLength() {
-      if(this.nomComptage == undefined) {
+      if(this.newName == undefined) {
         return 0
       } else {
-        return this.nomComptage.length;
+        return this.newName.length;
       }
     }
 
 
     changeName() {
-      console.log("AAAAA");
+      console.log('TYPE : ' + typeof this.newName);
+      let nomValide = this.nomComptageValide();
+      //Affichage message d'erreur si le nom est invalide (trop long)
+      let invalidMessage_nom = document.getElementById("invalidMessage_nom") as HTMLElement;
+      if(!nomValide) {
+        invalidMessage_nom.innerHTML = "Vous devez rentrer un nom valide";
+      } else {
+        invalidMessage_nom.innerHTML = "";
+        this.updateBDD('comptage', ['nom'], [this.newName]);
+        this.comptage.nom = this.newName;
+      }      
+    }
+
+    /*---------------------------------------------------------------------------------------------------------------*/
+    /*------------Renvoie true si le nom du nouveau comptage est valide (infèrieure à la taille maximale)------------*/
+    /*---------------------------------------------------------------------------------------------------------------*/
+    nomComptageValide() {
+      if(this.newName == undefined) {
+        return false;
+      } else {
+        return (this.newName.length > 0 && this.newName.length <= this.tailleMaxNom);
+      }
+    }
+
+
+
+    /*--------------------------------------------------------------------*/
+    /*------------Fonctions liées à la suppression du comptage------------*/
+    /*--------------------------------------------------------------------*/
+    deleteComptage() {
+      this.goTo('AccueilComptagePage');
     }
 }
