@@ -35,6 +35,10 @@ export class ParametresComptagePage {
     //Taille maximale du nom
     public tailleMaxNom: number;
 
+
+    /*------------------------------------*/
+    /*------------Constructeur------------*/
+    /*------------------------------------*/
   	constructor(
   		public navCtrl: NavController,
   		public navParams: NavParams,
@@ -90,6 +94,7 @@ export class ParametresComptagePage {
   	goTo(page) {
     	this.nav.setRoot(this.pagesAccessibles[page], {database: this.bdd});
   	}
+    //Un goTo spéciale pour aller à l'inventaire car il faut aussi passé le comptage (pour que inventaireComptage sache quel comptage elle doit afficher)
   	goToInventaire() {
     	this.nav.setRoot(InventaireComptagePage, {database: this.bdd, comptage: this.comptage});
   	}
@@ -103,12 +108,18 @@ export class ParametresComptagePage {
   	}
 
 
-
+    /*------------------------------------------------*/
+    /*------------Appel la fonction update------------*/
+    /*------------------------------------------------*/
     updateBDD(table, champs: Array<any>, values: Array<any>) {
       this.bdd.update(table, champs, values, "idComptage = " + this.comptage.idComptage);
     }
-
-
+    /*------------------------------------------------*/
+    /*------------Appel la fonction delete------------*/
+    /*------------------------------------------------*/
+    deleteBDD(table: string, where: string) {
+      return this.bdd.viderTable(table, where)
+    }
 
 
 
@@ -139,10 +150,10 @@ export class ParametresComptagePage {
     /*------------------------------------------------------------*/
     /*------------Fonctions liées au changement de nom------------*/
     /*------------------------------------------------------------*/
-    /*------------------------------------------------------------------------------------
+    /*---------------------------------------------------------
     * Retourne la taille du nom de comptage actuellement rentré
     * Utilisé pour afficher en direct la taille du nom
-    *----------------------------------------------------------------------------------*/
+    *--------------------------------------------------------*/
     getNameLength() {
       if(this.newName == undefined) {
         return 0
@@ -151,12 +162,14 @@ export class ParametresComptagePage {
       }
     }
 
-
+    /*-------------------------------------------------------------------------*/
+    /*------------Change le nom du comptage dans la BDD et en local------------*/
+    /*-------------------------------------------------------------------------*/
     changeName() {
-      console.log('TYPE : ' + typeof this.newName);
       let nomValide = this.nomComptageValide();
       //Affichage message d'erreur si le nom est invalide (trop long)
       let invalidMessage_nom = document.getElementById("invalidMessage_nom") as HTMLElement;
+
       if(!nomValide) {
         invalidMessage_nom.innerHTML = "Vous devez rentrer un nom valide";
       } else {
@@ -184,11 +197,10 @@ export class ParametresComptagePage {
     /*--------------------------------------------------------------------*/
     /*------------Fonctions liées à la suppression du comptage------------*/
     /*--------------------------------------------------------------------*/
-    deleteBDD(table: string, where: string) {
-      return this.bdd.viderTable(table, where)
-    }
-
-
+    /*-------------------------------------------------------------------------
+    * Affiche un pop-up demandant la confirmation de la suppression du comptage
+    * Utilisé lors de l'appui sur le bouton de suppression du comptage
+    *-------------------------------------------------------------------------*/
     deleteComptage() {
       let alert = this.alertCtrl.create({
         title: 'Suppression de ' + this.comptage.nom,
@@ -212,7 +224,9 @@ export class ParametresComptagePage {
       alert.present();
     }
 
-
+    /*----------------------------------------------------------------------------------------*/
+    /*------------Supprime le comptage actuel et passe sur la page accueilComptage------------*/
+    /*----------------------------------------------------------------------------------------*/
     deleteComptageConfirmed() {
       //Avant de supprimer le comptage, il faut supprimer tout les scans qui lui sont associés
       this.deleteBDD('scan', 'idComptage = ' + this.comptage.idComptage).then( () => {
