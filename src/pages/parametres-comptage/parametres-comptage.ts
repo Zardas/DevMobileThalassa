@@ -94,6 +94,7 @@ export class ParametresComptagePage {
     	this.nav.setRoot(InventaireComptagePage, {database: this.bdd, comptage: this.comptage});
   	}
 
+
   	/*----------------------------------------------------------------------------------*/
  	  /*------------Créer une nouvelle base de données (avec les bonnes tables------------*/
   	/*----------------------------------------------------------------------------------*/
