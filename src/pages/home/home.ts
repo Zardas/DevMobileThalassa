@@ -43,7 +43,7 @@ export class HomePage {
   Mais la page précédente (this quoi) serra toujours derrière
   */
   open(page) {
-  	this.navCtrl.push(this.pagesAccessibles[page]);
+  	this.navCtrl.push(this.pagesAccessibles[page], {database: this.bdd});
   }
   
 

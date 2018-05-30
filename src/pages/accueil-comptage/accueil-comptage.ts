@@ -103,8 +103,8 @@ export class AccueilComptagePage {
     this.bdd.addBDD(table, champs, values);
   }
 
-  viderTable(table: string) {
-    this.bdd.viderTable(table);
+  viderTable(table: string, where: string) {
+    this.bdd.viderTable(table, '');
   }
 
   /*-------------------------------------------------------------------------------------------------------------*/
