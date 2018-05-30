@@ -24,6 +24,19 @@ page-inventaire-comptage {
 					margin-left: 2vw;
 				}
 			}
+			ion-icon {
+				margin-right: 5px;
+			}
+		}
+
+		ion-title {
+			display: inline-block;
+			text-align: left;
+			width: 100%;
+
+			ion-icon {
+				vertical-align: middle;
+			}
 		}
 		
 	}
