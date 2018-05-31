@@ -194,6 +194,60 @@ export class ParametresComptagePage {
 
 
 
+
+
+    /*-------------------------------------------------------------*/
+    /*------------Fonctions liées au vidage du comptage------------*/
+    /*-------------------------------------------------------------*/
+    /*-----------------------------------------------------------------
+    * Affiche un pop-up demandant la confirmation du vidage du comptage
+    * Utilisé lors de l'appui sur le bouton de suppression du comptage
+    *----------------------------------------------------------------*/
+    viderComptage() {
+      let alert = this.alertCtrl.create({
+        title: 'Vidage de ' + this.comptage.nom,
+        message: 'Êtes-vous sûr de vouloir vider ' + this.comptage.nom + ' ?',
+        buttons: [
+          {
+            text: 'Non',
+            role: 'cancel',
+            handler: () => {
+              console.log('Vidage annulée');
+            }
+          },
+          {
+            text: 'Oui',
+            handler: () => {
+              this.viderComptageConfirmed();
+            }
+          }
+        ]
+      });
+      alert.present();
+    }
+
+    /*----------------------------------------------------------------------------------*/
+    /*------------Vide le comptage actuel et repasse sur la page du comptage------------*/
+    /*----------------------------------------------------------------------------------*/
+    viderComptageConfirmed() {
+      //Avant de supprimer le comptage, il faut supprimer tout les scans qui lui sont associés
+      this.deleteBDD('scan', 'idComptage = ' + this.comptage.idComptage).then( () => {
+          this.goToInventaire();
+      });
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
     /*--------------------------------------------------------------------*/
     /*------------Fonctions liées à la suppression du comptage------------*/
     /*--------------------------------------------------------------------*/
