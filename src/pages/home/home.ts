@@ -4,6 +4,7 @@ import { NavController, NavParams, Nav } from 'ionic-angular';
 import { AccueilComptagePage } from '../accueil-comptage/accueil-comptage';
 import { DatabaseUtilisation } from '../../providers/databaseProvider/databaseProviderUtilisation';
 
+import { ConstantesProvider } from '../../providers/constantes/constantes';
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -37,7 +38,6 @@ export class HomePage {
   ionViewDidLoad() {
   	console.log("Home didLoad()");
   }
-
 
   /*open = on met la page désirée sur le devant de la scène
   Mais la page précédente (this quoi) serra toujours derrière

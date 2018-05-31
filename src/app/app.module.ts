@@ -13,6 +13,8 @@ import { InventaireComptagePage } from '../pages/inventaire-comptage/inventaire-
 import { AccueilComptagePage } from '../pages/accueil-comptage/accueil-comptage';
 import { ParametresComptagePage } from '../pages/parametres-comptage/parametres-comptage';
 import { NouveauComptagePage } from '../pages/nouveau-comptage/nouveau-comptage';
+import { ConstantesProvider } from '../providers/constantes/constantes';
+import { PageProvider } from '../providers/page/page';
 
 @NgModule({
 
@@ -26,6 +28,8 @@ import { NouveauComptagePage } from '../pages/nouveau-comptage/nouveau-comptage'
     SQLite,
     BarcodeScanner,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
+    ConstantesProvider,
+    PageProvider,
   ]
 })
 
