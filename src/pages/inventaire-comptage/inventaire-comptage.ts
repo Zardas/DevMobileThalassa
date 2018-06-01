@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, Nav, ToastController, AlertControl
 
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 
-import { PageProvider } from '../../providers/page/page';
+import { PageSearchProvider } from '../../providers/page/pageSearch';
 
 import { AccueilComptagePage } from '../accueil-comptage/accueil-comptage';
 import { ParametresComptagePage } from '../parametres-comptage/parametres-comptage';
@@ -27,16 +27,13 @@ import { ParametresComptagePage } from '../parametres-comptage/parametres-compta
   templateUrl: 'inventaire-comptage.html',
 })
 
-export class InventaireComptagePage extends PageProvider {
+export class InventaireComptagePage extends PageSearchProvider {
 
   //Le comptage
   public comptage;
 
   //La liste des scans correspondants au comptage ET correspondant à la string recherchée
   public scans_searched: Array<any>;
-
-  //Indique si la searchbar est ouverte ou fermée
-  public isSearchbarOpened = false;
 
   //True = on affiche tout les scans / False : on regroupe les scans par codeBarre
   public item_par_item = true;
@@ -95,22 +92,6 @@ export class InventaireComptagePage extends PageProvider {
 
 
 
-
-
-  /*------------------------------------------------*/
-  /*------------Fonctions pour AngularJS------------*/
-  /*------------------------------------------------*/
-  /*------------------------------------------------------------------------------------------------------------------------------
-   * Return "close" si la barre de recherche est ouvert et "search" sinon
-   * Utilisé pour trouver quelle icône afficher à droite (loupe ou croix) en fonction de l'état de la searchbar (fermée ou ouverte)
-   *-----------------------------------------------------------------------------------------------------------------------------*/
-  getNameIcon() {
-    if(this.isSearchbarOpened) {
-      return "close";
-    } else {
-      return "search";
-    }
-  }
 
 
   /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -353,15 +334,15 @@ export class InventaireComptagePage extends PageProvider {
       subTitle: 'Ne rien mettre dans les champs pour les valeurs par défaut',
       inputs: [
         {
+          name: 'quantite',
+          placeholder: placeholderQuantite,
+          type: "number"
+        },
+        {
           name: 'name',
           placeholder: placeholderNom,
           type: "text",
           label: "Nom"
-        },
-        {
-          name: 'quantite',
-          placeholder: placeholderQuantite,
-          type: "number"
         },
         {
           name: 'prixEuro',
@@ -483,7 +464,7 @@ export class InventaireComptagePage extends PageProvider {
   /*---Vérifie si l'article scanné est au bon format (13 chiffres)---*/
   /*-----------------------------------------------------------------*/
   checkFormatArticle(toCheck: any) {
-    return (toCheck.length == this.constantes.tailleCodeBarre);
+    return (toCheck.length == this.constantes.tailleMaxCodeBarre);
   }
 
   

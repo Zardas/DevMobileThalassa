@@ -7,17 +7,16 @@
 <ion-header>
 
   <ion-navbar color="XLblue">
-    <ion-title (click)="goTo('ParametresGlobauxPage')">
+    <ion-title (click)="goTo('ParametresGlobauxPage')" *ngIf="!isSearchbarOpened">
       <ion-icon name="arrow-back"></ion-icon>
       Retour aux paramètres
     </ion-title>
 
     <!--Searchbar-->
-    <ion-searchbar *ngIf="isSearchbarOpened" showCancelButton="true" (search)="getScansCorrespondant($event)" (ionCancel)="isSearchbarOpened=false" (ionClear)="getScansCorrespondant('')"></ion-searchbar>
+    <ion-searchbar *ngIf="isSearchbarOpened" showCancelButton="true" (search)="search($event)" (ionCancel)="isSearchbarOpened=false" (ionClear)="search('')"></ion-searchbar>
 
     <ion-buttons end>
       <button ion-button id="search" (click)="isSearchbarOpened=!isSearchbarOpened"><ion-icon [name]="getNameIcon()"></ion-icon></button>
-      <button ion-button (click)="goToParam()" id="more"><ion-icon name="more"></ion-icon></button>
     </ion-buttons>
   </ion-navbar>
 
@@ -28,7 +27,7 @@
 
 	<ion-title>Articles</ion-title>
 
-	<ion-item *ngFor="let article of bdd.localData['article']">
+	<ion-item *ngFor="let article of article_searched">
 		{{article.codeBarre}} : {{article.designation}}
 		<span>{{article.prix}}€</span>
 		<p>{{getStock(article)}} en stock</p>

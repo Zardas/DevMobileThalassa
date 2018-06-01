@@ -3,17 +3,16 @@ $XLBlue: #0cb3e8;
 page-parametres-comptage {
 	ion-header {
 		ion-navbar {
-			background-color: $XLBlue;
 
 			ion-title {
 				display: inline-block;
-				text-align: left;
-				width: 100%;
+				text-align: center;
 
 				ion-icon {
-					vertical-align: middle;
+					position: absolute;
+					left: 2%;
+					top: 35%;
 				}
-
 			}
 		}
 	}

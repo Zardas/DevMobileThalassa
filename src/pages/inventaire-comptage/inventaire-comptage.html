@@ -14,8 +14,8 @@
   	<button ion-button menuToggle>
   		<ion-icon name="menu"></ion-icon>
   	</button>-->
-    
-    <ion-title (click)="goTo('AccueilComptagePage')" *ngIf="!isSearchbarOpened">
+
+    <ion-title (click)="goTo('AccueilComptagePage')" *ngIf="!isSearchbarOpened" icon-left>
       <ion-icon name="arrow-back"></ion-icon>
       {{comptage.nom}}
     </ion-title>

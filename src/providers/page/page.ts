@@ -11,7 +11,7 @@ import { ConstantesProvider } from '../../providers/constantes/constantes';
   and Angular DI.
 */
 
-/* Représente une page de base, aec ses fonctions de déplacement, sa liaison avec la BDD... */
+/* Représente une page de base, avec ses fonctions de déplacement, sa liaison avec la BDD... */
 
 @Injectable()
 export class PageProvider {
@@ -36,10 +36,8 @@ export class PageProvider {
     	} else {
       	this.bdd = navParams.get('database');
     	}
-
-    	
+   	
     	this.constantes = new ConstantesProvider();
-    	console.log('Hello PageProvider Provider');
  	}
 
 

@@ -10,12 +10,6 @@ page-inventaire-comptage {
 		font-size: 2.5vw;
 	}
 	ion-header {
-		ion-title {
-			display: inline-block;
-			text-align: left;
-			width: 100%;
-
-		}
 		
 		ion-buttons {
 			button {
@@ -29,13 +23,17 @@ page-inventaire-comptage {
 			}
 		}
 
-		ion-title {
-			display: inline-block;
-			text-align: left;
-			width: 100%;
+		ion-navbar {
 
-			ion-icon {
-				vertical-align: middle;
+			ion-title {
+				display: inline-block;
+				text-align: center;
+
+				ion-icon {
+					position: absolute;
+					left: 2%;
+					top: 35%;
+				}
 			}
 		}
 		

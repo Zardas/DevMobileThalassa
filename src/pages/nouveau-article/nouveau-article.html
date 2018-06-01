@@ -6,13 +6,44 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>nouveauArticle</ion-title>
-  </ion-navbar>
+  <ion-navbar color="XLblue">
+    <ion-title (click)="goTo('ListeArticlePage')">
+      <ion-icon name="arrow-back"></ion-icon>
+      Retour à la liste des articles
+    </ion-title>
 
+  <ion-buttons end id="enregistrer">
+    <button ion-button (click)="enregistrerArticle()">Enregistrer</button>
+  </ion-buttons>
+
+  </ion-navbar>
 </ion-header>
 
 
 <ion-content padding>
 
+	<!--Nom-->
+  <ion-item>
+    <ion-label stacked id="label_designation">
+      <span [innerHTML]="getNameLength()"></span>
+      /{{constantes.tailleMaxNomArticle}}
+    </ion-label>
+    <ion-input type="text" [(ngModel)]="nomArticle" placeholder="Saisir un nom" [maxlength]="constantes.tailleMaxNomArticle"></ion-input>
+  </ion-item>
+  <p id="separation"></p> <!--Pour une raison obscure, margin-bottom ne marche pas sur les ion-item-->
+
+  <!--CodeBarre-->
+  <ion-item>
+    <ion-label stacked id="label_codeBarre">
+      <span [innerHTML]="getCodeBarreLength()"></span>
+    </ion-label>
+    <ion-input type="text" [(ngModel)]="codeBarre" placeholder="Saisir un code-barre" [maxlength]="constantes.tailleMaxCodeBarre"></ion-input>
+  </ion-item>
+  <p id="separation"></p>
+
+  <!--Prix et stock-->
+  <div id="item_prix_stock">
+    <ion-input type="number" [(ngModel)]="prix" placeholder="Saisir un prix" id="input_prix"></ion-input>
+    <ion-input type="number" [(ngModel)]="stock" placeholder="Saisir un stock"></ion-input>
+  </div>
 </ion-content>

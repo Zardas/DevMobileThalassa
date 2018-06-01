@@ -5,8 +5,13 @@ page-parametres-globaux {
 		ion-navbar {
 			ion-title {
 				display: inline-block;
-				text-align: left;
-				width: 100%;
+				text-align: center;
+
+				ion-icon {
+					position: absolute;
+					left: 2%;
+					top: 13px;
+				}
 			}
 		}
 	}

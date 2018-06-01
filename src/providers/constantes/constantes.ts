@@ -14,13 +14,16 @@ export class ConstantesProvider {
 	//Taille maximale des noms des comptage
 	public tailleMaxNomComptage: number;
 
+  //Taille maximale des noms des articles
+  public tailleMaxNomArticle;
+
 	//Taille maximale des codes-barres
-  	public tailleCodeBarre: number;
+  public tailleMaxCodeBarre: number;
 
  	constructor() {
-    	console.log('Hello ConstantesProvider Provider');
     	this.tailleMaxNomComptage = 50;
-    	this.tailleCodeBarre = 60
+      this.tailleMaxNomArticle = 200;
+    	this.tailleMaxCodeBarre = 60
  	}
 
 }

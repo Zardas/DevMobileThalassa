@@ -8,7 +8,7 @@ import { InventaireComptagePage } from '../inventaire-comptage/inventaire-compta
 import { NouveauComptagePage } from '../nouveau-comptage/nouveau-comptage';
 import { ParametresGlobauxPage } from '../parametres-globaux/parametres-globaux';
 
-import { PageProvider } from '../../providers/page/page';
+import { PageSearchProvider } from '../../providers/page/pageSearch';
 
 /**
  * Generated class for the AccueilComptagePage page.
@@ -23,13 +23,11 @@ import { PageProvider } from '../../providers/page/page';
   selector: 'page-accueil-comptage',
   templateUrl: 'accueil-comptage.html',
 })
-export class AccueilComptagePage extends PageProvider {
+export class AccueilComptagePage extends PageSearchProvider {
 
   //La liste des scans correspondants au comptage ET correspondant à la string recherchée
   public comptage_searched: Array<any>;
 
-  //Indique si la searchbar est ouverte ou fermée
-  public isSearchbarOpened = false;
 
  	constructor(
   		public navCtrl: NavController,
@@ -126,17 +124,6 @@ export class AccueilComptagePage extends PageProvider {
   }
 
 
-  /*------------------------------------------------------------------------------------------------------------------------------
-   * Return "close" si la barre de recherche est ouvert et "search" sinon
-   * Utilisé pour trouver quelle icône afficher à droite (loupe ou croix) en fonction de l'état de la searchbar (fermée ou ouverte)
-   *-----------------------------------------------------------------------------------------------------------------------------*/
-  getNameIcon() {
-    if(this.isSearchbarOpened) {
-      return "close";
-    } else {
-      return "search";
-    }
-  }
 
 
   /*------------------------------------------------------------------------------------------------------------------------------

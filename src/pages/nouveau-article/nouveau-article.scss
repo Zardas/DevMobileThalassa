@@ -1,3 +1,23 @@
 page-nouveau-article {
 
+	ion-content {
+		ion-item {
+			ion-label {
+				text-align: right;
+			}
+
+		}
+
+		#item_prix_stock {
+			text-align: center;
+
+			ion-input {
+				width: 40%;
+				display: inline-block;
+			}
+		}
+		#separation {
+			margin-bottom: 30px;
+		}
+	}
 }
