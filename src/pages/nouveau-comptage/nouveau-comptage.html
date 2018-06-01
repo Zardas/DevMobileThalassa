@@ -49,10 +49,10 @@
       <!--Si on met directement "" comme value, la case est coché de base, même si on met checked="false"-->
       <ion-radio checked="false" value="non_specifie"></ion-radio>
     </ion-item>
-    <ion-item>
+    <!--<ion-item>
       <ion-label>Erreur</ion-label>
       <ion-radio checked="false" value="erreur"></ion-radio>
-    </ion-item>
+    </ion-item>-->
   </ion-list>
   <p id="invalidMessage_type"></p>
 
@@ -62,7 +62,7 @@
     <ion-select [(ngModel)]="magasinComptage" id="magasinSelect">
       <ion-option *ngFor="let magasin of bdd.localData['magasin']" [value]="magasin.nom">{{magasin.nom}}</ion-option>
       <ion-option value="">Non spécifié</ion-option>
-      <ion-option value="Erreur">Erreur</ion-option>
+      <!--<ion-option value="Erreur">Erreur</ion-option>-->
     </ion-select>
   </ion-item>
   <p id="invalidMessage_magasin"></p>
