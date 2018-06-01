@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 /*
@@ -13,7 +12,7 @@ export class ConstantesProvider {
 	/* Placer ici toute les constantes de l'application */
 	public taille: number;
 
- 	constructor(public http: HttpClient) {
+ 	constructor() {
     	console.log('Hello ConstantesProvider Provider');
     	this.taille = 23;
  	}

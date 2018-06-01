@@ -1,9 +1,9 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NavController, NavParams, Nav } from 'ionic-angular';
 
 import { DatabaseUtilisation } from '../../providers/databaseProvider/databaseProviderUtilisation';
 import { ConstantesProvider } from '../../providers/constantes/constantes';
+
 /*
   Generated class for the PageProvider provider.
 
@@ -26,7 +26,6 @@ export class PageProvider {
   	private pagesAccessibles: Map<String, any>;
 
  	constructor(
- 		public http: HttpClient,
  		public navCtrl: NavController,
     	public navParams: NavParams,
     	public nav: Nav
@@ -37,8 +36,9 @@ export class PageProvider {
     	} else {
       	this.bdd = navParams.get('database');
     	}
-    
-    	this.constantes = new ConstantesProvider(http);
+
+    	
+    	this.constantes = new ConstantesProvider();
     	console.log('Hello PageProvider Provider');
  	}
 
@@ -87,4 +87,6 @@ export class PageProvider {
   	dropAllTables() {
     	this.bdd.dropAllTables();
   	}
+
+
 }
