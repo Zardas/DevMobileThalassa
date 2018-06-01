@@ -1,3 +1,28 @@
-page-parametres-globaux {
+$XLBlue: #0cb3e8;
 
+page-parametres-globaux {
+	ion-header {
+		ion-navbar {
+			ion-title {
+				display: inline-block;
+				text-align: left;
+				width: 100%;
+			}
+		}
+	}
+
+
+	ion-content {
+		ion-item {
+			margin-bottom: 50px;
+			border: 1px solid black;
+
+			ion-title {
+				text-align: center;
+			}
+		}
+		ion-item:hover {
+			background-color: #0cb3e8;
+		}
+	}
 }

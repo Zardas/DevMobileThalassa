@@ -8,7 +8,11 @@ import { HomePage } from '../pages/home/home';
 import { InventaireComptagePage } from '../pages/inventaire-comptage/inventaire-comptage';
 import { AccueilComptagePage } from '../pages/accueil-comptage/accueil-comptage';
 import { ParametresComptagePage } from '../pages/parametres-comptage/parametres-comptage';
+import { ParametresGlobauxPage } from '../pages/parametres-globaux/parametres-globaux';
+import { ListeArticlePage } from '../pages/liste-article/liste-article';
 import { NouveauComptagePage } from '../pages/nouveau-comptage/nouveau-comptage';
+import { NouveauArticlePage } from '../pages/nouveau-article/nouveau-article';
+
 
 @Component({
   templateUrl: 'app.html'
@@ -32,9 +36,12 @@ export class MyApp {
     this.pages = [
       { title: 'Accueil', component: HomePage },
       { title: 'Inventaire', component: InventaireComptagePage },
-      { title: 'AccueilComptage', component: AccueilComptagePage },
-      { title: 'ParametresComptage', component: ParametresComptagePage },
-      { title: 'Nouveau Comptage', component: NouveauComptagePage }
+      { title: 'Accueil Comptage', component: AccueilComptagePage },
+      { title: 'Parametres Comptage', component: ParametresComptagePage },
+      { title: 'Parametres Globaux', component: ParametresGlobauxPage },
+      { title: 'Liste articles', component: ListeArticlePage },
+      { title: 'Nouveau Comptage', component: NouveauComptagePage },
+      { title: 'Nouvel Article', component: NouveauArticlePage}
     ];
 
   }

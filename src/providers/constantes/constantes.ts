@@ -12,14 +12,14 @@ export class ConstantesProvider {
 	/* Placer ici toute les constantes de l'application */
 
 	//Taille maximale des noms des comptage
-	public tailleMaxNom: number;
+	public tailleMaxNomComptage: number;
 
 	//Taille maximale des codes-barres
   	public tailleCodeBarre: number;
 
  	constructor() {
     	console.log('Hello ConstantesProvider Provider');
-    	this.tailleMaxNom = 50;
+    	this.tailleMaxNomComptage = 50;
     	this.tailleCodeBarre = 60
  	}
 

@@ -6,6 +6,7 @@ import { NavController, NavParams, Nav } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { InventaireComptagePage } from '../inventaire-comptage/inventaire-comptage';
 import { NouveauComptagePage } from '../nouveau-comptage/nouveau-comptage';
+import { ParametresGlobauxPage } from '../parametres-globaux/parametres-globaux';
 
 import { PageProvider } from '../../providers/page/page';
 
@@ -39,7 +40,10 @@ export class AccueilComptagePage extends PageProvider {
 
     super(navCtrl, navParams, nav);
 
- 		this.parametragePagesAccessibles(['HomePage', 'InventaireComptagePage', 'NouveauComptagePage'], [HomePage, InventaireComptagePage, NouveauComptagePage]);
+ 		this.parametragePagesAccessibles(
+      ['HomePage', 'InventaireComptagePage', 'NouveauComptagePage', 'ParametresGlobauxPage'],
+      [HomePage, InventaireComptagePage, NouveauComptagePage, ParametresGlobauxPage]
+    );
 
     this.getComptageCorrespondant(''); //Réinitialise le scan et affiche tout les items relatifs au comptage
  	}

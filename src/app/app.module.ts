@@ -12,24 +12,43 @@ import { HomePage } from '../pages/home/home';
 import { InventaireComptagePage } from '../pages/inventaire-comptage/inventaire-comptage';
 import { AccueilComptagePage } from '../pages/accueil-comptage/accueil-comptage';
 import { ParametresComptagePage } from '../pages/parametres-comptage/parametres-comptage';
+import { ParametresGlobauxPage } from '../pages/parametres-globaux/parametres-globaux';
 import { NouveauComptagePage } from '../pages/nouveau-comptage/nouveau-comptage';
-import { ConstantesProvider } from '../providers/constantes/constantes';
-import { PageProvider } from '../providers/page/page';
+import { NouveauArticlePage } from '../pages/nouveau-article/nouveau-article';
+import { ListeArticlePage } from '../pages/liste-article/liste-article';
 
 @NgModule({
 
-  declarations: [MyApp, HomePage, AccueilComptagePage, InventaireComptagePage, ParametresComptagePage, NouveauComptagePage],
+  declarations: [
+    MyApp,
+    HomePage,
+    AccueilComptagePage,
+    InventaireComptagePage,
+    ParametresComptagePage,
+    ParametresGlobauxPage,
+    ListeArticlePage,
+    NouveauComptagePage,
+    NouveauArticlePage
+  ],
   imports: [BrowserModule, HttpModule, IonicModule.forRoot(MyApp)],
   bootstrap: [IonicApp],
-  entryComponents: [MyApp, HomePage, AccueilComptagePage, InventaireComptagePage, ParametresComptagePage, NouveauComptagePage],
+  entryComponents: [
+    MyApp,
+    HomePage,
+    AccueilComptagePage,
+    InventaireComptagePage,
+    ParametresComptagePage,
+    ParametresGlobauxPage,
+    ListeArticlePage,
+    NouveauComptagePage,
+    NouveauArticlePage
+  ],
   providers: [
     StatusBar,
     SplashScreen,
     SQLite,
     BarcodeScanner,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
-    ConstantesProvider,
-    PageProvider,
+    {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
 

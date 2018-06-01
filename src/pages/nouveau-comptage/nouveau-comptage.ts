@@ -150,7 +150,7 @@ export class NouveauComptagePage extends PageProvider {
     if(this.nomComptage == undefined) {
       return false;
     } else {
-      return (this.nomComptage.length > 0 && this.nomComptage.length <= this.constantes.tailleMaxNom);
+      return (this.nomComptage.length > 0 && this.nomComptage.length <= this.constantes.tailleMaxNomComptage);
     }
   }
 

@@ -6,8 +6,11 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>parametresGlobaux</ion-title>
+  <ion-navbar color="XLblue">
+    <ion-title (click)="goTo('AccueilComptagePage')">
+      <ion-icon name="arrow-back"></ion-icon>
+      Retour à la liste des comptages
+    </ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -15,4 +18,16 @@
 
 <ion-content padding>
 
+	<ion-item (click)="goTo('ListeArticlePage')">
+		<ion-title>Articles</ion-title>
+	</ion-item>
+	<ion-item>
+		<ion-title>Emplacement</ion-title>
+	</ion-item>
+	<ion-item>
+		<ion-title>Paramètres</ion-title>
+	</ion-item>
+	<ion-item>
+		<ion-title>Aide</ion-title>
+	</ion-item>
 </ion-content>

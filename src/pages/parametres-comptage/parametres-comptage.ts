@@ -158,7 +158,7 @@ export class ParametresComptagePage extends PageProvider {
       if(this.newName == undefined) {
         return false;
       } else {
-        return (this.newName.length > 0 && this.newName.length <= this.constantes.tailleMaxNom);
+        return (this.newName.length > 0 && this.newName.length <= this.constantes.tailleMaxNomComptage);
       }
     }
 

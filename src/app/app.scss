@@ -50,7 +50,13 @@ ion-navbar img {
 	float: right;
 }
 
-
+ion-navbar {
+	ion-title {
+		display: inline-block;
+		text-align: left;
+		width: 100%;
+	}
+}
 /*--------------------*/
 /*-----TOOLBAR------ */
 /*------------------*/
