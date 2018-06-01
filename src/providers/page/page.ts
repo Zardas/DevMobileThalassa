@@ -23,7 +23,7 @@ export class PageProvider {
  	public constantes: ConstantesProvider
 
  	//Liste des pages accessibles, utiliser pour les fonctions de navigation afin d'éviter que l'on puisse aller n'importe où
-  	private pagesAccessibles: Map<String, any>;
+  private pagesAccessibles: Map<String, any>;
 
  	constructor(
  		public navCtrl: NavController,	//Pile de pages

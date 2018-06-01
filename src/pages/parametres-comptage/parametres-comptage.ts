@@ -26,9 +26,6 @@ export class ParametresComptagePage extends PageProvider {
     //Nom du nouveau comptage (https://stackoverflow.com/questions/46494041/cant-get-value-of-input-ionic-3)
     public newName: string;
 
-    //Taille maximale du nom
-    public tailleMaxNom: number;
-
 
     /*------------------------------------*/
     /*------------Constructeur------------*/
@@ -53,7 +50,6 @@ export class ParametresComptagePage extends PageProvider {
       		this.comptage = navParams.get('comptage');
     	}
 
-      this.tailleMaxNom = 50;
   	}
 
 
@@ -162,7 +158,7 @@ export class ParametresComptagePage extends PageProvider {
       if(this.newName == undefined) {
         return false;
       } else {
-        return (this.newName.length > 0 && this.newName.length <= this.tailleMaxNom);
+        return (this.newName.length > 0 && this.newName.length <= this.constantes.tailleMaxNom);
       }
     }
 

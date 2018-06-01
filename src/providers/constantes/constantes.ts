@@ -10,11 +10,17 @@ import { Injectable } from '@angular/core';
 export class ConstantesProvider {
 
 	/* Placer ici toute les constantes de l'application */
-	public taille: number;
+
+	//Taille maximale des noms des comptage
+	public tailleMaxNom: number;
+
+	//Taille maximale des codes-barres
+  	public tailleCodeBarre: number;
 
  	constructor() {
     	console.log('Hello ConstantesProvider Provider');
-    	this.taille = 23;
+    	this.tailleMaxNom = 50;
+    	this.tailleCodeBarre = 60
  	}
 
 }

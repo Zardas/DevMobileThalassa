@@ -27,8 +27,6 @@ export class NouveauComptagePage extends PageProvider {
   //Magasin du nouveau comptage
   public magasinComptage;
 
-  //Taille maximale du nom
-  public tailleMaxNom: number;
 
  	constructor(
   	public navCtrl: NavController,
@@ -40,7 +38,6 @@ export class NouveauComptagePage extends PageProvider {
 
     this.parametragePagesAccessibles(['AccueilComptagePage'], [AccueilComptagePage]);
 
-    this.tailleMaxNom = 50;
   }
 
   ionViewDidLoad() {
@@ -153,7 +150,7 @@ export class NouveauComptagePage extends PageProvider {
     if(this.nomComptage == undefined) {
       return false;
     } else {
-      return (this.nomComptage.length > 0 && this.nomComptage.length <= this.tailleMaxNom);
+      return (this.nomComptage.length > 0 && this.nomComptage.length <= this.constantes.tailleMaxNom);
     }
   }
 

@@ -30,10 +30,7 @@ import { ParametresComptagePage } from '../parametres-comptage/parametres-compta
 export class InventaireComptagePage extends PageProvider {
 
   //Le comptage
-  public comptage;  
-
-  //Taille des coes-barres
-  public tailleCodeBarre: number;
+  public comptage;
 
   //La liste des scans correspondants au comptage ET correspondant à la string recherchée
   public scans_searched: Array<any>;
@@ -70,8 +67,6 @@ export class InventaireComptagePage extends PageProvider {
   ) {
 
     super(navCtrl, navParams, nav);
-
-    this.tailleCodeBarre = 13;
 
     this.parametragePagesAccessibles(['AccueilComptagePage', 'ParametresComptagePage'], [AccueilComptagePage, ParametresComptagePage]);
 
@@ -488,7 +483,7 @@ export class InventaireComptagePage extends PageProvider {
   /*---Vérifie si l'article scanné est au bon format (13 chiffres)---*/
   /*-----------------------------------------------------------------*/
   checkFormatArticle(toCheck: any) {
-    return (toCheck.length == this.tailleCodeBarre);
+    return (toCheck.length == this.constantes.tailleCodeBarre);
   }
 
   
