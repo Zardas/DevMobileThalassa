@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Nav, AlertController } from 'ionic-angular';
 
-import { DatabaseUtilisation } from '../../providers/databaseProvider/databaseProviderUtilisation';
+import { PageProvider } from '../../providers/page/page';
 
 import { AccueilComptagePage } from '../accueil-comptage/accueil-comptage';
 import { InventaireComptagePage } from '../inventaire-comptage/inventaire-comptage';
@@ -18,13 +18,7 @@ import { InventaireComptagePage } from '../inventaire-comptage/inventaire-compta
   selector: 'page-parametres-comptage',
   templateUrl: 'parametres-comptage.html',
 })
-export class ParametresComptagePage {
-
-	//Liste des pages accessibles, utiliser pour les fonctions de navigation afin d'éviter que l'on puisse aller n'importe où
-  	private pagesAccessibles: Map<String, any>;
-
-  	//Provider possédant à la fois la base de donnée et la hash-map localData
-  	public bdd: DatabaseUtilisation;
+export class ParametresComptagePage extends PageProvider {
 
   	//Le comptage
   	public comptage;  
@@ -45,14 +39,11 @@ export class ParametresComptagePage {
   		public nav: Nav,
       private alertCtrl: AlertController //Permet d'afficher des alertes (pour le nom et la quantité des articles scanné)
   	) {
-  		this.parametragePagesAccessibles();
 
-    	//On récupère la base de données
-    	if(navParams.get('database') == undefined) {
-      		this.refreshBDD();
-    	} else {
-      	this.bdd = navParams.get('database');
-    	}
+      super(navCtrl, navParams, nav);
+
+  		this.parametragePagesAccessibles(['AccueilComptagePage', 'InventaireComptagePage'], [AccueilComptagePage, InventaireComptagePage]);
+
 
     	//On récupère le comptage
     	if(navParams.get('comptage') == undefined) {
@@ -65,14 +56,6 @@ export class ParametresComptagePage {
       this.tailleMaxNom = 50;
   	}
 
-  	/*---------------------------------------------------------------------*/
-  	/*------------Fonction de paramétrage des pages accessibles------------*/
-  	/*---------------------------------------------------------------------*/
-	  parametragePagesAccessibles() {
-    	this.pagesAccessibles = new Map<String, any>();
-    	this.pagesAccessibles['InventaireComptagePage'] = InventaireComptagePage;
-      this.pagesAccessibles['AccueilComptagePage'] = AccueilComptagePage;
-  	}
 
   	ionViewDidLoad() {
     	console.log('ionViewDidLoad ParametresComptagePage');
@@ -83,43 +66,30 @@ export class ParametresComptagePage {
   	/*-----------------------------------------------*/
  	  /*------------Fonctions de navigation------------*/
   	/*-----------------------------------------------*/
-  	/*open = on met la page désirée sur le devant de la scène
-  	Mais la page précédente (this quoi) serra toujours derrière
-  	*/
-  	open(page) {
-  		this.navCtrl.push(this.pagesAccessibles[page]);
-  	}
-  	/*goTo = mettre en racine la page désirée -> différent de open
-  	*/
-  	goTo(page) {
-    	this.nav.setRoot(this.pagesAccessibles[page], {database: this.bdd});
-  	}
     //Un goTo spéciale pour aller à l'inventaire car il faut aussi passé le comptage (pour que inventaireComptage sache quel comptage elle doit afficher)
   	goToInventaire() {
     	this.nav.setRoot(InventaireComptagePage, {database: this.bdd, comptage: this.comptage});
   	}
 
 
-  	/*----------------------------------------------------------------------------------*/
- 	  /*------------Créer une nouvelle base de données (avec les bonnes tables------------*/
-  	/*----------------------------------------------------------------------------------*/
-  	refreshBDD() {
-    	this.bdd = new DatabaseUtilisation();
-  	}
+    /*-----------------------------------------------------------------------------------------------------------*/
+    /*------------Cette fonction permet de ne pas avoir à repréciser le where à chaque appel d'update------------*/
+    /*-----------------------------------------------------------------------------------------------------------*/
+    updateBDD_withWhere(table, champs: Array<any>, values: Array<any>) {
+      this.updateBDD(table, champs, values, "idComptage = " + this.comptage.idComptage);
+    }
+    
 
 
-    /*------------------------------------------------*/
-    /*------------Appel la fonction update------------*/
-    /*------------------------------------------------*/
-    updateBDD(table, champs: Array<any>, values: Array<any>) {
-      this.bdd.update(table, champs, values, "idComptage = " + this.comptage.idComptage);
-    }
-    /*------------------------------------------------*/
-    /*------------Appel la fonction delete------------*/
-    /*------------------------------------------------*/
-    deleteBDD(table: string, where: string) {
-      return this.bdd.viderTable(table, where)
-    }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -127,7 +97,7 @@ export class ParametresComptagePage {
     /*------------Fonctions liées au changement de l'état ouvert------------*/
     /*----------------------------------------------------------------------*/
   	changerOuvertureComptage() {
-      this.updateBDD('comptage', ['ouvert'], [1-this.comptage.ouvert]);
+      this.updateBDD_withWhere('comptage', ['ouvert'], [1-this.comptage.ouvert]);
       this.comptage.ouvert = !this.comptage.ouvert; //Nécéssaire puisque les affichages se font en fonction de la variable locale comptage
   	}
 
@@ -138,6 +108,12 @@ export class ParametresComptagePage {
   			return {text: "Comptage fermé", icon: "lock"};
   		}
   	}
+
+
+
+
+
+
 
 
 
@@ -174,7 +150,7 @@ export class ParametresComptagePage {
         invalidMessage_nom.innerHTML = "Vous devez rentrer un nom valide";
       } else {
         invalidMessage_nom.innerHTML = "";
-        this.updateBDD('comptage', ['nom'], [this.newName]);
+        this.updateBDD_withWhere('comptage', ['nom'], [this.newName]);
         this.comptage.nom = this.newName;
       }      
     }
@@ -189,6 +165,13 @@ export class ParametresComptagePage {
         return (this.newName.length > 0 && this.newName.length <= this.tailleMaxNom);
       }
     }
+
+
+
+
+
+
+
 
 
 

@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, Nav, ToastController, AlertControl
 
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 
-import { DatabaseUtilisation } from '../../providers/databaseProvider/databaseProviderUtilisation';
+import { PageProvider } from '../../providers/page/page';
 
 import { AccueilComptagePage } from '../accueil-comptage/accueil-comptage';
 import { ParametresComptagePage } from '../parametres-comptage/parametres-comptage';
@@ -27,13 +27,7 @@ import { ParametresComptagePage } from '../parametres-comptage/parametres-compta
   templateUrl: 'inventaire-comptage.html',
 })
 
-export class InventaireComptagePage {
-
-  //Liste des pages accessibles, utiliser pour les fonctions de navigation afin d'éviter que l'on puisse aller n'importe où
-  private pagesAccessibles: Map<String, any>;
-
-  //Provider possédant à la fois la base de donnée et la hash-map localData
-  public bdd: DatabaseUtilisation;
+export class InventaireComptagePage extends PageProvider {
 
   //Le comptage
   public comptage;  
@@ -67,24 +61,19 @@ export class InventaireComptagePage {
   /*------------Constructeur------------*/
   /*------------------------------------*/
   constructor(
-    public navCtrl: NavController,         //Pile de pages
-    public navParams: NavParams,           //Paramètres de navigation
-    public nav: Nav,                       //Gestionnaire de navigation
-    private toastCtrl: ToastController,    //Contrôleur des toast (les petits popup)
-    private barcodeScanner: BarcodeScanner, //Scanner des code-barrres
-    private alertCtrl: AlertController //Permet d'afficher des alertes (pour le nom et la quantité des articles scanné)
+    public navCtrl: NavController,           //Pile de pages
+    public navParams: NavParams,             //Paramètres de navigation
+    public nav: Nav,                         //Gestionnaire de navigation
+    private toastCtrl: ToastController,      //Contrôleur des toast (les petits popup)
+    private barcodeScanner: BarcodeScanner,  //Scanner des code-barrres
+    private alertCtrl: AlertController       //Permet d'afficher des alertes (pour le nom et la quantité des articles scanné)
   ) {
+
+    super(navCtrl, navParams, nav);
 
     this.tailleCodeBarre = 13;
 
-    this.parametragePagesAccessibles();
-
-    //On récupère la base de données
-    if(navParams.get('database') == undefined) {
-      this.refreshBDD();
-    } else {
-      this.bdd = navParams.get('database');
-    }
+    this.parametragePagesAccessibles(['AccueilComptagePage', 'ParametresComptagePage'], [AccueilComptagePage, ParametresComptagePage]);
 
     //On récupère le comptage
     if(navParams.get('comptage') == undefined) {
@@ -94,17 +83,9 @@ export class InventaireComptagePage {
       this.comptage = navParams.get('comptage');
     }
 
-    this.getScansCorrespondant('');
+    this.getScansCorrespondant(''); //Réinitialise le scan et affiche tout les items relatifs au comptage
   }
 
-  /*---------------------------------------------------------------------*/
-  /*------------Fonction de paramétrage des pages accessibles------------*/
-  /*---------------------------------------------------------------------*/
-  parametragePagesAccessibles() {
-    this.pagesAccessibles = new Map<String, any>();
-    this.pagesAccessibles['AccueilComptagePage'] = AccueilComptagePage;
-    this.pagesAccessibles['ParametresComptagePage'] = ParametresComptagePage;
-  }
 
 
   ionViewDidLoad() {
@@ -112,37 +93,61 @@ export class InventaireComptagePage {
   }
 
 
-  /*-----------------------------------------------*/
-  /*------------Fonctions de navigation------------*/
-  /*-----------------------------------------------*/
-  /*open = on met la page désirée sur le devant de la scène
-  Mais la page précédente (this quoi) serra toujours derrière
-  */
-  open(page) {
-  	this.navCtrl.push(this.pagesAccessibles[page]);
-  }
-  /*goTo = mettre en racine la page désirée -> différent de open
-  */
-  goTo(page) {
-    this.nav.setRoot(this.pagesAccessibles[page], {database: this.bdd});
-  }
   goToParam() {
     this.nav.setRoot(ParametresComptagePage, {database: this.bdd, comptage: this.comptage});
   }
   
-  /*----------------------------------------------------------------------------------*/
-  /*------------Créer une nouvelle base de données (avec les bonnes tables------------*/
-  /*----------------------------------------------------------------------------------*/
-  refreshBDD() {
-    this.bdd = new DatabaseUtilisation();
+
+
+
+
+
+  /*------------------------------------------------*/
+  /*------------Fonctions pour AngularJS------------*/
+  /*------------------------------------------------*/
+  /*------------------------------------------------------------------------------------------------------------------------------
+   * Return "close" si la barre de recherche est ouvert et "search" sinon
+   * Utilisé pour trouver quelle icône afficher à droite (loupe ou croix) en fonction de l'état de la searchbar (fermée ou ouverte)
+   *-----------------------------------------------------------------------------------------------------------------------------*/
+  getNameIcon() {
+    if(this.isSearchbarOpened) {
+      return "close";
+    } else {
+      return "search";
+    }
   }
 
 
-  addBDD(table: string, champs: Array<any>, values: Array<any>) {
-    return this.bdd.addBDD(table, champs, values);
+  /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+  /*------------Indique si c'est le codeBarre ou la désignation qui doit être affiché en texte principal (si la designation est '', c'est le codeBarre qui est principal, sinon, c'est la désignation)------------*/
+  /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+  getPrimaryText(scan) {
+    if(scan.designation == "") {
+      return scan.codeBarre;
+    } else {
+      return scan.designation;
+    }
+  }
+  getSecondaryText(scan) {
+    if(scan.designation == "") {
+      return scan.designation;
+    } else {
+      return scan.codeBarre;
+    }
   }
 
 
+
+
+
+
+
+
+
+
+  /*-------------------------------------------------*/
+  /*------------Fonctions liées au search------------*/
+  /*-------------------------------------------------*/
   /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
   /*------------Créer la liste de tout les scans correspondant au comptage this et possédant searched dans leur nom, en parcourant la liste de tout les scans------------*/
   /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -175,6 +180,50 @@ export class InventaireComptagePage {
     }
   }
 
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /*---------------------------------------------*/
+  /*---Fonctions relatives au mode d'affichage---*/
+  /*---------------------------------------------*/
+  /*--------------------------------------------*/
+  /*---Indique le nom à afficher pour le scan---*/
+  /*--------------------------------------------*/
+  getNomMode() {
+    if(this.item_par_item) {
+      return "Scans individuels";
+    } else {
+      return "Scans regroupés";
+    }
+  }
+
+
+  /*--------------------------------*/
+  /*---Change le mode d'affichage---*/
+  /*--------------------------------*/
+  changeMode() {
+    this.item_par_item = !this.item_par_item;
+
+    if(this.item_par_item) {
+      this.getScansCorrespondant('');
+    } else {
+      this.scans_searched = this.regroupeItem(this.scans_searched);
+    }
+  }
+
+
   /*-----------------------------------------------------------------------------------------------------------------------*/
   /*------------Renvoie un tableau comprenant les scan passés en paramètres, mais regroupés selon le code-barre------------*/
   /*-----------------------------------------------------------------------------------------------------------------------*/
@@ -204,64 +253,6 @@ export class InventaireComptagePage {
       }
     }
     return item_regroupes;
-  }
-
-
-  /*------------------------------------------------------------------------------------------------------------------------------
-   * Return "close" si la barre de recherche est ouvert et "search" sinon
-   * Utilisé pour trouver quelle icône afficher à droite (loupe ou croix) en fonction de l'état de la searchbar (fermée ou ouverte)
-   *-----------------------------------------------------------------------------------------------------------------------------*/
-  getNameIcon() {
-    if(this.isSearchbarOpened) {
-      return "close";
-    } else {
-      return "search";
-    }
-  }
-
-  /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-  /*------------Indique si c'est le codeBarre ou la désignation qui doit être affiché en texte principal (si la designation est '', c'est le codeBarre qui est principal, sinon, c'est la désignation)------------*/
-  /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-  getPrimaryText(scan) {
-    if(scan.designation == "") {
-      return scan.codeBarre;
-    } else {
-      return scan.designation;
-    }
-  }
-  getSecondaryText(scan) {
-    if(scan.designation == "") {
-      return scan.designation;
-    } else {
-      return scan.codeBarre;
-    }
-  }
-
-
-  /*---------------------------------------------*/
-  /*---Fonctions relatives au mode d'affichage---*/
-  /*---------------------------------------------*/
-  /*--------------------------------------------*/
-  /*---Indique le nom à afficher pour le scan---*/
-  /*--------------------------------------------*/
-  getNomMode() {
-    if(this.item_par_item) {
-      return "Scans individuels";
-    } else {
-      return "Scans regroupés";
-    }
-  }
-  /*--------------------------------*/
-  /*---Change le mode d'affichage---*/
-  /*--------------------------------*/
-  changeMode() {
-    this.item_par_item = !this.item_par_item;
-
-    if(this.item_par_item) {
-      this.getScansCorrespondant('');
-    } else {
-      this.scans_searched = this.regroupeItem(this.scans_searched);
-    }
   }
 
 

@@ -4,6 +4,7 @@ import { NavController, NavParams, Nav } from 'ionic-angular';
 import { AccueilComptagePage } from '../accueil-comptage/accueil-comptage';
 
 import { PageProvider } from '../../providers/page/page';
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'

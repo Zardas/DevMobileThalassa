@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, Nav } from 'ionic-angular';
 
 import { AccueilComptagePage } from '../accueil-comptage/accueil-comptage';
 
-import { DatabaseUtilisation } from '../../providers/databaseProvider/databaseProviderUtilisation';
+import { PageProvider } from '../../providers/page/page';
 /**
  * Generated class for the NouveauComptagePage page.
  *
@@ -16,13 +16,7 @@ import { DatabaseUtilisation } from '../../providers/databaseProvider/databasePr
   selector: 'page-nouveau-comptage',
   templateUrl: 'nouveau-comptage.html',
 })
-export class NouveauComptagePage {
-
-	//Liste des pages accessibles, utiliser pour les fonctions de navigation afin d'éviter que l'on puisse aller n'importe où
-	private pagesAccessibles: Map<String, any>;
-
-  //Provider possédant à la fois la base de donnée et la hash-map localData
-  public bdd: DatabaseUtilisation;
+export class NouveauComptagePage extends PageProvider {
 
   //Nom du nouveau comptage (https://stackoverflow.com/questions/46494041/cant-get-value-of-input-ionic-3)
   public nomComptage;
@@ -41,13 +35,10 @@ export class NouveauComptagePage {
   	public navParams: NavParams,
      public nav: Nav
   ) {
-    this.parametragePagesAccessibles();
 
-    if(navParams.get('database') == undefined) {
-      this.refreshBDD();
-    } else {
-      this.bdd = navParams.get('database');
-    }
+    super(navCtrl, navParams, nav);
+
+    this.parametragePagesAccessibles(['AccueilComptagePage'], [AccueilComptagePage]);
 
     this.tailleMaxNom = 50;
   }
@@ -56,40 +47,17 @@ export class NouveauComptagePage {
    	console.log('ionViewDidLoad NouveauComptagePage');
   }
 
-  /*open = on met la page désirée sur le devant de la scène
-  Mais la page précédente (this quoi) serra toujours derrière
-  */
-  open(page) {
-    this.navCtrl.push(this.pagesAccessibles[page]);
-  }
-  
-  //goTo = mettre en racine la page désirée -> différent de open
-  goTo(page) {
-    this.nav.setRoot(this.pagesAccessibles[page], {database: this.bdd});
-  }
-
-  /*---------------------------------------------------------------------*/
-  /*------------Fonction de paramétrage des pages accessibles------------*/
-  /*---------------------------------------------------------------------*/
-  parametragePagesAccessibles() {
-    this.pagesAccessibles = new Map<String, any>();
-    this.pagesAccessibles['AccueilComptagePage'] = AccueilComptagePage;
-  }
 
 
-  /*----------------------------------------------------------------------------------*/
-  /*------------Créer une nouvelle base de données (avec les bonnes tables------------*/
-  /*----------------------------------------------------------------------------------*/
-  refreshBDD() {
-    this.bdd = new DatabaseUtilisation();
-  }
 
 
-  addBDD(table: string, champs: Array<any>, values: Array<any>) {
-    this.bdd.addBDD(table, champs, values);
-  }
 
 
+
+
+  /*------------------------------------------------*/
+  /*------------Fonctions pour AngularJS------------*/
+  /*------------------------------------------------*/
   /*------------------------------------------------------------------------------------
    * Retourne la taille du nom de comptage actuellement rentré
    * Utilisé pour afficher en direct la taille du nom
@@ -104,6 +72,21 @@ export class NouveauComptagePage {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+  /*---------------------------------------------------------------*/
+  /*------------Fonctions liées à l'ajout d'un comptage------------*/
+  /*---------------------------------------------------------------*/
   /*---------------------------------------------------------------------------------------*/
   /*------------Ajoute un comptage dans la base grâce aux informations rentrées------------*/
   /*---------------------------------------------------------------------------------------*/
@@ -243,6 +226,26 @@ export class NouveauComptagePage {
     }
     return idMax;
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   /*------------------------------------------------------------------------*/
   /*------------Renvoie a date actuelle sous la forme YYYY-MM-DD------------*/

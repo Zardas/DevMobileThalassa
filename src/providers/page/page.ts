@@ -26,9 +26,9 @@ export class PageProvider {
   	private pagesAccessibles: Map<String, any>;
 
  	constructor(
- 		public navCtrl: NavController,
-    	public navParams: NavParams,
-    	public nav: Nav
+ 		public navCtrl: NavController,	//Pile de pages
+    	public navParams: NavParams,	//Paramètres de navigation
+    	public nav: Nav 				//Gestionnaire de navigation
 	) {
 
  		if(navParams.get('database') == undefined) {
@@ -77,8 +77,21 @@ export class PageProvider {
 
 
 	addBDD(table: string, champs: Array<any>, values: Array<any>) {
-    	this.bdd.addBDD(table, champs, values);
+    	return this.bdd.addBDD(table, champs, values);
   	}
+
+  	/*------------------------------------------------*/
+    /*------------Appel la fonction update------------*/
+    /*------------------------------------------------*/
+    updateBDD(table, champs: Array<any>, values: Array<any>, where: string) {
+      this.bdd.update(table, champs, values, where);
+    }
+    /*------------------------------------------------*/
+    /*------------Appel la fonction delete------------*/
+    /*------------------------------------------------*/
+    deleteBDD(table: string, where: string) {
+      return this.bdd.viderTable(table, where)
+    }
 
   	viderTable(table: string) {
     	this.bdd.viderTable(table, '');

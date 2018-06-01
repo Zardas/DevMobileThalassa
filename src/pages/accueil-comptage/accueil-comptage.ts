@@ -5,10 +5,10 @@ import { NavController, NavParams, Nav } from 'ionic-angular';
 
 import { HomePage } from '../home/home';
 import { InventaireComptagePage } from '../inventaire-comptage/inventaire-comptage';
-import { ParametresComptagePage } from '../parametres-comptage/parametres-comptage';
 import { NouveauComptagePage } from '../nouveau-comptage/nouveau-comptage';
 
-import { DatabaseUtilisation } from '../../providers/databaseProvider/databaseProviderUtilisation';
+import { PageProvider } from '../../providers/page/page';
+
 /**
  * Generated class for the AccueilComptagePage page.
  *
@@ -22,13 +22,7 @@ import { DatabaseUtilisation } from '../../providers/databaseProvider/databasePr
   selector: 'page-accueil-comptage',
   templateUrl: 'accueil-comptage.html',
 })
-export class AccueilComptagePage {
-
-  //Liste des pages accessibles, utiliser pour les fonctions de navigation afin d'éviter que l'on puisse aller n'importe où
-	private pagesAccessibles: Map<String, any>;
-
-  //Provider possédant à la fois la base de donnée et la hash-map localData
-  public bdd: DatabaseUtilisation;
+export class AccueilComptagePage extends PageProvider {
 
   //La liste des scans correspondants au comptage ET correspondant à la string recherchée
   public comptage_searched: Array<any>;
@@ -43,32 +37,16 @@ export class AccueilComptagePage {
       private sanitizer: DomSanitizer
   	) {
 
- 		this.parametragePagesAccessibles();
-    
-    if(navParams.get('database') == undefined) {
-      this.refreshBDD();
-    } else {
-      this.bdd = navParams.get('database');
-    }
+    super(navCtrl, navParams, nav);
 
-    this.getComptageCorrespondant('');
+ 		this.parametragePagesAccessibles(['HomePage', 'InventaireComptagePage', 'NouveauComptagePage'], [HomePage, InventaireComptagePage, NouveauComptagePage]);
+
+    this.getComptageCorrespondant(''); //Réinitialise le scan et affiche tout les items relatifs au comptage
  	}
 
 
  	ionViewDidLoad() {
     console.log('ionViewDidLoad AccueilComptagePage');
- 	}
-
-	/*open = on met la page désirée sur le devant de la scène
- 	Mais la page précédente (this quoi) serra toujours derrière
- 	*/
- 	open(page) {
-  	this.navCtrl.push(this.pagesAccessibles[page]);
- 	}
-  
- 	//goTo = mettre en racine la page désirée -> différent de open
- 	goTo(page) {
-    this.nav.setRoot(this.pagesAccessibles[page], {database: this.bdd});
  	}
 
   //Un goTo spéciale pour aller à un comptage en particulier car il faut aussi fournir l'id du comptage
@@ -77,36 +55,20 @@ export class AccueilComptagePage {
   }
 
 
- 	/*---------------------------------------------------------------------*/
-  /*------------Fonction de paramétrage des pages accessibles------------*/
-  /*---------------------------------------------------------------------*/
-  parametragePagesAccessibles() {
-   	this.pagesAccessibles = new Map<String, any>();
-   	this.pagesAccessibles['HomePage'] = HomePage;
-   	this.pagesAccessibles['InventaireComptagePage'] = InventaireComptagePage;
-   	this.pagesAccessibles['ParametresComptagePage'] = ParametresComptagePage;
-    this.pagesAccessibles['NouveauComptagePage'] = NouveauComptagePage;
- 	}
 
 
-  /*----------------------------------------------------------------------------------*/
-  /*------------Créer une nouvelle base de données (avec les bonnes tables------------*/
-  /*----------------------------------------------------------------------------------*/
-  refreshBDD() {
-    this.bdd = new DatabaseUtilisation();
-  }
-
-  
 
 
-  addBDD(table: string, champs: Array<any>, values: Array<any>) {
-    this.bdd.addBDD(table, champs, values);
-  }
 
-  viderTable(table: string, where: string) {
-    this.bdd.viderTable(table, '');
-  }
 
+
+
+  /*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+
+  /*------------------------------------------------*/
+  /*------------Fonctions pour AngularJS------------*/
+  /*------------------------------------------------*/
   /*-------------------------------------------------------------------------------------------------------------*/
   /*------------Retourne la couleur du fond du badge en fonction de l'état (fermé ou non) du comptage------------*/
   /*-------------------------------------------------------------------------------------------------------------*/
@@ -144,6 +106,7 @@ export class AccueilComptagePage {
     }
   }
 
+
   /*------------------------------------------------------------------------------------
    * Trouve le nombre de scan (quantité, pas scan individuels) relatif au comptage this
    * Utilisé pour le badge à gauche de chaque comptage dans la liste
@@ -158,6 +121,7 @@ export class AccueilComptagePage {
     return nb;
   }
 
+
   /*------------------------------------------------------------------------------------------------------------------------------
    * Return "close" si la barre de recherche est ouvert et "search" sinon
    * Utilisé pour trouver quelle icône afficher à droite (loupe ou croix) en fonction de l'état de la searchbar (fermée ou ouverte)
@@ -169,7 +133,6 @@ export class AccueilComptagePage {
       return "search";
     }
   }
-
 
 
   /*------------------------------------------------------------------------------------------------------------------------------
@@ -185,6 +148,28 @@ export class AccueilComptagePage {
   }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+
+
+
+  /*-------------------------------------------------*/
+  /*------------Fonctions liées au search------------*/
+  /*-------------------------------------------------*/
   /*-----------------------------------------------------------------------------------------------------------------------------------------*/
   /*------------Créer la liste de tout les comptage possédant searched dans leur nom, en parcourant la liste de tout les comptage------------*/
   /*-----------------------------------------------------------------------------------------------------------------------------------------*/
@@ -204,6 +189,16 @@ export class AccueilComptagePage {
       this.comptage_searched = this.bdd.localData['comptage'];
     }
   }
+
+
+
+
+
+
+
+
+
+
 
 
 
