@@ -53,9 +53,10 @@ export class AccueilComptagePage extends PageSearchProvider {
     this.getComptageCorrespondant(''); //Réinitialise le scan et affiche tout les items relatifs au comptage
  	}
 
-
+  //S'éxecute quand la page est prêt
  	ionViewDidLoad() {
     console.log('ionViewDidLoad AccueilComptagePage');
+    //(document.getElementById("aucuneComptage") as HTMLElement).innerHTML = this.aucuneComptage();
  	}
 
   //Un goTo spéciale pour aller à un comptage en particulier car il faut aussi fournir l'id du comptage

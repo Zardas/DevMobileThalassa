@@ -56,6 +56,9 @@
     <button ion-button (click)="ajouteScanExempleNb(1000)">Ajouter 1000 exemples</button>
   </div>
 
+  <ion-spinner id="loading"></ion-spinner>
+  <h2 id="aucunScan"></h2>
+
   <ion-item *ngFor="let scan of scans_searched" id="item_scanned">
       <ion-badge item-begin id="badge" big>
         {{scan.quantite}}

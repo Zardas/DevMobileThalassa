@@ -65,7 +65,6 @@ export class InventaireComptagePage extends PageSearchProvider {
     private alertCtrl: AlertController,      //Permet d'afficher des alertes (pour le nom et la quantité des articles scanné)
     private loadingCtrl: LoadingController   //Contrôleur des indicateurs de chargement
   ) {
-
     super(navCtrl, navParams, nav);
 
     this.parametragePagesAccessibles(['AccueilComptagePage', 'ParametresComptagePage'], [AccueilComptagePage, ParametresComptagePage]);
@@ -77,14 +76,13 @@ export class InventaireComptagePage extends PageSearchProvider {
     } else {
       this.comptage = navParams.get('comptage');
     }
-
-    this.getScansCorrespondant(''); //Réinitialise le scan et affiche tout les items relatifs au comptage
   }
 
 
-
+  //S'éxecute quand la page ets chargée
   ionViewDidLoad() {
     console.log('InventaireComptage didLoad()');
+    this.getScansCorrespondant(''); //Réinitialise le scan et affiche tout les items relatifs au comptage
   }
 
 
@@ -137,16 +135,27 @@ export class InventaireComptagePage extends PageSearchProvider {
     this.scans_searched = new Array<any>();
 
     //On remplit le tableau scans
-    for(let i = 0 ; i < this.bdd.localData['scan'].length ; i++) {
+    /*for(let i = 0 ; i < this.bdd.localData['scan'].length ; i++) {
       if(this.bdd.localData['scan'][i].idComptage == this.comptage.idComptage) {
         scans.push(this.bdd.localData['scan'][i]);
       }
-    }
-    this.getBDD('scan', ['idComptage'], [this.comptage.idComptage]).then( data => {
-      console.log('TAILLE : ' + data.length);
-    })
+    }*/
+    //On sélectionne d'abord tout le scan correspondant au comptage
+    let loading = document.getElementById("loading") as HTMLElement;
+    let aucunScan = document.getElementById("aucunScan") as HTMLElement;
+    loading.style= "display: block";
+    aucunScan.innerHTML = "";
 
-    //on remplit le tableau scans_searched
+    this.getBDD('scan', ['idComptage'], [this.comptage.idComptage]).then( data => {
+      
+      loading.style = "display: none";
+      
+      for(let i = 0 ; i < data.length ; i++) {
+        scans.push(data[i]);
+      }
+      //loading.innerHTML = "";
+
+      //on remplit le tableau scans_searched
     if(searched != '') {
       console.log("Search");
       let re = new RegExp(searched.target.value, "i");
@@ -159,12 +168,21 @@ export class InventaireComptagePage extends PageSearchProvider {
       if(!this.item_par_item) {
         this.scans_searched = this.regroupeItem(this.scans_searched);
       }
+      //On affiche un message d'erreur s'il n'y a aucun résultat
+      if(this.scans_searched.length == 0) {
+        aucunScan.innerHTML = "Aucun scan ne correspond à cette recherche";
+      }
+
     } else {
       this.scans_searched = scans;
+      //On affiche un message d'erreur s'il n'y a aucun résultats
+      if(this.scans_searched.length == 0) {
+        aucunScan.innerHTML = "Vous n'avez encore rien scanné, appuyez sur le bouton en bas pour commencer";
+      }
     }
+    });    
   }
 
-  
 
 
 
@@ -431,7 +449,6 @@ export class InventaireComptagePage extends PageSearchProvider {
   /*--------------------------------------------------------------------------------------------------------------------*/
   ajoutScan(codeBarre: string, quantite: number, name: string, prix: number, prixBase, stockBase) {
     //if(this.checkFormatArticle(scan)) {
-      //let loading = this.presentLoadingAjouteScan();
       let currentDate = this.getCurrentDate();
       this.addBDD("scan", ["dateScan", "codeBarre", "designation", "idComptage", "quantite", "auteur", "prixEtiquette", "prixBase", "stockBase"], [currentDate, codeBarre, name, this.comptage.idComptage, quantite, "auteureeee", prix, prixBase, stockBase]).then( () => {
         this.scans_searched.push({dateScan: currentDate,
@@ -447,7 +464,7 @@ export class InventaireComptagePage extends PageSearchProvider {
         if(!this.item_par_item) {
           this.scans_searched = this.regroupeItem(this.scans_searched);
         }
-        //loading.dismiss();
+        (document.getElementById("aucunScan") as HTMLElement).innerHTML = "";
       });
     /*} else {
       console.log("Le code-barre scanné est invalide");
