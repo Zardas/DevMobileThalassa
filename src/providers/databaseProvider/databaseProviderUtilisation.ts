@@ -164,7 +164,7 @@ export class DatabaseUtilisation {
   getBDD(table: string, champs: Array<string>, values: Array<any>) {
     let where = "";
 
-    if(champs.length == 0 || values.length == 0) {
+    if(champs.length != 0 && values.length != 0) {
       where = "WHERE " + champs[0] + " = " + values[0];
       for(let i = 1 ; i < Math.min(champs.length, values.length) ; i++) {
         where = where + " AND " + champs[i] + " = " + values[i];

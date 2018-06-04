@@ -147,8 +147,10 @@ export class Database {
   	/*---Select tout les tuples de la table "table"---*/
   	/*------------------------------------------------*/
 	getData(table: string, where: string): Promise<any> {
-		var sql = "SELECT * FROM " + table + where;
+		var sql = "SELECT * FROM " + table + " " + where;
 
+		console.log('SQL de get : ' + sql);
+		console.log('WHERE : ' + where);
 		return this.db.executeSql(sql, {})
 			.then( result => {
 				//console.log("----Nombre de tuple dans la table : " + result.rows.length + "----");

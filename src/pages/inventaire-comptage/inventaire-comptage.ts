@@ -132,9 +132,6 @@ export class InventaireComptagePage extends PageSearchProvider {
   /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
   getScansCorrespondant(searched) {
 
-     this.getBDD('scan', ['codeBarre'], [3479560440460]).then( data => {
-      console.log('AAAAA : ' + data);
-     });
     //Scans = array contenant tout les scans correspondant au comptage en cours
     let scans = new Array<any>();
     this.scans_searched = new Array<any>();
@@ -145,6 +142,10 @@ export class InventaireComptagePage extends PageSearchProvider {
         scans.push(this.bdd.localData['scan'][i]);
       }
     }
+    this.getBDD('scan', ['idComptage'], [this.comptage.idComptage]).then( data => {
+      console.log('TAILLE : ' + data.length);
+    })
+
     //on remplit le tableau scans_searched
     if(searched != '') {
       console.log("Search");
@@ -565,12 +566,12 @@ export class InventaireComptagePage extends PageSearchProvider {
 
   ajouteScanExemple() {
     for(let i = 0 ; i < this.nbExemple ; i++) {
-      this.ajoutScan('11111111111', 1, 'Exemple', 2, 3, 10);
+      this.ajoutScan('1111111111111', 1, 'Exemple', 2, 3, 10);
     }
   }
   ajouteScanExempleNb(nb: number) {
     for(let i = 0 ; i < nb ; i++) {
-      this.ajoutScan('11111111111', 1, 'Exemple', 2, 3, 10);
+      this.ajoutScan('1111111111111', 1, 'Exemple', 2, 3, 10);
     }
   }
   getNbScanExemple() {
