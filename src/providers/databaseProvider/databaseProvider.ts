@@ -151,7 +151,7 @@ export class Database {
 
 		return this.db.executeSql(sql, {})
 			.then( result => {
-				console.log("----Nombre de tuple dans la table : " + result.rows.length + "----");
+				//console.log("----Nombre de tuple dans la table : " + result.rows.length + "----");
 				let toReturn: Array<any> = [];
 				for(let i = 0 ; i < result.rows.length ; i++) {
 					toReturn.push(result.rows.item(i));

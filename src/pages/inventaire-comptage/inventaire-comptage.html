@@ -47,7 +47,14 @@
     <ion-toggle (ionChange)="changeMode()"></ion-toggle>
   </p>
 
-  <!--<h2 [innerHTML]="aucuneScan()"></h2>-->
+  <ion-input type="number" [(ngModel)]="nbExemple" placeholder="Nombre de scans d'exemple à ajouter"></ion-input>
+  <button ion-button block (click)="ajouteScanExemple()">Ajouter {{getNbScanExemple()}} d'exemple</button>
+
+  <div>
+    <button ion-button (click)="ajouteScanExempleNb(10)">Ajouter 10 exemples</button>
+    <button ion-button (click)="ajouteScanExempleNb(100)">Ajouter 100 exemples</button>
+    <button ion-button (click)="ajouteScanExempleNb(1000)">Ajouter 1000 exemples</button>
+  </div>
 
   <ion-item *ngFor="let scan of scans_searched" id="item_scanned">
       <ion-badge item-begin id="badge" big>

@@ -74,10 +74,12 @@ export class PageProvider {
   	}
 
 
-	addBDD(table: string, champs: Array<any>, values: Array<any>) {
+    addBDD(table: string, champs: Array<any>, values: Array<any>) {
     	return this.bdd.addBDD(table, champs, values);
   	}
-
+    getBDD(table: string, champs: Array<any>, values: Array<any>) {
+      return this.bdd.getBDD(table, champs, values);
+    }
   	/*------------------------------------------------*/
     /*------------Appel la fonction update------------*/
     /*------------------------------------------------*/
@@ -90,14 +92,17 @@ export class PageProvider {
     deleteBDD(table: string, where: string) {
       return this.bdd.viderTable(table, where)
     }
-
+    /*---------------------------------------------*/
+    /*------------Vide toute les tables------------*/
+    /*---------------------------------------------*/
   	viderTable(table: string) {
     	this.bdd.viderTable(table, '');
   	}
-
+    /*---------------------------------------------*/
+    /*------------Drop toute les tables------------*/
+    /*---------------------------------------------*/
   	dropAllTables() {
     	this.bdd.dropAllTables();
   	}
-
 
 }

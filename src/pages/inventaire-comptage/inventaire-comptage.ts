@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Nav, ToastController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Nav, ToastController, AlertController, LoadingController } from 'ionic-angular';
 
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 
@@ -38,6 +38,8 @@ export class InventaireComptagePage extends PageSearchProvider {
   //True = on affiche tout les scans / False : on regroupe les scans par codeBarre
   public item_par_item = true;
 
+  public nbExemple: number;
+
   //Options pour le scanner
   private BarcodeOptions = {
     //Afficher le bouton pour changer l'orientation de la caméra
@@ -60,7 +62,8 @@ export class InventaireComptagePage extends PageSearchProvider {
     public nav: Nav,                         //Gestionnaire de navigation
     private toastCtrl: ToastController,      //Contrôleur des toast (les petits popup)
     private barcodeScanner: BarcodeScanner,  //Scanner des code-barrres
-    private alertCtrl: AlertController       //Permet d'afficher des alertes (pour le nom et la quantité des articles scanné)
+    private alertCtrl: AlertController,      //Permet d'afficher des alertes (pour le nom et la quantité des articles scanné)
+    private loadingCtrl: LoadingController   //Contrôleur des indicateurs de chargement
   ) {
 
     super(navCtrl, navParams, nav);
@@ -128,7 +131,10 @@ export class InventaireComptagePage extends PageSearchProvider {
   /*------------Créer la liste de tout les scans correspondant au comptage this et possédant searched dans leur nom, en parcourant la liste de tout les scans------------*/
   /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
   getScansCorrespondant(searched) {
-    console.log("Search");
+
+     this.getBDD('scan', ['codeBarre'], [3479560440460]).then( data => {
+      console.log('AAAAA : ' + data);
+     });
     //Scans = array contenant tout les scans correspondant au comptage en cours
     let scans = new Array<any>();
     this.scans_searched = new Array<any>();
@@ -141,6 +147,7 @@ export class InventaireComptagePage extends PageSearchProvider {
     }
     //on remplit le tableau scans_searched
     if(searched != '') {
+      console.log("Search");
       let re = new RegExp(searched.target.value, "i");
       for(let i = 0 ; i < scans.length ; i++) {
         if((scans[i].designation).search(re) != -1) {
@@ -423,6 +430,7 @@ export class InventaireComptagePage extends PageSearchProvider {
   /*--------------------------------------------------------------------------------------------------------------------*/
   ajoutScan(codeBarre: string, quantite: number, name: string, prix: number, prixBase, stockBase) {
     //if(this.checkFormatArticle(scan)) {
+      //let loading = this.presentLoadingAjouteScan();
       let currentDate = this.getCurrentDate();
       this.addBDD("scan", ["dateScan", "codeBarre", "designation", "idComptage", "quantite", "auteur", "prixEtiquette", "prixBase", "stockBase"], [currentDate, codeBarre, name, this.comptage.idComptage, quantite, "auteureeee", prix, prixBase, stockBase]).then( () => {
         this.scans_searched.push({dateScan: currentDate,
@@ -438,7 +446,7 @@ export class InventaireComptagePage extends PageSearchProvider {
         if(!this.item_par_item) {
           this.scans_searched = this.regroupeItem(this.scans_searched);
         }
-
+        //loading.dismiss();
       });
     /*} else {
       console.log("Le code-barre scanné est invalide");
@@ -545,7 +553,35 @@ export class InventaireComptagePage extends PageSearchProvider {
     return (yyyy + '-' + new_mm + '-' + new_dd + '-' + new_hh + "h" + new_mimi + "m" + new_ss + "s" + new_msmsms + "ms");
   }
 
+  presentLoadingAjouteScan() {
+    let loading = this.loadingCtrl.create({
+      content: 'Ajout du scan'
+    });
 
+    loading.present();
+
+    return loading;
+  }
+
+  ajouteScanExemple() {
+    for(let i = 0 ; i < this.nbExemple ; i++) {
+      this.ajoutScan('11111111111', 1, 'Exemple', 2, 3, 10);
+    }
+  }
+  ajouteScanExempleNb(nb: number) {
+    for(let i = 0 ; i < nb ; i++) {
+      this.ajoutScan('11111111111', 1, 'Exemple', 2, 3, 10);
+    }
+  }
+  getNbScanExemple() {
+    if(this.nbExemple > 1) {
+      return ("les " + this.nbExemple + " scans ");
+    } else if(this.nbExemple == 1) {
+      return "le scan";
+    } else {
+      return "aucun scan";
+    }
+  }
 
 
 
