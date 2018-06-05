@@ -37,6 +37,7 @@ ion-header {
 
 /*	AFFICHAGE COMPTAGES	*/
 ion-content {
+
 	ion-item {
 
 		#badge {
@@ -53,8 +54,6 @@ ion-content {
 				font-style: italic;
 			}	
 		}
-
-
 	}
 
 	
@@ -75,5 +74,8 @@ ion-content {
 		ion-item {
 			text-align: center;
 		}
+	}
+	#menu_contextuel ion-item:hover {
+		background-color: rgb(250,250,255);
 	}
 }

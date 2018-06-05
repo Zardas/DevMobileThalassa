@@ -228,17 +228,6 @@ export class InventaireComptagePage extends PageSearchProvider {
       return "Ouvrir";
     }
   }
-
-
-
-
-
-
-
-
-  /*---------------------------------------------*/
-  /*---Fonctions relatives au mode d'affichage---*/
-  /*---------------------------------------------*/
   /*--------------------------------------------*/
   /*---Indique le nom à afficher pour le scan---*/
   /*--------------------------------------------*/
@@ -251,6 +240,13 @@ export class InventaireComptagePage extends PageSearchProvider {
   }
 
 
+
+
+
+
+  /*----------------------------------------------------*/
+  /*---Fonctions liées aux changements des paramètres---*/
+  /*----------------------------------------------------*/
   /*--------------------------------*/
   /*---Change le mode d'affichage---*/
   /*--------------------------------*/
@@ -263,7 +259,6 @@ export class InventaireComptagePage extends PageSearchProvider {
       this.scans_searched = this.regroupeItem(this.scans_searched);
     }
   }
-
 
   /*-----------------------------------------------------------------------------------------------------------------------*/
   /*------------Renvoie un tableau comprenant les scan passés en paramètres, mais regroupés selon le code-barre------------*/

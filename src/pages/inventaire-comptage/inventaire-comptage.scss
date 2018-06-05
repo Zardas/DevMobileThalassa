@@ -1,6 +1,7 @@
 $XLBlue: #0cb3e8;
 $XLBlueDarker: #0069a2;
 $IonicBlue: #387ef5;
+$LightGray: rgb(224,224,224);
 
 page-inventaire-comptage {
 
@@ -65,17 +66,16 @@ page-inventaire-comptage {
 		}
 
 		#item_scanned {
-			width: 100%;
-			padding-left: 0;
+			padding-left: 2%;
 			padding-right: 0;
 
-			#item_comptage_sans_badge  {
-				
-			}
 			span {
 				float: right;
 				font-weight: bold;
 			}
+		}
+		#item_scanned:hover, #menu_contextuel ion-item:hover {
+			background-color: rgb(250,250,255);
 		}
 
 		#div_bas {
@@ -104,12 +104,12 @@ page-inventaire-comptage {
 			top: 0px;
 
 			width: 25%;
-			border: 1px solid rgb(224,224,224);
+			border: 1px solid $LightGray;
 
 			ion-item {
 				text-align: center;
 			}
-	}
+		}
 	}
 
 

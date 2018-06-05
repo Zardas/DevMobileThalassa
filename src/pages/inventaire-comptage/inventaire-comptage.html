@@ -35,12 +35,7 @@
 </ion-header>
 
 
-<ion-content padding>
-
-  <!-- Bouton "Envoyer les donées scannées dans la base de données" -->
-  <button ion-button block class="envoyerDansLaBase" color="XLblueDarker" class="transfererDonnees" (click)="presentToast('Les données ont été transférées')">
-    Ajouter les données scannées dans la base de données
-  </button>
+<ion-content padding-top>
 
   <!-- Menu contextuel -->
   <ion-list id="menu_contextuel" *ngIf="menuContextuelOpen">
@@ -48,11 +43,11 @@
     <ion-item no-lines>Créer une copie</ion-item>
     <ion-item no-lines (click)="comptage.ouvert = 1-comptage.ouvert">{{fermerOuOuvert()}}</ion-item>
     <ion-item no-lines (click)="deleteComptage()">Supprimer</ion-item>
-    <ion-item no-lines>Exporter</ion-item>
+    <ion-item no-lines (click)="presentToast('Les données ont été transférées')">Exporter</ion-item>
   </ion-list>
 
 
-  <!-- Boutons refresh (utilisé au cas où il y a un problème) -->
+  <!-- Boutons refresh (utilisés au cas où il y a un problème) -->
   <p id="refresh">
     <button ion-fab mini color="XLblue" (click)="getScansCorrespondant('')">
       <ion-icon name="refresh"></ion-icon>
@@ -64,7 +59,7 @@
     <ion-toggle (ionChange)="changeMode()"></ion-toggle>
   </p>
 
-
+  <!--
   <ion-input type="number" [(ngModel)]="nbExemple" placeholder="Nombre de scans d'exemple à ajouter"></ion-input>
   <button ion-button block (click)="ajouteScanExemple()">Ajouter {{getNbScanExemple()}} d'exemple</button>
 
@@ -75,9 +70,9 @@
     <button ion-button (click)="ajouteScanExempleNb(1000)">Ajouter 1000 exemples</button>
     <button ion-button (click)="ajouteScanExempleNb(10000)">Ajouter 10000 exemples</button>
   </div>
+  -->
 
-
-  <!-- Icone de loading (caché par défaut) -->
+  <!-- Icône de loading (cachée par défaut) -->
   <p id="loading">
     <ion-spinner></ion-spinner>
   </p>
