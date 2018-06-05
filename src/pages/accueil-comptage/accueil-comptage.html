@@ -33,7 +33,7 @@
 
   <!-- Menu contextuel -->
   <ion-list id="menu_contextuel" *ngIf="menuContextuelOpen">
-    <ion-item no-lines>Articles</ion-item>
+    <ion-item no-lines (click)="goTo('ListeArticlePage')">Articles</ion-item>
     <ion-item no-lines>Emplacements</ion-item>
     <ion-item no-lines>Paramètres</ion-item>
     <ion-item no-lines>Aide</ion-item>

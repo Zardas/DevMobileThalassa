@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Nav } from 'ionic-angular';
 
-import { ParametresGlobauxPage } from '../parametres-globaux/parametres-globaux';
+import { AccueilComptagePage } from '../accueil-comptage/accueil-comptage';
 import { NouveauArticlePage } from '../nouveau-article/nouveau-article';
 
 import { PageSearchProvider } from '../../providers/page/pageSearch';
@@ -33,8 +33,8 @@ export class ListeArticlePage extends PageSearchProvider {
   	super(navCtrl, navParams, nav);
 
   	this.parametragePagesAccessibles(
-      ['ParametresGlobauxPage', 'NouveauArticlePage'],
-      [ParametresGlobauxPage, NouveauArticlePage]
+      ['NouveauArticlePage', 'AccueilComptagePage'],
+      [NouveauArticlePage, AccueilComptagePage]
     );
 
     this.search('');
