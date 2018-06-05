@@ -46,7 +46,7 @@
   <ion-list id="menu_contextuel" *ngIf="menuContextuelOpen">
     <ion-item no-lines (click)="goToParam()">Modifier</ion-item>
     <ion-item no-lines>Créer une copie</ion-item>
-    <ion-item no-lines>Fermer</ion-item>
+    <ion-item no-lines (click)="comptage.ouvert = 1-comptage.ouvert">{{fermerOuOuvert()}}</ion-item>
     <ion-item no-lines (click)="deleteComptage()">Supprimer</ion-item>
     <ion-item no-lines>Exporter</ion-item>
   </ion-list>

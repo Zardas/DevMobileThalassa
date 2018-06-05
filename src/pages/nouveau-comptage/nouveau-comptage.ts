@@ -137,9 +137,7 @@ export class NouveauComptagePage extends PageProvider {
       //TODO : gérer l'auteur
       this.addBDD('comptage', ['idComptage', 'nomMagasin', 'dateDebut', 'nomTypeComptage', 'auteur', 'ouvert', 'nom'], [this.getIdNouveauComptage(), this.magasinComptage, this.getCurrentDate(), comptageType, 'Testeur', 1, this.nomComptage]).then( () => {
         this.goTo('AccueilComptagePage');
-      })
-      //console.log(this.getIdNouveauComptage());
-      //console.log(this.getCurrentDate());
+      });
     }
   }
 

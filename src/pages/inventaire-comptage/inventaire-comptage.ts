@@ -202,6 +202,40 @@ export class InventaireComptagePage extends PageSearchProvider {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /*---------------------------------*/
+  /*---Fonctions liées à angularJS---*/
+  /*---------------------------------*/
+  /*--------------------------------------------------------------------------------*/
+  /*---Indique si le bouton d'ouverture/fermeture va ouvrir ou fermer le comptage---*/
+  /*--------------------------------------------------------------------------------*/
+  fermerOuOuvert() {
+    if(this.comptage.ouvert) {
+      return "Fermer";
+    } else {
+      return "Ouvrir";
+    }
+  }
+
+
+
+
+
+
+
+
   /*---------------------------------------------*/
   /*---Fonctions relatives au mode d'affichage---*/
   /*---------------------------------------------*/
