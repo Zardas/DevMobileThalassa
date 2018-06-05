@@ -31,7 +31,7 @@ export class AccueilComptagePage extends PageSearchProvider {
   //Liste du nombre d'articles totaux pour chaque comptage (ce nombre ne change jamais donc il n'est pas forcément très cohérent de le recalculer tout le temp)
   public listeNbScanTotaux: Array<number>;
 
-  //Indique si l'on doit montrer le menu contextuel
+  //Indique si l'on doit montrer le menu contextuel (impossible à utiliser à cause d'un problème de synchronisité (issue #14))
   public menuContextuelOpen: boolean;
 
  	constructor(

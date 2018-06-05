@@ -43,6 +43,7 @@
   <!-- Liste des comptage -->
   <ion-item *ngFor="let comptage of comptage_searched">
     <ion-badge item-begin id="badge" [style.background-color]="setColorBadge(comptage)">
+      <!--{{findNBArticles(comptage)}}-->
       {{listeNbScanTotaux[comptage.idComptage-1]}}
       <!--<button ion-button (click)="ajouteScanExemple(comptage)" small><ion-icon name="add"></ion-icon></button>-->
     </ion-badge>

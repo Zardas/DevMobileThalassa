@@ -135,8 +135,9 @@ export class NouveauComptagePage extends PageProvider {
     //On ajoute dans la BDD si toute les validations sont passées
     if(nomValide && typeValide && magasinValide) {
       //TODO : gérer l'auteur
-      this.addBDD('comptage', ['idComptage', 'nomMagasin', 'dateDebut', 'nomTypeComptage', 'auteur', 'ouvert', 'nom'], [this.getIdNouveauComptage(), this.magasinComptage, this.getCurrentDate(), comptageType, 'Testeur', 1, this.nomComptage]);
-      this.goTo('AccueilComptagePage');
+      this.addBDD('comptage', ['idComptage', 'nomMagasin', 'dateDebut', 'nomTypeComptage', 'auteur', 'ouvert', 'nom'], [this.getIdNouveauComptage(), this.magasinComptage, this.getCurrentDate(), comptageType, 'Testeur', 1, this.nomComptage]).then( () => {
+        this.goTo('AccueilComptagePage');
+      })
       //console.log(this.getIdNouveauComptage());
       //console.log(this.getCurrentDate());
     }
