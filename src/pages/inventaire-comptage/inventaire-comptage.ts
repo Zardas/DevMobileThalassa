@@ -143,12 +143,12 @@ export class InventaireComptagePage extends PageSearchProvider {
     //On sélectionne d'abord tout le scan correspondant au comptage
     let loading = document.getElementById("loading") as HTMLElement;
     let aucunScan = document.getElementById("aucunScan") as HTMLElement;
-    loading.style= "display: block";
+    loading.style.display = 'block';
     aucunScan.innerHTML = "";
 
     this.getBDD('scan', ['idComptage'], [this.comptage.idComptage]).then( data => {
       
-      loading.style = "display: none";
+      loading.style.display = 'none';
       
       for(let i = 0 ; i < data.length ; i++) {
         scans.push(data[i]);
@@ -156,30 +156,30 @@ export class InventaireComptagePage extends PageSearchProvider {
       //loading.innerHTML = "";
 
       //on remplit le tableau scans_searched
-    if(searched != '') {
-      console.log("Search");
-      let re = new RegExp(searched.target.value, "i");
-      for(let i = 0 ; i < scans.length ; i++) {
-        if((scans[i].designation).search(re) != -1) {
-          this.scans_searched.push(scans[i]);
+      if(searched != '') {
+        console.log("Search");
+        let re = new RegExp(searched.target.value, "i");
+        for(let i = 0 ; i < scans.length ; i++) {
+          if((scans[i].designation).search(re) != -1) {
+            this.scans_searched.push(scans[i]);
+          }
+        }
+        //Si on est en mode item_regroupé, il faut encore regouper les items (logique...)
+        if(!this.item_par_item) {
+          this.scans_searched = this.regroupeItem(this.scans_searched);
+        }
+        //On affiche un message d'erreur s'il n'y a aucun résultat
+        if(this.scans_searched.length == 0) {
+          aucunScan.innerHTML = "Aucun scan ne correspond à cette recherche";
+        }
+
+      } else {
+        this.scans_searched = scans;
+        //On affiche un message d'erreur s'il n'y a aucun résultats
+        if(this.scans_searched.length == 0) {
+          aucunScan.innerHTML = "Vous n'avez encore rien scanné, appuyez sur le bouton en bas pour commencer";
         }
       }
-      //Si on est en mode item_regroupé, il faut encore regouper les items (logique...)
-      if(!this.item_par_item) {
-        this.scans_searched = this.regroupeItem(this.scans_searched);
-      }
-      //On affiche un message d'erreur s'il n'y a aucun résultat
-      if(this.scans_searched.length == 0) {
-        aucunScan.innerHTML = "Aucun scan ne correspond à cette recherche";
-      }
-
-    } else {
-      this.scans_searched = scans;
-      //On affiche un message d'erreur s'il n'y a aucun résultats
-      if(this.scans_searched.length == 0) {
-        aucunScan.innerHTML = "Vous n'avez encore rien scanné, appuyez sur le bouton en bas pour commencer";
-      }
-    }
     });    
   }
 
@@ -589,6 +589,7 @@ export class InventaireComptagePage extends PageSearchProvider {
   ajouteScanExempleNb(nb: number) {
     for(let i = 0 ; i < nb ; i++) {
       this.ajoutScan('1111111111111', 1, 'Exemple', 2, 3, 10);
+      console.log(i);
     }
   }
   getNbScanExemple() {

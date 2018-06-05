@@ -30,7 +30,7 @@
 
 <ion-content padding>
 
-  <h2 [innerHTML]="aucuneComptage()"></h2>
+  <h2>{{aucuneComptage()}}</h2>
 
   <ion-item *ngFor="let comptage of comptage_searched">
     <ion-badge item-begin id="badge" [style.background-color]="setColorBadge(comptage)">
