@@ -6,32 +6,41 @@
 -->
 <script src="../../assets/sql.js"></script>
 <ion-header>
-
   <ion-navbar color="XLblue">
 
 
   	<!-- Bouton logo (retourne au menu) -->
     <img src="assets/imgs/logoXLSoft.png" *ngIf="!isSearchbarOpened" (click)="goTo('HomePage')" id="img_title_left" />
 
-
+    <!-- Titre -->
     <ion-title id="title" icon-right *ngIf="!isSearchbarOpened">XLComptage</ion-title>
     
+    <!-- Barre de recherche -->
     <ion-searchbar *ngIf="isSearchbarOpened" showCancelButton="true" (search)="getComptageCorrespondant($event)" (ionCancel)="isSearchbarOpened=false" (ionClear)="getComptageCorrespondant('')"></ion-searchbar>
     
+    <!-- Boutons recherche et more -->
     <ion-buttons end>
       <button ion-button id="search" (click)="isSearchbarOpened=!isSearchbarOpened"><ion-icon [name]="getNameIcon()"></ion-icon></button>
-      <button ion-button id="more" (click)="goTo('ParametresGlobauxPage')"><ion-icon name="more"></ion-icon></button>
+      <!--<button ion-button id="more" (click)="goTo('ParametresGlobauxPage')"><ion-icon name="more"></ion-icon></button>-->
+      <button ion-button id="more" (click)="menuContextuelOpen=!menuContextuelOpen"><ion-icon name="more"></ion-icon></button>
     </ion-buttons>
 
 
   </ion-navbar>
-
 </ion-header>
 
 <ion-content padding>
 
-  <h2>{{aucuneComptage()}}</h2>
+  <!-- Menu contextuel -->
+  <ion-list id="menu_contextuel" *ngIf="menuContextuelOpen">
+    <ion-item no-lines>Articles</ion-item>
+    <ion-item no-lines>Emplacements</ion-item>
+    <ion-item no-lines>Paramètres</ion-item>
+    <ion-item no-lines>Aide</ion-item>
+  </ion-list>
 
+
+  <!-- Liste des comptage -->
   <ion-item *ngFor="let comptage of comptage_searched">
     <ion-badge item-begin id="badge" [style.background-color]="setColorBadge(comptage)">
       {{listeNbScanTotaux[comptage.idComptage-1]}}
@@ -45,9 +54,16 @@
     </div>
   </ion-item>
 
+  <!-- Message indiquant qu'il n'y a aucun comptage -->
+  <h2>{{aucuneComptage()}}</h2>
+
+
+  <!-- Bouton pour créer un nouveau comptage -->
   <ion-fab bottom center>
     <button ion-fab color="primary" (click)="goTo('NouveauComptagePage')">
       <ion-icon name="add"></ion-icon>
     </button>
   </ion-fab>
+
+
 </ion-content>

@@ -40,6 +40,9 @@ export class InventaireComptagePage extends PageSearchProvider {
 
   public nbExemple: number;
 
+  //Indique si l'on doit montrer le menu contextuel
+  public menuContextuelOpen: boolean;
+
   //Options pour le scanner
   private BarcodeOptions = {
     //Afficher le bouton pour changer l'orientation de la caméra
@@ -69,6 +72,8 @@ export class InventaireComptagePage extends PageSearchProvider {
 
     this.parametragePagesAccessibles(['AccueilComptagePage', 'ParametresComptagePage'], [AccueilComptagePage, ParametresComptagePage]);
 
+    this.menuContextuelOpen = false;
+    
     //On récupère le comptage
     if(navParams.get('comptage') == undefined) {
       this.comptage = new Array<any>();
@@ -613,6 +618,65 @@ export class InventaireComptagePage extends PageSearchProvider {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /*--------------------------------------------------------------------*/
+  /*------------Fonctions liées à la suppression du comptage------------*/
+  /*--------------------------------------------------------------------*/
+  /*-------------------------------------------------------------------------
+  * Affiche un pop-up demandant la confirmation de la suppression du comptage
+  * Utilisé lors de l'appui sur le bouton de suppression du comptage
+  *-------------------------------------------------------------------------*/
+  deleteComptage() {
+    let alert = this.alertCtrl.create({
+      title: 'Suppression de ' + this.comptage.nom,
+      message: 'Êtes-vous sûr de vouloir supprimer ' + this.comptage.nom + ' ?',
+      buttons: [
+        {
+          text: 'Non',
+          role: 'cancel',
+          handler: () => {
+            console.log('Suppression annulée');
+          }
+        },
+        {
+          text: 'Oui',
+          handler: () => {
+            this.deleteComptageConfirmed();
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  /*----------------------------------------------------------------------------------------*/
+  /*------------Supprime le comptage actuel et passe sur la page accueilComptage------------*/
+  /*----------------------------------------------------------------------------------------*/
+  deleteComptageConfirmed() {
+    //Avant de supprimer le comptage, il faut supprimer tout les scans qui lui sont associés
+    this.deleteBDD('scan', 'idComptage = ' + this.comptage.idComptage).then( () => {
+      this.deleteBDD('comptage', 'idComptage = ' + this.comptage.idComptage).then( () => {
+        this.goTo('AccueilComptagePage');
+      });
+    });
+  }
 
 
 

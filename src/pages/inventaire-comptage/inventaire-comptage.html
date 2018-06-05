@@ -15,6 +15,7 @@
   		<ion-icon name="menu"></ion-icon>
   	</button>-->
 
+    <!-- Titre et flèche de retour à l'accueil -->
     <ion-title (click)="goTo('AccueilComptagePage')" *ngIf="!isSearchbarOpened" icon-left>
       <ion-icon name="arrow-back"></ion-icon>
       {{comptage.nom}}
@@ -23,9 +24,11 @@
     <!--Searchbar-->
     <ion-searchbar *ngIf="isSearchbarOpened" showCancelButton="true" (search)="getScansCorrespondant($event)" (ionCancel)="isSearchbarOpened=false" (ionClear)="getScansCorrespondant('')"></ion-searchbar>
 
+    <!-- Bouton de recherche et icone more -->
     <ion-buttons end>
       <button ion-button id="search" (click)="isSearchbarOpened=!isSearchbarOpened"><ion-icon [name]="getNameIcon()"></ion-icon></button>
-      <button ion-button (click)="goToParam()" id="more"><ion-icon name="settings"></ion-icon></button>
+      <!--<button ion-button (click)="goToParam()" id="more"><ion-icon name="settings"></ion-icon></button>-->
+      <button ion-button (click)="menuContextuelOpen=!menuContextuelOpen"><ion-icon name="more"></ion-icon></button>
     </ion-buttons>
   </ion-navbar>
 
@@ -33,19 +36,34 @@
 
 
 <ion-content padding>
+
+  <!-- Bouton "Envoyer les donées scannées dans la base de données" -->
   <button ion-button block class="envoyerDansLaBase" color="XLblueDarker" class="transfererDonnees" (click)="presentToast('Les données ont été transférées')">
     Ajouter les données scannées dans la base de données
   </button>
 
+  <!-- Menu contextuel -->
+  <ion-list id="menu_contextuel" *ngIf="menuContextuelOpen">
+    <ion-item no-lines (click)="goToParam()">Modifier</ion-item>
+    <ion-item no-lines>Créer une copie</ion-item>
+    <ion-item no-lines>Fermer</ion-item>
+    <ion-item no-lines (click)="deleteComptage()">Supprimer</ion-item>
+    <ion-item no-lines>Exporter</ion-item>
+  </ion-list>
+
+
+  <!-- Boutons refresh (utilisé au cas où il y a un problème) -->
   <p id="refresh">
     <button ion-fab mini color="XLblue" (click)="getScansCorrespondant('')">
       <ion-icon name="refresh"></ion-icon>
     </button>
   </p>
+  <!-- Swtich pour changer le mode d'affichage -->
   <p id="changeMode">
     <ion-label>{{getNomMode()}}</ion-label>
     <ion-toggle (ionChange)="changeMode()"></ion-toggle>
   </p>
+
 
   <ion-input type="number" [(ngModel)]="nbExemple" placeholder="Nombre de scans d'exemple à ajouter"></ion-input>
   <button ion-button block (click)="ajouteScanExemple()">Ajouter {{getNbScanExemple()}} d'exemple</button>
@@ -55,11 +73,18 @@
     <button ion-button (click)="ajouteScanExempleNb(10)">Ajouter 10 exemples</button>
     <button ion-button (click)="ajouteScanExempleNb(100)">Ajouter 100 exemples</button>
     <button ion-button (click)="ajouteScanExempleNb(1000)">Ajouter 1000 exemples</button>
+    <button ion-button (click)="ajouteScanExempleNb(10000)">Ajouter 10000 exemples</button>
   </div>
 
-  <ion-spinner id="loading"></ion-spinner>
+
+  <!-- Icone de loading (caché par défaut) -->
+  <p id="loading">
+    <ion-spinner></ion-spinner>
+  </p>
+  <!-- Texte indiquant qu'il n'y a aucun scan (caché par défaut) -->
   <h2 id="aucunScan"></h2>
 
+  <!-- Liste des scans relatifs au comptage et adapté au mode d'affichage -->
   <ion-item *ngFor="let scan of scans_searched" id="item_scanned">
       <ion-badge item-begin id="badge" big>
         {{scan.quantite}}
@@ -74,6 +99,7 @@
   </ion-item>
   
 
+  <!-- Bouton de scan -->
   <ion-fab bottom center *ngIf="comptage.ouvert == 1">
     <button ion-fab color="primary" (click)="scanBarcode()">
       <ion-icon name="camera"></ion-icon>

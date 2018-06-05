@@ -31,6 +31,9 @@ export class AccueilComptagePage extends PageSearchProvider {
   //Liste du nombre d'articles totaux pour chaque comptage (ce nombre ne change jamais donc il n'est pas forcément très cohérent de le recalculer tout le temp)
   public listeNbScanTotaux: Array<number>;
 
+  //Indique si l'on doit montrer le menu contextuel
+  public menuContextuelOpen: boolean;
+
  	constructor(
   		public navCtrl: NavController,
   		public navParams: NavParams,
@@ -48,7 +51,7 @@ export class AccueilComptagePage extends PageSearchProvider {
       [HomePage, InventaireComptagePage, NouveauComptagePage, ParametresGlobauxPage]
     );
 
-    
+    this.menuContextuelOpen = false;
 
     this.getComptageCorrespondant(''); //Réinitialise le scan et affiche tout les items relatifs au comptage
  	}

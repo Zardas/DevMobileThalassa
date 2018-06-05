@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 
-
+// Explication de pourquoi privilégié SQLite aux autres sgbd : https://courses.cs.washington.edu/courses/cse544/13sp/final-projects/p19-tperrier.pdf
 interface champ {
 	nom: string;
 	type: string;
