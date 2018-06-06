@@ -163,7 +163,7 @@ export class NouveauArticlePage extends PageProvider {
     //Affichage message d'erreur si le prixCentime est invalide (?)
     let invalidMessage_prixCentime = document.getElementById("invalidMessage_prixCentime") as HTMLElement;
     if(!prixcentimeValide) {
-      invalidMessage_prixCentime.innerHTML = "Vous devez rentrer un prix en centime valide";
+      invalidMessage_prixCentime.innerHTML = "Vous devez rentrer un prix en centimes valide";
     } else {
       invalidMessage_prixCentime.innerHTML = "";
     }

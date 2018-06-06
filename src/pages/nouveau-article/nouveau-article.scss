@@ -1,23 +1,47 @@
+$XLBlue: #0cb3e8;
+$XLBlueDarker: #0069a2;
+$redSoft: #f44336;
+
 page-nouveau-article {
 
+	ion-navbar {
+		ion-buttons {
+			ion-icon {
+				margin-right: 5px;
+			}
+		}
+	}
+
 	ion-content {
+		ion-title {
+			text-align: center;
+			margin-bottom: 10px;
+		}
+
 		ion-item {
 			ion-label {
 				text-align: right;
-			}
-
+			}			
 		}
 
-		#item_prix_stock {
+		#item, #prix_global_div {
+			margin-bottom: 20px;
+		}
+
+		#prix_global_div {
 			text-align: center;
 
-			ion-input {
-				width: 40%;
+			#item_prix {
 				display: inline-block;
+				width: 45%;
 			}
 		}
-		#separation {
-			margin-bottom: 30px;
+
+		#invalidMessage_nom, #invalidMessage_codeBarre, #invalidMessage_prixEuro, #invalidMessage_prixCentime, #invalidMessage_stock {
+			margin-bottom: 20px;
+			text-align: center;
+			color: $redSoft;
 		}
+
 	}
 }
