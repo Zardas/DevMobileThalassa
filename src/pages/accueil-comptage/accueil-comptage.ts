@@ -58,7 +58,6 @@ export class AccueilComptagePage extends PageSearchProvider {
   //S'éxecute quand la page est prêt
  	ionViewDidLoad() {
     console.log('ionViewDidLoad AccueilComptagePage');
-    //(document.getElementById("aucuneComptage") as HTMLElement).innerHTML = this.aucuneComptage();
     this.search(''); //Réinitialise le scan et affiche tout les items relatifs au comptage
  	}
 
@@ -205,7 +204,7 @@ export class AccueilComptagePage extends PageSearchProvider {
     loading.style.display = 'block';
 
     //on remplit le tableau scans_searched
-    if(searched != '') {
+    /*if(searched != '') {
       let re = new RegExp(searched.target.value, "i");
       for(let i = 0 ; i < this.bdd.localData['comptage'].length ; i++) {
         if((this.bdd.localData['comptage'][i].nom).search(re) != -1) {
@@ -214,9 +213,31 @@ export class AccueilComptagePage extends PageSearchProvider {
       }
     } else {
       this.comptage_searched = this.bdd.localData['comptage'];
-    }
+    }*/
 
-    loading.style.display = 'none';
+    this.getBDD('comptage', [], []).then( data => {
+      this.comptage_searched = [];
+
+      if(searched == '') {
+
+        for(let i = 0 ; i < data.length ; i++) {
+          this.comptage_searched.push(data[i]);
+        }
+
+      } else {
+
+        let re = new RegExp(searched.target.value, "i");
+        for(let i = 0 ; i < data.length ; i++) {
+          if((data[i].nom).search(re) != -1) {
+            this.comptage_searched.push(data[i]);
+          }
+        }
+
+      }
+      loading.style.display = 'none';
+    });
+
+    
   }
 
 

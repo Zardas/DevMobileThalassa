@@ -21,7 +21,7 @@ export class DatabaseUtilisation {
 	private database: Database;
 
 	//Liste des tables de database
-	private tables: Array<table>;
+	public tables: Array<table>;
 
 	//Données en local utilisé par angular pour afficher les valeurs dynamiquement dans le html et synchronisé avec le contenu de la base à chaque requête et chargement de cette page
 	public localData: Map<String, Array<any>>;
@@ -181,7 +181,27 @@ export class DatabaseUtilisation {
       })
     ;
   }
+  /*-------------------*/
+  /*---Get d'un data (avec un WHERE custom)
+   * Utilisé pour les fonctions de search ou il ne faut pas l'opérateur = mais l'opérateur REGEXP---*/
+  /*-------------------*/
+  getBDDCustom(table: string, whereCustom: string) {
+    let where = "";
 
+    if(whereCustom.length != 0) {
+      where = "WHERE " + whereCustom;
+    }
+
+    return this.database.getData(table, where)
+      .then( data => {       
+        return data;
+      })
+      .catch( err => {
+        console.warn("Problème avec le get sur la table " + table + " : " + err);
+        return err;
+      })
+    ;
+  }
 
   /*---------------------------------------------*/
   /*---Update d'un tuple dans la table "table"---*/

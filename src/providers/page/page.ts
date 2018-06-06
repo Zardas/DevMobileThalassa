@@ -32,7 +32,7 @@ export class PageProvider {
 	) {
 
  		if(navParams.get('database') == undefined) {
-      		this.refreshBDD();
+      	this.refreshBDD();
     	} else {
       	this.bdd = navParams.get('database');
     	}
@@ -71,6 +71,7 @@ export class PageProvider {
   	/*----------------------------------------------------------------------------------*/
   	refreshBDD() {
     	this.bdd = new DatabaseUtilisation();
+      return this.bdd;
   	}
 
 
@@ -79,6 +80,9 @@ export class PageProvider {
   	}
     getBDD(table: string, champs: Array<any>, values: Array<any>) {
       return this.bdd.getBDD(table, champs, values);
+    }
+    getBDDCustom(table: string, where: string) {
+      return this.bdd.getBDDCustom(table, where);
     }
   	/*------------------------------------------------*/
     /*------------Appel la fonction update------------*/
