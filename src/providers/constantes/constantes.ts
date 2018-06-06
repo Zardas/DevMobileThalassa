@@ -15,15 +15,19 @@ export class ConstantesProvider {
 	public tailleMaxNomComptage: number;
 
   //Taille maximale des noms des articles
-  public tailleMaxNomArticle;
+  public tailleMaxNomArticle: number;
 
 	//Taille maximale des codes-barres
   public tailleMaxCodeBarre: number;
 
+  //Taille maximale des noms de magasins
+  public tailleMaxNomMagasin: number;
+
  	constructor() {
     	this.tailleMaxNomComptage = 50;
       this.tailleMaxNomArticle = 200;
-    	this.tailleMaxCodeBarre = 60
+    	this.tailleMaxCodeBarre = 60;
+      this.tailleMaxNomMagasin = 200;
  	}
 
 }

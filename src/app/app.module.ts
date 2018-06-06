@@ -15,6 +15,7 @@ import { ParametresComptagePage } from '../pages/parametres-comptage/parametres-
 import { ParametresGlobauxPage } from '../pages/parametres-globaux/parametres-globaux';
 import { NouveauComptagePage } from '../pages/nouveau-comptage/nouveau-comptage';
 import { NouveauArticlePage } from '../pages/nouveau-article/nouveau-article';
+import { NouveauMagasinPage } from '../pages/nouveau-magasin/nouveau-magasin';
 import { ListeArticlePage } from '../pages/liste-article/liste-article';
 import { ListeMagasinPage } from '../pages/liste-magasin/liste-magasin';
 
@@ -30,7 +31,8 @@ import { ListeMagasinPage } from '../pages/liste-magasin/liste-magasin';
     ListeArticlePage,
     ListeMagasinPage,
     NouveauComptagePage,
-    NouveauArticlePage
+    NouveauArticlePage,
+    NouveauMagasinPage
   ],
   imports: [BrowserModule, HttpModule, IonicModule.forRoot(MyApp)],
   bootstrap: [IonicApp],
@@ -44,7 +46,8 @@ import { ListeMagasinPage } from '../pages/liste-magasin/liste-magasin';
     ListeArticlePage,
     ListeMagasinPage,
     NouveauComptagePage,
-    NouveauArticlePage
+    NouveauArticlePage,
+    NouveauMagasinPage
   ],
   providers: [
     StatusBar,

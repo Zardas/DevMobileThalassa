@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Nav } from 'ionic-angular';
 
 import { AccueilComptagePage } from '../accueil-comptage/accueil-comptage';
+import { NouveauMagasinPage } from '../nouveau-magasin/nouveau-magasin';
 
 import { PageSearchProvider } from '../../providers/page/pageSearch';
 /**
@@ -31,15 +32,15 @@ export class ListeMagasinPage extends PageSearchProvider {
   	super(navCtrl, navParams, nav);
 
   	this.parametragePagesAccessibles(
-      ['AccueilComptagePage'],
-      [AccueilComptagePage]
+      ['AccueilComptagePage', 'NouveauMagasinPage'],
+      [AccueilComptagePage, NouveauMagasinPage]
     );
 
-    this.search('');
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ListeArticlePage');
+    this.search('');
   }
 
 

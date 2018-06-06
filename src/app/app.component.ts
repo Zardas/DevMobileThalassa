@@ -13,6 +13,7 @@ import { ListeArticlePage } from '../pages/liste-article/liste-article';
 import { ListeMagasinPage } from '../pages/liste-magasin/liste-magasin';
 import { NouveauComptagePage } from '../pages/nouveau-comptage/nouveau-comptage';
 import { NouveauArticlePage } from '../pages/nouveau-article/nouveau-article';
+import { NouveauMagasinPage } from '../pages/nouveau-magasin/nouveau-magasin';
 
 
 @Component({
@@ -43,7 +44,8 @@ export class MyApp {
       { title: 'Liste articles', component: ListeArticlePage },
       { title: 'Liste magasins', component: ListeMagasinPage },
       { title: 'Nouveau Comptage', component: NouveauComptagePage },
-      { title: 'Nouvel Article', component: NouveauArticlePage}
+      { title: 'Nouvel Article', component: NouveauArticlePage },
+      { title: 'Nouveau Magasin', component: NouveauMagasinPage }
     ];
 
   }

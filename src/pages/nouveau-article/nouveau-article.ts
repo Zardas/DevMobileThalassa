@@ -41,12 +41,16 @@ export class NouveauArticlePage extends PageProvider {
 
   	super(navCtrl, navParams, nav);
 
-  	this.parametragePagesAccessibles(['ListeArticlePage'], [ListeArticlePage]);
+  	this.parametragePagesAccessibles(
+      ['ListeArticlePage'],
+      [ListeArticlePage]
+    );
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad NouveauArticlePage');
   }
+
 
 
 
