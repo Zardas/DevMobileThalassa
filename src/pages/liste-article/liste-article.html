@@ -37,8 +37,12 @@
 
 <ion-content padding-top>
 
-
-	<ion-title>Articles</ion-title>
+  <!-- Icône de loading (cachée par défaut) -->
+  <p id="loading">
+    <ion-spinner></ion-spinner>
+  </p>
+  <!-- Message indiquant qu'il n'y a aucun comptage -->
+  <h2>{{aucuneComptage()}}</h2>
 
 	<ion-item *ngFor="let article of article_searched">
 		{{article.codeBarre}} : {{article.designation}}

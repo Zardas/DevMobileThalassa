@@ -54,6 +54,33 @@ export class ListeArticlePage extends PageSearchProvider {
 
 
 
+
+
+
+
+  /*------------------------------------------------*/
+  /*------------Fonctions pour AngularJS------------*/
+  /*------------------------------------------------*/
+  /*------------------------------------------------------------------------------------------------------------------------------
+   * Return "Il n'y a actuellement aucun article, appuyez sur le + en bas pour en créer un" s'il n'y a aucune article et "" sinon
+   * Utilisé pour indiquer à l'utilisateur ce qu'il doit faire si il n'y a aucun article
+   *----------------------------------------------------------------------------------------------------------------------------*/
+  aucuneComptage() {
+    if(this.bdd.localData['article'].length == 0) {
+      return "Il n'y a actuellement aucun article, appuyez sur le + en bas pour en créer un";
+    } else {
+      return "";
+    }
+  }
+
+
+
+
+
+
+
+
+
   /*-------------------------------------------------*/
   /*------------Fonctions liées au search------------*/
   /*-------------------------------------------------*/
@@ -64,16 +91,30 @@ export class ListeArticlePage extends PageSearchProvider {
     console.log("Search");
     this.article_searched = new Array<any>();
 
-    //on remplit le tableau scans_searched
-    if(searched != '') {
-      let re = new RegExp(searched.target.value, "i");
-      for(let i = 0 ; i < this.bdd.localData['article'].length ; i++) {
-        if((this.bdd.localData['article'][i].designation).search(re) != -1) {
-          this.article_searched.push(this.bdd.localData['article'][i]);
+    let loading = document.getElementById("loading") as HTMLElement;
+    loading.style.display = 'block';
+
+    this.getBDD('article', [], []).then( data => {
+      this.article_searched = [];
+
+      if(searched == '') {
+
+        for(let i = 0 ; i < data.length ; i++) {
+          this.article_searched.push(data[i]);
         }
+
+      } else {
+
+        let re = new RegExp(searched.target.value, "i");
+        for(let i = 0 ; i < data.length ; i++) {
+          if((data[i].designation).search(re) != -1) {
+            this.article_searched.push(data[i]);
+          }
+        }
+
       }
-    } else {
-      this.article_searched = this.bdd.localData['article'];
-    }
+      loading.style.display = 'none';
+    });
   }
+
 }
