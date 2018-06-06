@@ -37,11 +37,11 @@ export class ListeArticlePage extends PageSearchProvider {
       [NouveauArticlePage, AccueilComptagePage]
     );
 
-    this.search('');
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ListeArticlePage');
+    this.search('');
   }
 
   getStock(article: any) {

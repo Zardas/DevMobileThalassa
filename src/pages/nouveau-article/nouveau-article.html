@@ -1,49 +1,74 @@
 <!--
-  Generated template for the NouveauArticlePage page.
+  Generated template for the NouveauComptagePage page.
 
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
+<script src="../../assets/sql.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 <ion-header>
 
   <ion-navbar color="XLblue">
-    <ion-title (click)="goTo('ListeArticlePage')">
-      <ion-icon name="arrow-back"></ion-icon>
-      Retour à la liste des articles
-    </ion-title>
+    <ion-buttons begin>
+      <button ion-button (click)="goTo('ListeArticlePage')" id="button">
+        <ion-icon name="arrow-back"></ion-icon>
+        Annuler
+      </button>
+    </ion-buttons>
 
-  <ion-buttons end id="enregistrer">
-    <button ion-button (click)="enregistrerArticle()">Enregistrer</button>
-  </ion-buttons>
-
+    <ion-buttons end>
+      <button ion-button (click)="enregistrerArticle()">Enregistrer</button>
+    </ion-buttons>
   </ion-navbar>
+
 </ion-header>
 
 
 <ion-content padding>
+  <ion-title>Nouveau Article</ion-title>
 
-	<!--Nom-->
-  <ion-item>
-    <ion-label stacked id="label_designation">
+  <!--Designation-->
+  <ion-item id="item_nouveauNom">
+    <ion-label stacked id="label_nom">
       <span [innerHTML]="getNameLength()"></span>
       /{{constantes.tailleMaxNomArticle}}
     </ion-label>
-    <ion-input type="text" [(ngModel)]="nomArticle" placeholder="Saisir un nom" [maxlength]="constantes.tailleMaxNomArticle"></ion-input>
+    <ion-input type="text" [(ngModel)]="nomArticle" id="newName" placeholder="Saisir un nom" [maxlength]="constantes.tailleMaxNomArticle"></ion-input>
+    <span>Vous devez rentrer un nom valide</span>
   </ion-item>
-  <p id="separation"></p> <!--Pour une raison obscure, margin-bottom ne marche pas sur les ion-item-->
+  <p id="invalidMessage_nom"></p>
 
-  <!--CodeBarre-->
-  <ion-item>
-    <ion-label stacked id="label_codeBarre">
+  <!--Code-barre-->
+  <ion-item id="item_nouveauNom">
+    <ion-label stacked id="label_nom">
       <span [innerHTML]="getCodeBarreLength()"></span>
+      /{{constantes.tailleMaxCodeBarre}}
     </ion-label>
-    <ion-input type="text" [(ngModel)]="codeBarre" placeholder="Saisir un code-barre" [maxlength]="constantes.tailleMaxCodeBarre"></ion-input>
+    <ion-input type="number" [(ngModel)]="codeBarre" id="newName" placeholder="Saisir un code-barre" [maxlength]="constantes.tailleMaxCodeBarre"></ion-input>
+    <span>Vous devez rentrer un codebarre valide</span>
   </ion-item>
-  <p id="separation"></p>
+  <p id="invalidMessage_codeBarre"></p>
 
-  <!--Prix et stock-->
-  <div id="item_prix_stock">
-    <ion-input type="number" [(ngModel)]="prix" placeholder="Saisir un prix" id="input_prix"></ion-input>
-    <ion-input type="number" [(ngModel)]="stock" placeholder="Saisir un stock"></ion-input>
-  </div>
+  <!--Prix-->
+  <ion-item id="item_prix">
+      <ion-label stacked id="label_nom"><span>En euros</span></ion-label>
+      <ion-input type="number" [(ngModel)]="prixEuro" placeholder="Saisir le prix en euros"></ion-input>
+      <span>Vous devez rentrer un prix en euros valide</span>
+  </ion-item>
+  <ion-item id="item_prix">  
+      <ion-label stacked id="label_nom"><span>En euros</span></ion-label>
+      <ion-input type="number" [(ngModel)]="prixCentime" placeholder="Saisir le prix en centimes" [maxlength]="2"></ion-input>
+      <span>Vous devez rentrer un prix en centimes valide</span>
+  </ion-item>
+  <p id="invalidMessage_prixEuro"></p>
+  <p id="invalidMessage_prixCentime"></p>
+
+  <!--Stock-->
+  <ion-item>
+    <ion-label stacked id="label_nom"><span [innerHTML]="getStock()"></span></ion-label>
+    <ion-input type="number" [(ngModel)]="stock" placeholder="Saisir la quantité en stock"></ion-input>
+    <span>Vous devez rentrer un stock valide</span>
+  </ion-item>
+  <p id="invalidMessage_stock"></p>
+  
 </ion-content>
