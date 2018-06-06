@@ -53,14 +53,13 @@ export class AccueilComptagePage extends PageSearchProvider {
     );
 
     this.menuContextuelOpen = false;
-
-    this.getComptageCorrespondant(''); //Réinitialise le scan et affiche tout les items relatifs au comptage
  	}
 
   //S'éxecute quand la page est prêt
  	ionViewDidLoad() {
     console.log('ionViewDidLoad AccueilComptagePage');
     //(document.getElementById("aucuneComptage") as HTMLElement).innerHTML = this.aucuneComptage();
+    this.search(''); //Réinitialise le scan et affiche tout les items relatifs au comptage
  	}
 
   //Un goTo spéciale pour aller à un comptage en particulier car il faut aussi fournir l'id du comptage
@@ -198,9 +197,12 @@ export class AccueilComptagePage extends PageSearchProvider {
   /*-----------------------------------------------------------------------------------------------------------------------------------------*/
   /*------------Créer la liste de tout les comptage possédant searched dans leur nom, en parcourant la liste de tout les comptage------------*/
   /*-----------------------------------------------------------------------------------------------------------------------------------------*/
-  getComptageCorrespondant(searched) {
+  search(searched) {
     console.log("Search");
     this.comptage_searched = new Array<any>();
+
+    let loading = document.getElementById("loading") as HTMLElement;
+    loading.style.display = 'block';
 
     //on remplit le tableau scans_searched
     if(searched != '') {
@@ -213,6 +215,8 @@ export class AccueilComptagePage extends PageSearchProvider {
     } else {
       this.comptage_searched = this.bdd.localData['comptage'];
     }
+
+    loading.style.display = 'none';
   }
 
 

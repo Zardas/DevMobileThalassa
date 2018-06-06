@@ -22,7 +22,7 @@
     </ion-title>
 
     <!--Searchbar-->
-    <ion-searchbar *ngIf="isSearchbarOpened" showCancelButton="true" (search)="getScansCorrespondant($event)" (ionCancel)="isSearchbarOpened=false" (ionClear)="getScansCorrespondant('')"></ion-searchbar>
+    <ion-searchbar *ngIf="isSearchbarOpened" showCancelButton="true" (search)="search($event)" (ionCancel)="isSearchbarOpened=false" (ionClear)="search('')"></ion-searchbar>
 
     <!-- Bouton de recherche et icone more -->
     <ion-buttons end>
@@ -49,7 +49,7 @@
 
   <!-- Boutons refresh (utilisés au cas où il y a un problème) -->
   <p id="refresh">
-    <button ion-fab mini color="XLblue" (click)="getScansCorrespondant('')">
+    <button ion-fab mini color="XLblue" (click)="search('')">
       <ion-icon name="refresh"></ion-icon>
     </button>
   </p>

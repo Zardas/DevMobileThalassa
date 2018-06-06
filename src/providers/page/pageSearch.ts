@@ -14,13 +14,13 @@ export class PageSearchProvider extends PageProvider {
   	public isSearchbarOpened = false;
 
 	/*------------------------------------*/
-  	/*------------Constructeur------------*/
-  	/*------------------------------------*/
-  	constructor(
-    	public navCtrl: NavController,           //Pile de pages
-    	public navParams: NavParams,             //Paramètres de navigation
-    	public nav: Nav,                         //Gestionnaire de navigation
-  	) {
+  /*------------Constructeur------------*/
+  /*------------------------------------*/
+  constructor(
+   	public navCtrl: NavController,           //Pile de pages
+   	public navParams: NavParams,             //Paramètres de navigation
+   	public nav: Nav,                         //Gestionnaire de navigation
+  ) {
 		super(navCtrl, navParams, nav);
 	}
 

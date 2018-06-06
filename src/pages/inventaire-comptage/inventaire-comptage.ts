@@ -87,7 +87,7 @@ export class InventaireComptagePage extends PageSearchProvider {
   //S'éxecute quand la page ets chargée
   ionViewDidLoad() {
     console.log('InventaireComptage didLoad()');
-    this.getScansCorrespondant(''); //Réinitialise le scan et affiche tout les items relatifs au comptage
+    this.search(''); //Réinitialise le scan et affiche tout les items relatifs au comptage
   }
 
 
@@ -133,7 +133,7 @@ export class InventaireComptagePage extends PageSearchProvider {
   /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
   /*------------Créer la liste de tout les scans correspondant au comptage this et possédant searched dans leur nom, en parcourant la liste de tout les scans------------*/
   /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-  getScansCorrespondant(searched) {
+  search(searched) {
 
     //Scans = array contenant tout les scans correspondant au comptage en cours
     let scans = new Array<any>();
@@ -254,7 +254,7 @@ export class InventaireComptagePage extends PageSearchProvider {
     this.item_par_item = !this.item_par_item;
 
     if(this.item_par_item) {
-      this.getScansCorrespondant('');
+      this.search('');
     } else {
       this.scans_searched = this.regroupeItem(this.scans_searched);
     }

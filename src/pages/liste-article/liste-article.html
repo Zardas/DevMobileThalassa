@@ -21,12 +21,14 @@
 
   
     <ion-navbar color="XLblue" padding-left padding-right>
-      <ion-buttons id="leftSide">
+      <ion-searchbar *ngIf="isSearchbarOpened" showCancelButton="true" (search)="search($event)" (ionCancel)="isSearchbarOpened=false" (ionClear)="search('')"></ion-searchbar>
+
+      <ion-buttons id="leftSide" *ngIf="!isSearchbarOpened">
         <button ion-button icon-only (click)="goTo('AccueilComptagePage')"><ion-icon name="arrow-back"></ion-icon></button>
       </ion-buttons>
-      <ion-title>Liste des articles</ion-title>
+      <ion-title *ngIf="!isSearchbarOpened">Liste des articles</ion-title>
       <ion-buttons id="rightSide">
-        <button ion-button icon-only><ion-icon name="search"></ion-icon></button>
+        <button ion-button icon-only (click)="isSearchbarOpened=!isSearchbarOpened"><ion-icon [name]="getNameIcon()"></ion-icon></button>
       </ion-buttons>
       
     </ion-navbar>

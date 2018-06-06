@@ -20,7 +20,7 @@ import { NouveauArticlePage } from '../pages/nouveau-article/nouveau-article';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage = HomePage;
+  rootPage = AccueilComptagePage;
   pages: Array<{title: string, component: any}>;
 
 

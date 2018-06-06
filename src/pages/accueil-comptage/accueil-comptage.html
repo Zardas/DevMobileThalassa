@@ -16,7 +16,7 @@
     <ion-title id="title" icon-right *ngIf="!isSearchbarOpened">XLComptage</ion-title>
     
     <!-- Barre de recherche -->
-    <ion-searchbar *ngIf="isSearchbarOpened" showCancelButton="true" (search)="getComptageCorrespondant($event)" (ionCancel)="isSearchbarOpened=false" (ionClear)="getComptageCorrespondant('')"></ion-searchbar>
+    <ion-searchbar *ngIf="isSearchbarOpened" showCancelButton="true" (search)="search($event)" (ionCancel)="isSearchbarOpened=false" (ionClear)="search('')"></ion-searchbar>
     
     <!-- Boutons recherche et more -->
     <ion-buttons end>
@@ -24,6 +24,7 @@
       <!--<button ion-button id="more" (click)="goTo('ParametresGlobauxPage')"><ion-icon name="more"></ion-icon></button>-->
       <button ion-button id="more" (click)="menuContextuelOpen=!menuContextuelOpen"><ion-icon name="more"></ion-icon></button>
     </ion-buttons>
+
 
 
   </ion-navbar>
@@ -55,6 +56,11 @@
     </div>
   </ion-item>
 
+
+  <!-- Icône de loading (cachée par défaut) -->
+  <p id="loading">
+    <ion-spinner></ion-spinner>
+  </p>
   <!-- Message indiquant qu'il n'y a aucun comptage -->
   <h2>{{aucuneComptage()}}</h2>
 
