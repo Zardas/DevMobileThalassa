@@ -8,6 +8,7 @@ import { InventaireComptagePage } from '../inventaire-comptage/inventaire-compta
 import { NouveauComptagePage } from '../nouveau-comptage/nouveau-comptage';
 import { ParametresGlobauxPage } from '../parametres-globaux/parametres-globaux';
 import { ListeArticlePage } from '../liste-article/liste-article';
+import { ListeMagasinPage } from '../liste-magasin/liste-magasin';
 
 import { PageSearchProvider } from '../../providers/page/pageSearch';
 
@@ -48,8 +49,8 @@ export class AccueilComptagePage extends PageSearchProvider {
     this.calculListeNbScanTotaux();
 
  		this.parametragePagesAccessibles(
-      ['HomePage', 'InventaireComptagePage', 'NouveauComptagePage', 'ParametresGlobauxPage', 'ListeArticlePage'],
-      [HomePage, InventaireComptagePage, NouveauComptagePage, ParametresGlobauxPage, ListeArticlePage]
+      ['HomePage', 'InventaireComptagePage', 'NouveauComptagePage', 'ParametresGlobauxPage', 'ListeArticlePage', 'ListeMagasinPage'],
+      [HomePage, InventaireComptagePage, NouveauComptagePage, ParametresGlobauxPage, ListeArticlePage, ListeMagasinPage]
     );
 
     this.menuContextuelOpen = false;

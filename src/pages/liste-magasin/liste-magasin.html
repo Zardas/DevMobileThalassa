@@ -1,0 +1,44 @@
+<!--
+  Generated template for the ListeMagasinPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  
+    <ion-navbar color="XLblue" padding-left padding-right>
+      <ion-searchbar *ngIf="isSearchbarOpened" showCancelButton="true" (search)="search($event)" (ionCancel)="isSearchbarOpened=false" (ionClear)="search('')"></ion-searchbar>
+
+      <ion-buttons id="leftSide" *ngIf="!isSearchbarOpened">
+        <button ion-button icon-only (click)="goTo('AccueilComptagePage')"><ion-icon name="arrow-back"></ion-icon></button>
+      </ion-buttons>
+      <ion-title *ngIf="!isSearchbarOpened">Liste des magasins</ion-title>
+      <ion-buttons id="rightSide">
+        <button ion-button icon-only (click)="isSearchbarOpened=!isSearchbarOpened"><ion-icon [name]="getNameIcon()"></ion-icon></button>
+      </ion-buttons>
+      
+    </ion-navbar>
+</ion-header>
+
+
+<ion-content padding-top>
+
+  <!-- Icône de loading (cachée par défaut) -->
+  <p id="loading">
+    <ion-spinner></ion-spinner>
+  </p>
+  <!-- Message indiquant qu'il n'y a aucun comptage -->
+  <h2>{{aucunMagasin()}}</h2>
+
+	<ion-item *ngFor="let magasin of magasin_searched">
+		{{magasin.nom}}
+		<span>{{magasin.idMagasin}}</span>
+	</ion-item>
+
+
+	<ion-fab bottom center>
+   	<button ion-fab color="primary" (click)="goTo('NouveauArticlePage')">
+   		<ion-icon name="add"></ion-icon>
+   	</button>
+  </ion-fab>
+</ion-content>

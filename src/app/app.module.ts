@@ -16,6 +16,7 @@ import { ParametresGlobauxPage } from '../pages/parametres-globaux/parametres-gl
 import { NouveauComptagePage } from '../pages/nouveau-comptage/nouveau-comptage';
 import { NouveauArticlePage } from '../pages/nouveau-article/nouveau-article';
 import { ListeArticlePage } from '../pages/liste-article/liste-article';
+import { ListeMagasinPage } from '../pages/liste-magasin/liste-magasin';
 
 @NgModule({
 
@@ -27,6 +28,7 @@ import { ListeArticlePage } from '../pages/liste-article/liste-article';
     ParametresComptagePage,
     ParametresGlobauxPage,
     ListeArticlePage,
+    ListeMagasinPage,
     NouveauComptagePage,
     NouveauArticlePage
   ],
@@ -40,6 +42,7 @@ import { ListeArticlePage } from '../pages/liste-article/liste-article';
     ParametresComptagePage,
     ParametresGlobauxPage,
     ListeArticlePage,
+    ListeMagasinPage,
     NouveauComptagePage,
     NouveauArticlePage
   ],
