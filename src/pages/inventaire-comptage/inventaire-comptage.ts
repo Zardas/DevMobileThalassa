@@ -392,39 +392,45 @@ export class InventaireComptagePage extends PageSearchProvider {
     let alert = this.alertCtrl.create({
       title: 'Ajout d\'un scan',
       subTitle: 'Ne rien mettre dans les champs pour les valeurs par défaut',
+      cssClass: 'alertCustomCSS',
       inputs: [
         {
           name: 'quantite',
           placeholder: placeholderQuantite,
-          type: "number"
+          type: "number",
+          id: "inputQuantite"
         },
         {
           name: 'name',
           placeholder: placeholderNom,
           type: "text",
-          label: "Nom"
+          id: "inputName"
         },
         {
           name: 'prixEuro',
           placeholder: placeholderPrixEuro,
-          type: "number"
+          type: "number",
+          id: "inputEuro"
         },
         {
           name: "prixCentime",
           placeholder: placeholderPrixCentime,
-          type: "number"
+          type: "number",
+          id: "inputCentime"
         }
       ],
       buttons: [
         {
           text: 'Annuler',
           role: 'cancel',
+          cssClass: 'alertCancel',
           handler: data => {
             this.presentToast('Scan annulé');
           }
         },
         {
           text: 'Ajouter',
+          cssClass: 'alertConfirm',
           handler: data => {
             this.gestionParametresScan(codeBarre, data, nomDefaut, prixEuroDefaut, prixCentimeDefaut, prixBase, stockBase);
           }

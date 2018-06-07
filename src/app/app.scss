@@ -26,6 +26,29 @@ img, object, embed, canvas, video, audio, picture {
 }
 
 
+/* Customisation des pop-up */
+.alertCustomCSS {
+
+	.alert-wrapper {
+		text-align: center;
+		padding-left: 2%;
+		padding-right: 2%;
+		* {
+			display: inline;
+		}
+	}
+
+	#inputQuantite {
+		display: block;
+	}
+	#inputEuro, #inputCentime {
+		width: 40%;
+	}
+	.alert-title {
+		display: block;
+	}
+}
+
 /*--------------------*/
 /*-----HEADER------- */
 /*------------------*/
