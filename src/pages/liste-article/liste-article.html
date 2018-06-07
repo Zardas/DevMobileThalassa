@@ -19,19 +19,23 @@
     </ion-buttons>
   </ion-navbar>-->
 
-  
-    <ion-navbar color="XLblue" padding-left padding-right>
-      <ion-searchbar *ngIf="isSearchbarOpened" showCancelButton="true" (search)="search($event)" (ionCancel)="isSearchbarOpened=false" (ionClear)="search('')"></ion-searchbar>
+  <ion-navbar color="XLblue" padding-left padding-right>
 
-      <ion-buttons id="leftSide" *ngIf="!isSearchbarOpened">
-        <button ion-button icon-only (click)="goTo('AccueilComptagePage')"><ion-icon name="arrow-back"></ion-icon></button>
-      </ion-buttons>
-      <ion-title *ngIf="!isSearchbarOpened">Liste des articles</ion-title>
-      <ion-buttons id="rightSide">
-        <button ion-button icon-only (click)="isSearchbarOpened=!isSearchbarOpened"><ion-icon [name]="getNameIcon()"></ion-icon></button>
-      </ion-buttons>
+    <!--Searchbar-->
+    <ion-searchbar *ngIf="isSearchbarOpened" showCancelButton="true" (search)="search($event)" (ionCancel)="isSearchbarOpened=false" (ionClear)="search('')"></ion-searchbar>
+
+    <!--Boutons de retour-->
+    <ion-buttons id="leftSide" *ngIf="!isSearchbarOpened">
+      <button ion-button icon-only (click)="goTo('AccueilComptagePage')"><ion-icon name="arrow-back"></ion-icon></button>
+    </ion-buttons>
+    <!--Titre-->
+    <ion-title *ngIf="!isSearchbarOpened">Liste des articles</ion-title>
+    <!--Bouton de search-->
+    <ion-buttons id="rightSide">
+      <button ion-button icon-only (click)="isSearchbarOpened=!isSearchbarOpened"><ion-icon [name]="getNameIcon()"></ion-icon></button>
+    </ion-buttons>
       
-    </ion-navbar>
+  </ion-navbar>
 </ion-header>
 
 
@@ -44,6 +48,7 @@
   <!-- Message indiquant qu'il n'y a aucun comptage -->
   <h2>{{aucuneComptage()}}</h2>
 
+  <!--Liste des articles-->
 	<ion-item *ngFor="let article of article_searched">
 		{{article.codeBarre}} : {{article.designation}}
 		<span>{{article.prix}}€</span>
@@ -51,9 +56,12 @@
 	</ion-item>
 
 
+  <!--Bouton ajouter un article-->
 	<ion-fab bottom center>
    	<button ion-fab color="primary" (click)="goTo('NouveauArticlePage')">
    		<ion-icon name="add"></ion-icon>
    	</button>
   </ion-fab>
+
+  
 </ion-content>

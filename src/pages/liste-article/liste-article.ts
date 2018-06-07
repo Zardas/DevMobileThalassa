@@ -44,14 +44,6 @@ export class ListeArticlePage extends PageSearchProvider {
     this.search('');
   }
 
-  getStock(article: any) {
-    if(article.stock == undefined) {
-      return 'Stock indisponible';
-    } else {
-      return article.stock;
-    }
-  }
-
 
 
 
@@ -70,6 +62,16 @@ export class ListeArticlePage extends PageSearchProvider {
       return "Il n'y a actuellement aucun article, appuyez sur le + en bas pour en créer un";
     } else {
       return "";
+    }
+  }
+  /*----------------------------------------------------------------------------------------------------------------
+   * Return stock indisponible" s'il n'y a pas de stock associé au à l'article passé en paramètre et son stock sinon
+   *--------------------------------------------------------------------------------------------------------------*/
+  getStock(article: any) {
+    if(article.stock == undefined) {
+      return 'Stock indisponible';
+    } else {
+      return article.stock;
     }
   }
 
