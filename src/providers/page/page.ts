@@ -100,7 +100,7 @@ export class PageProvider {
     /*------------Vide toute les tables------------*/
     /*---------------------------------------------*/
   	viderTable(table: string) {
-    	this.bdd.viderTable(table, '');
+    	return this.bdd.viderTable(table, '');
   	}
     /*---------------------------------------------*/
     /*------------Drop toute les tables------------*/

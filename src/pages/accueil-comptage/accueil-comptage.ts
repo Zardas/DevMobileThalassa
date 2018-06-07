@@ -54,6 +54,7 @@ export class AccueilComptagePage extends PageSearchProvider {
     );
 
     this.menuContextuelOpen = false;
+
  	}
 
   //S'éxecute quand la page est prêt
@@ -62,7 +63,7 @@ export class AccueilComptagePage extends PageSearchProvider {
     this.search(''); //Réinitialise le scan et affiche tout les items relatifs au comptage
  	}
 
-  //Un goTo spéciale pour aller à un comptage en particulier car il faut aussi fournir l'id du comptage
+  //Un goTo spécial pour aller à un comptage en particulier car il faut aussi fournir l'id du comptage
   goToComptage(comptage) {
     this.nav.setRoot(InventaireComptagePage, {database: this.bdd, comptage: comptage});
   }
@@ -127,19 +128,19 @@ export class AccueilComptagePage extends PageSearchProvider {
   findNBArticles(comptage) {
     let nb = 0;
     //Version avec la hash-map
-    /*for(let i = 0 ; i < this.bdd.localData['scan'].length; i++) {
+    for(let i = 0 ; i < this.bdd.localData['scan'].length; i++) {
       if(this.bdd.localData['scan'][i].idComptage == comptage.idComptage) {
         nb = nb + this.bdd.localData['scan'][i].quantite;
       }
     }
-    return nb;*/
+    return nb;
     //Version avec requête SQLite
-    return this.getBDD('scan', ['idComptage'], [comptage.idComptage]).then( data => {
+    /*return this.getBDD('scan', ['idComptage'], [comptage.idComptage]).then( data => {
       for(let i = 0 ; i < data.length ; i++) {
         nb = nb + data[i].quantite;
       }
       return nb;
-    });
+    });*/
   }
   /*----------------------------------------------------------------
    * Initialise et remplit la variable listeNbScanTotaux
@@ -147,15 +148,15 @@ export class AccueilComptagePage extends PageSearchProvider {
    *--------------------------------------------------------------*/
   calculListeNbScanTotaux() {
     //Version avec la hash-map
-    /*for(let i = 0 ; i < this.bdd.localData['comptage'].length ; i++) {
-      this.listeNbScanTotaux[i] = this.findNBArticles(this.bdd.localData['comptage'][i]);
-    }*/
-    //Version avec requête SQLite
     for(let i = 0 ; i < this.bdd.localData['comptage'].length ; i++) {
+      this.listeNbScanTotaux[i] = this.findNBArticles(this.bdd.localData['comptage'][i]);
+    }
+    //Version avec requête SQLite
+    /*for(let i = 0 ; i < this.bdd.localData['comptage'].length ; i++) {
       this.findNBArticles(this.bdd.localData['comptage'][i]).then( data => {
         this.listeNbScanTotaux[i] = data;
       });
-    }
+    }*/
   }
 
 
